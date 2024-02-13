@@ -6,7 +6,7 @@ package descriptions;
     parameter ODD = 1;
     parameter EVEN = 0; 
 
-    typedef enum logic[6:0] {   // logic is defined to handle procedural blocks and continuous assign statements
+    typedef enum logic[0:6] {   // logic is defined to handle procedural blocks and continuous assign statements
         ADD_WORD                                                = 7'd1,
         ADD_HALFWORD                                            = 7'd2,
         ADD_HALFWORD_IMMEDIATE                                  = 7'd3,
