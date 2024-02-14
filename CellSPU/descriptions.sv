@@ -49,7 +49,7 @@ package descriptions;
         IMMEDIATE_LOAD_HALFWORD                                 = 7'd41,
         IMMEDIATE_LOAD_HALFWORD_UPPER                           = 7'd42,
         IMMEDIATE_LOAD_WORD                                     = 7'd43,
-        IMMEDIATE_LAOD_ADDRESS                                  = 7'd44,
+        IMMEDIATE_LOAD_ADDRESS                                  = 7'd44,
         SHIFT_LEFT_HALFWORD                                     = 7'd45,
         SHIFT_LEFT_HALFWORD_IMMEDIATE                           = 7'd46,
         SHIFT_LEFT_WORD                                         = 7'd47,
