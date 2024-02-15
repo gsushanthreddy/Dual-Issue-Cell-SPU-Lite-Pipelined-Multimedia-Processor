@@ -17,6 +17,13 @@ module oddpipe(
     input [0:9] I10_input,
     input [0:15] I16_input,
     input [0:17] I18_input
+    
+    output [0:14] LS_address_output,
+    input [0:127] LS_data_input,
+    output [0:127] LS_data_output,
+
+    input [0:31] PC_input,
+    output [0:31] PC_output
 );
     opcode op_op_code;
     logic [0:127] ra, rb, rc, rt_value;
@@ -34,12 +41,19 @@ module oddpipe(
     logic [0:2] unit_id; 
     logic [0:127] t_128;
 
+    logic [0:14] ls_address_output;
+    logic [0:127] ls_data_input;
+    logic [0:127] ls_data_output;
+
+    logic [0:31] pc_input, pc_output;
+
     assign logic [0:15] rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
     assign logic [0:31] rep_left_bit_I10_32 = {{22{I10[0]}}, I10};
     
     always_comb begin 
         case(op_op_code)
-        
+
+            // permute block
             SHIFT_LEFT_QUADWORD_BY_BITS:
                 $display("Shift left quadword by bits instruction starts...");
                 begin
@@ -228,10 +242,10 @@ module oddpipe(
                         begin
                             s6[j] = ra[(j*BYTE + (BYTE-1))];
                         end
-                    rt_value[(0*BYTE) : (3*BYTE)] = {16'd0, s6};
-                    rt_value[(4*BYTE) : (7*BYTE)] = 32'd0;
-                    rt_value[(8*BYTE) : (11*BYTE)] = 32'd0;
-                    rt_value[(12*BYTE) : (15*BYTE)] = 32'd0;
+                    rt_value[(0*BYTE) : (4*BYTE)-1] = {16'd0, s6};
+                    rt_value[(4*BYTE) : (8*BYTE)-1] = 32'd0;
+                    rt_value[(8*BYTE) : (12*BYTE)-1] = 32'd0;
+                    rt_value[(12*BYTE) : (16*BYTE)-1] = 32'd0;
                     unit_latency = 4'd4;
                     unit_id = 3'd5;
                 end
@@ -244,10 +258,10 @@ module oddpipe(
                         begin
                             s5[j] = ra[(j*HALFWORD + (HALFWORD-1))];
                         end
-                    rt_value[(0*BYTE) : (3*BYTE)] = {24'd0, s5};
-                    rt_value[(4*BYTE) : (7*BYTE)] = 32'd0;
-                    rt_value[(8*BYTE) : (11*BYTE)] = 32'd0;
-                    rt_value[(12*BYTE) : (15*BYTE)] = 32'd0;
+                    rt_value[(0*BYTE) : (4*BYTE)-1] = {24'd0, s5};
+                    rt_value[(4*BYTE) : (8*BYTE)-1] = 32'd0;
+                    rt_value[(8*BYTE) : (12*BYTE)-1] = 32'd0;
+                    rt_value[(12*BYTE) : (16*BYTE)-1] = 32'd0;
                     unit_latency = 4'd4;
                     unit_id = 3'd5;
                 end
@@ -260,19 +274,151 @@ module oddpipe(
                         begin
                             s4[j] = ra[(j*WORD + (WORD-1))];
                         end
-                    rt_value[(0*BYTE) : (3*BYTE)] = {28'd0, s4};
-                    rt_value[(4*BYTE) : (7*BYTE)] = 32'd0;
-                    rt_value[(8*BYTE) : (11*BYTE)] = 32'd0;
-                    rt_value[(12*BYTE) : (15*BYTE)] = 32'd0;
+                    rt_value[(0*BYTE) : (4*BYTE)-1] = {28'd0, s4};
+                    rt_value[(4*BYTE) : (8*BYTE)-1] = 32'd0;
+                    rt_value[(8*BYTE) : (12*BYTE)-1] = 32'd0;
+                    rt_value[(12*BYTE) : (16*BYTE)-1] = 32'd0;
                     unit_latency = 4'd4;
                     unit_id = 3'd5;
                 end
 
+            // Load and store
+            LOAD_QUADFORM_DFORM:
+                $display("Load quadform D-form instruction starts...");
+                begin
+                    ls_address_output = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & 32'hFFFFFFF0;
+                    rt_value = ls_data_input;
 
-            
+                    unit_latency = 4'd7;
+                    unit_id = 3'd6;
+                end
 
+            LOAD_QUADWORD_AFORM:
+                $display("Load quadform A-form instruction starts...");
+                begin
+                    ls_address_output = ({{14{I16[0]}}, I16, 2'b0}) & 32'hFFFFFFF0;
+                    rt_value = ls_data_input;
 
-            
+                    unit_latency = 4'd7;
+                    unit_id = 3'd6;
+                end
+
+            STORE_QUADFORM_DFORM:
+                $display("Store quadform D-form instruction starts...");
+                begin
+                    ls_address_output = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & 32'hFFFFFFF0;
+                    ls_data_output = rt_value;
+
+                    unit_latency = 4'd7;
+                    unit_id = 3'd6;
+                end
+
+            STORE_QUADFORM_AFORM:
+                $display("Store quadform A-form instruction starts...");
+                begin
+                    ls_address_output = ({{14{I16[0]}}, I16, 2'b0}) & 32'hFFFFFFF0;
+                    ls_data_output = rt_value;
+
+                    unit_latency = 4'd7;
+                    unit_id = 3'd6;
+                end
+
+            // Branch
+            BRANCH_RELATIVE:
+                $display("Branch relative instruction starts...");
+                begin
+                    pc_output = ($signed(pc_input) + $signed({{14{I16[0]}}, I16, 2'b0}));
+
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_ABSOLUTE:
+                $display("Branch absolute instruction starts...");
+                begin
+                    pc_output = ({{14{I16[0]}}, I16, 2'b0});
+
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_RELATIVE_AND_SET_LINK:
+                $display("Branch relative and set link instruction starts...");
+                begin
+                    rt_value[0:31] = (pc_input + 4);
+                    rt_value[32:127] = 96'd0;
+                    pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0}));
+
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_ABSOLUTE_AND_SET_LINK:
+                $display("Branch absolute and set link instruction starts...");
+                begin
+                    rt_value[0:31] = (pc_input + 4);
+                    rt_value[32:127] = 96'd0;
+                    pc_output = ({{14{I16[0]}}, I16, 2'b0});
+
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_IF_NOT_ZERO_WORD:
+                $display("Branch if not zero word instruction starts...");
+                begin
+                    if (rt_value[0:31] != 0) begin
+                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
+
+                    end 
+                    else begin
+                        pc_output = (pc_input + 4);
+                    end
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_IF_ZERO_WORD:
+                $display("Branch if zero word instruction starts...");
+                begin
+                    if (rt_value[0:31] = 0) begin
+                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
+
+                    end 
+                    else begin
+                        pc_output = (pc_input + 4);
+                    end
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_IF_NOT_ZERO_HALFWORD:
+                $display("Branch if not zero halfword instruction starts...");
+                begin
+                    if (rt_value[16:31] != 0) begin
+                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
+
+                    end 
+                    else begin
+                        pc_output = (pc_input + 4);
+                    end
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
+
+            BRANCH_IF_ZERO_HALFWORD:
+                $display("Branch if zero halfword instruction starts...");
+                begin
+                    if (rt_value[16:31] = 0) begin
+                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
+
+                    end 
+                    else begin
+                        pc_output = (pc_input + 4);
+                    end
+                    unit_latency = 4'd1;
+                    unit_id = 3'd7;
+                end
             
         endcase
     end
