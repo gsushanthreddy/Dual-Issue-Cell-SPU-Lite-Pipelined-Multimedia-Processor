@@ -943,7 +943,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
-
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             FLOATING_MULTIPLY_AND_ADD: 
@@ -976,6 +976,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             FLOATING_NEGATIVE_MULTIPLY_AND_SUBTRACT: 
@@ -1008,6 +1009,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             FLOATING_MULTIPLY_AND_SUBTRACT: 
@@ -1040,6 +1042,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             MULTIPLY: 
