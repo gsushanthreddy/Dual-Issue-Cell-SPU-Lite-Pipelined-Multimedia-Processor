@@ -23,7 +23,7 @@ module oddpipe(
     output [0:127] LS_data_output,
 
     input [0:31] PC_input,
-    output [0:31] PC_output
+    output [0:31] PC_output,
 );
     opcode op_op_code;
     logic [0:127] ra, rb, rc, rt_value;
@@ -45,7 +45,8 @@ module oddpipe(
     logic [0:127] ls_data_input;
     logic [0:127] ls_data_output;
 
-    logic [0:31] pc_input, pc_output;
+    logic [0:31] pc_input;
+    logic [0:31] pc_output;
 
     assign logic [0:15] rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
     assign logic [0:31] rep_left_bit_I10_32 = {{22{I10[0]}}, I10};
