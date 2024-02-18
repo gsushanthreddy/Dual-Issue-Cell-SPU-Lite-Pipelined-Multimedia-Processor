@@ -13,7 +13,6 @@ module evenpipe(
     input clock,
     input reset,
     input opcode ep_input_op_code,
-    input wrt_en_ep_input;
     input [0:127] ra_input,
     input [0:127] rb_input,
     input [0:127] rc_input,
@@ -35,11 +34,6 @@ module evenpipe(
     logic [0:17] I18;
     logic [0:3] unit_latency;
     logic [0:2] unit_id; 
-
-    real ra_float;
-    real rb_float;
-    real rc_float;
-    real rt_float;
 
     real t_1_real; // for bits to short real conversion value of ra
     real t_2_real; // for bits to short real conversion value of rb
@@ -64,7 +58,7 @@ module evenpipe(
     
     always_comb begin 
         case(ep_op_code)
-            
+
             ADD_WORD:
                 $display("Add Word instruction starts...");
                 begin
@@ -74,6 +68,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -86,6 +81,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -98,6 +94,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -110,6 +107,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -122,6 +120,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -134,6 +133,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -146,6 +146,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -158,6 +159,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -170,6 +172,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -182,6 +185,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -195,6 +199,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -214,6 +219,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -238,6 +244,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -250,6 +257,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -262,6 +270,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -274,6 +283,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -286,6 +296,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -298,6 +309,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -310,6 +322,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -322,6 +335,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -334,6 +348,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -346,6 +361,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -358,6 +374,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -370,6 +387,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -395,6 +413,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -415,6 +434,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -435,6 +455,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -454,6 +475,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -473,6 +495,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -492,6 +515,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -511,6 +535,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -530,6 +555,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -549,6 +575,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -568,6 +595,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -587,6 +615,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -606,6 +635,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -625,6 +655,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -644,6 +675,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -663,6 +695,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -675,6 +708,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -687,6 +721,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -699,6 +734,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -711,6 +747,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -736,6 +773,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -761,6 +799,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -786,6 +825,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -811,6 +851,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -836,6 +877,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -861,6 +903,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
                 
@@ -886,6 +929,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -911,6 +955,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -943,6 +988,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -976,6 +1022,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1009,6 +1056,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1042,6 +1090,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd7;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1066,6 +1115,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1092,6 +1142,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
@@ -1105,6 +1156,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1118,6 +1170,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1137,6 +1190,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1149,6 +1203,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1162,6 +1217,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
@@ -1182,6 +1238,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    wrt_en_ep = 1;
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
         endcase
