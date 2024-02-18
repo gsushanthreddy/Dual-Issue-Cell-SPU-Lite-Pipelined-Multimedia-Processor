@@ -860,26 +860,26 @@ module evenpipe(
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-					t_4_real = t_1_real * t_2_real;
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = t_1_real * t_2_real;
 
-                    if (t_4_real < -SMAX)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
-                    end
-                    else if (t_4_real) 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
-                    end
-                    else if (t_4_real > -SMIN && t_4_real < SMIN)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = 0;
-                    end
-                    else 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
-                    end
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
 
                     end
                     unit_latency = 4'd7;
@@ -892,27 +892,27 @@ module evenpipe(
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-                    t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
-					t_4_real = (t_1_real * t_2_real) + t_3_real;
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = (t_1_real * t_2_real) + t_3_real;
 
-                    if (t_4_real < -SMAX)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
-                    end
-                    else if (t_4_real) 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
-                    end
-                    else if (t_4_real > -SMIN && t_4_real < SMIN)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = 0;
-                    end
-                    else 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
-                    end
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
 
                     end
                     unit_latency = 4'd7;
@@ -924,27 +924,27 @@ module evenpipe(
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-                    t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
-					t_4_real = t_3_real - (t_1_real * t_2_real);
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = t_3_real - (t_1_real * t_2_real);
 
-                    if (t_4_real < -SMAX)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
-                    end
-                    else if (t_4_real) 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
-                    end
-                    else if (t_4_real > -SMIN && t_4_real < SMIN)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = 0;
-                    end
-                    else 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
-                    end
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
 
                     end
                     unit_latency = 4'd7;
@@ -956,27 +956,27 @@ module evenpipe(
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-                    t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
-					t_4_real = (t_1_real * t_2_real) - t_3_real;
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = (t_1_real * t_2_real) - t_3_real;
 
-                    if (t_4_real < -SMAX)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
-                    end
-                    else if (t_4_real) 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
-                    end
-                    else if (t_4_real > -SMIN && t_4_real < SMIN)
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = 0;
-                    end
-                    else 
-                    begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
-                    end
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
 
                     end
                     unit_latency = 4'd7;
