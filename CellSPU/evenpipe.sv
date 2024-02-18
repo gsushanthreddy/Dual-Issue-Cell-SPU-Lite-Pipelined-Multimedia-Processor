@@ -6,11 +6,14 @@ import descriptions::*;
 // t_XX = temporary wire which can traverse XX bits 
 // t_XX_y = #y duplicate of temporary wire which can traverse XX bits 
 // r_XX = temporary register of XX bits
+// wrt_en = write enable
+// fw_ep_st_X = forward even pipe stage X = Total 143 bits = 3 bits uid + 128 bits rt_value + 1 bit write enable + 7 bits rt address value + 4 bits instruction latency
 
 module evenpipe(
     input clock,
     input reset,
     input opcode ep_input_op_code,
+    input wrt_en_input;
     input [0:127] ra_input,
     input [0:127] rb_input,
     input [0:127] rc_input,
@@ -22,6 +25,8 @@ module evenpipe(
 );
     opcode ep_op_code;
     logic [0:127] ra, rb, rc, rt_value;
+    logic [0:6] rt_address;
+    logic wrt_en;
     logic [0:15] r_16;
     logic [0:31] r_32;
     logic [0:6] I7;
@@ -44,6 +49,8 @@ module evenpipe(
     logic [0:15] t_16;
     logic [0:31] t_32;
 
+    logic [0:142] fw_ep_st_1;
+
     assign logic [0:16] rep_left_bit_I7_16 = {{9{I7[0]}}, I7};
     assign logic [0:32] rep_left_bit_I7_32 = {{25{I7[0]}}, I7};
     assign logic [0:15] rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
@@ -61,6 +68,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ADD_HALFWORD:
@@ -72,6 +80,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ADD_HALFWORD_IMMEDIATE:
@@ -83,6 +92,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ADD_WORD_IMMEDIATE:
@@ -94,6 +104,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SUBTRACT_FROM_WORD:
@@ -105,6 +116,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SUBTRACT_FROM_HALFWORD:
@@ -116,6 +128,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SUBTRACT_FROM_HALFWORD_IMMEDIATE:
@@ -127,6 +140,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SUBTRACT_FROM_WORD_IMMEDIATE:
@@ -138,6 +152,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ADD_EXTENDED:
@@ -149,6 +164,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SUBTRACT_FROM_EXTENDED:
@@ -160,6 +176,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             CARRY_GENERATE:
@@ -172,6 +189,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             BORROW_GENERATE:
@@ -190,6 +208,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             AND:
@@ -201,6 +220,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             AND_WITH_COMPLEMENT:
@@ -212,6 +232,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             AND_HALFWORD_IMMEDIATE:
@@ -223,6 +244,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             AND_HALFWORD_IMMEDIATE:
@@ -234,6 +256,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             OR:
@@ -245,6 +268,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             OR_COMPLEMENT:
@@ -256,6 +280,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             OR_HALFWORD_IMMEDIATE:
@@ -267,6 +292,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             OR_WORD_IMMEDIATE:
@@ -278,6 +304,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             EXCLUSIVE_OR:
@@ -289,6 +316,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             EXCLUSIVE_OR_HALFWORD_IMMEDIATE:
@@ -300,6 +328,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             EXCLUSIVE_OR_WORD_IMMEDIATE:
@@ -311,6 +340,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             NAND:
@@ -322,6 +352,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             NOR:
@@ -333,6 +364,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COUNT_LEADING_ZEROS:
@@ -357,6 +389,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             FORM_SELECT_MASK_FOR_HALFWORDS:
@@ -376,6 +409,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             FORM_SELECT_MASK_FOR_WORDS:
@@ -395,6 +429,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_EQUAL_HALFWORD:
@@ -413,6 +448,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_EQUAL_HALFWORD_IMMEDIATE:
@@ -431,6 +467,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_EQUAL_WORD:
@@ -449,6 +486,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_EQUAL_WORD_IMMEDIATE:
@@ -467,6 +505,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             COMPARE_GREATER_THAN_HALFWORD:
@@ -485,6 +524,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_GREATER_THAN_HALFWORD_IMMEDIATE:
@@ -503,6 +543,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_GREATER_THAN_WORD:
@@ -521,6 +562,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_GREATER_THAN_WORD_IMMEDIATE:
@@ -539,6 +581,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_HALFWORD:
@@ -557,6 +600,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_HALFWORD_IMMEDIATE:
@@ -575,6 +619,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_WORD:
@@ -593,6 +638,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_WORD_IMMEDIATE:
@@ -611,6 +657,7 @@ module evenpipe(
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             IMMEDIATE_LOAD_HALFWORD: 
@@ -622,6 +669,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             IMMEDIATE_LOAD_HALFWORD_UPPER:
@@ -633,6 +681,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             IMMEDIATE_LOAD_HALFWORD: 
@@ -644,6 +693,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             IMMEDIATE_LOAD_ADDRESS:
@@ -655,6 +705,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SHIFT_LEFT_HALFWORD: 
@@ -679,6 +730,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_HALFWORD_IMMEDIATE: 
@@ -703,6 +755,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_WORD: 
@@ -727,6 +780,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_WORD_IMMEDIATE: 
@@ -751,6 +805,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ROTATE_HALFWORD: 
@@ -775,6 +830,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ROTATE_HALFWORD_IMMEDIATE: 
@@ -799,6 +855,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
                 
             ROTATE_WORD: 
@@ -823,6 +880,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ROTATE_WORD_IMMEDIATE: 
@@ -847,6 +905,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             FLOATING_MULTIPLY: 
@@ -882,6 +941,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             MULTIPLY_UNSIGNED: 
@@ -893,6 +953,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             MULTIPLY_IMMEDIATE: 
@@ -905,6 +966,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             MULTIPLY_UNSIGNED_IMMEDIATE: 
@@ -917,6 +979,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
 
             MULTIPLY_AND_ADD: 
@@ -929,6 +992,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             MULTIPLY_HIGH: 
@@ -941,6 +1005,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             ABSOLUTE_DIFFERENCES_OF_BYTES: 
@@ -959,6 +1024,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             AVERAGE_BYTES: 
@@ -970,6 +1036,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             SUM_BYTES_INTO_HALFWORDS: 
@@ -982,6 +1049,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
             
             COUNT_ONES_IN_BYTES: 
@@ -1001,6 +1069,7 @@ module evenpipe(
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
+                    fw_ep_st_1 = {unit_id, rt_value, wrt_en, rt_address, unit_latency};
                 end
         endcase
     end
