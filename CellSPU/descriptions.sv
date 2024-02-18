@@ -6,6 +6,10 @@ package descriptions;
     parameter ODD = 1;
     parameter EVEN = 0; 
 
+    parameter SMAX = $bitstoshortreal(32'h7fffffff);
+    parameter SMIN = $bitstoshortreal(32'h80000000);
+    parameter LSLR = 32'h00007FFF;
+
     typedef enum logic[0:6] {   // logic is defined to handle procedural blocks and continuous assign statements
         ADD_WORD                                                = 7'd1,
         ADD_HALFWORD                                            = 7'd2,

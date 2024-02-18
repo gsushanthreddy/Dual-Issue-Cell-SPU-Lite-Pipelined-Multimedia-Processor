@@ -40,6 +40,12 @@ module evenpipe(
     real rb_float;
     real rc_float;
     real rt_float;
+
+    real t_1_real; // for bits to short real conversion value of ra
+    real t_2_real; // for bits to short real conversion value of rb
+    real t_3_real; // for bits to short real conversion value of rc
+    real t_4_real; // for bits to short real value of result
+
     int s;
 
     logic t_1;
@@ -911,25 +917,129 @@ module evenpipe(
             FLOATING_MULTIPLY: 
                 $display("Floating Multiply instruction starts...");
                 begin
+                    for(int i=0; i < 4; i++) 
+                    begin
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = t_1_real * t_2_real;
+
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
+
+                    end
+                    unit_latency = 4'd7;
+                    unit_id = 3'd3;
 
                 end
             
             FLOATING_MULTIPLY_AND_ADD: 
                 $display("Floating Multiply and Add instruction starts...");
                 begin
-                    
+                    for(int i=0; i < 4; i++) 
+                    begin
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = (t_1_real * t_2_real) + t_3_real;
+
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
+
+                    end
+                    unit_latency = 4'd7;
+                    unit_id = 3'd3;
                 end
             
             FLOATING_NEGATIVE_MULTIPLY_AND_SUBTRACT: 
                 $display("Floating Negative Multiply and Subtract instruction starts...");
                 begin
-                    
+                    for(int i=0; i < 4; i++) 
+                    begin
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = t_3_real - (t_1_real * t_2_real);
+
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
+
+                    end
+                    unit_latency = 4'd7;
+                    unit_id = 3'd3;
                 end
             
             FLOATING_MULTIPLY_AND_SUBTRACT: 
                 $display("Floating Multiply and Subtract instruction starts...");
                 begin
-                    
+                    for(int i=0; i < 4; i++) 
+                    begin
+					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_4_real = (t_1_real * t_2_real) - t_3_real;
+
+                        if (t_4_real < -SMAX)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                        end
+                        else if (t_4_real) 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                        end
+                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                        end
+                        else 
+                        begin
+                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                        end
+
+                    end
+                    unit_latency = 4'd7;
+                    unit_id = 3'd3;
                 end
             
             MULTIPLY: 
