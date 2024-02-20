@@ -1,4 +1,4 @@
-module register_file(
+module registerFile(
     input clock;
     input reset;
     input logic [6:0] ra_ep_address;
@@ -32,7 +32,7 @@ module register_file(
     end
 
     always_ff @(posedge clock) begin
-        if(wrt_en_ep)
+        if(wrt_en_ep) 
         begin
             reg_file[rt_ep_address] <= rt_value_ep;
         end
