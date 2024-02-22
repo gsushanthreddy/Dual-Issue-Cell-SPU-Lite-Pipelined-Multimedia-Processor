@@ -17,7 +17,7 @@ module oddpipe(
     input [0:6] I7_input,
     input [0:9] I10_input,
     input [0:15] I16_input,
-    input [0:17] I18_input
+    input [0:17] I18_input,
     
     output [0:14] LS_address_output,
     input [0:127] LS_data_input,
