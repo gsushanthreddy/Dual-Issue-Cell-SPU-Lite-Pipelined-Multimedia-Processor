@@ -4,7 +4,7 @@ import descriptions::*;
 // op_op_code = odd pipe op code
 // wrt_en_op = write enable
 // fw_op_st_X = forward odd pipe stage X = Total 143 bits = 3 bits uid + 128 bits rt_value + 1 bit write enable + 7 bits rt address value + 4 bits instruction latency
-
+//ls_wrt_en = write enable for local store for store instructions
 
 module oddpipe(
     input clock,
@@ -19,9 +19,10 @@ module oddpipe(
     input [0:15] I16_input,
     input [0:17] I18_input,
     
-    output [0:14] LS_address_output,
-    input [0:127] LS_data_input,
-    output [0:127] LS_data_output,
+    output [0:14] LS_address,
+    output [0:127] LS_data_input,
+    input [0:127] LS_data_output,
+    output ls_wrt_en, // write enable for storing data in the local store
 
     input [0:31] PC_input,
     output [0:31] PC_output,
@@ -43,8 +44,9 @@ module oddpipe(
     logic [0:127] t_128;
 
     logic wrt_en_op;
+    logic ls_wrt_en;
 
-    logic [0:14] ls_address_output;
+    logic [0:14] ls_address;
     logic [0:127] ls_data_input;
     logic [0:127] ls_data_output;
 
@@ -330,7 +332,7 @@ module oddpipe(
             LOAD_QUADFORM_DFORM:
                 $display("Load quadform D-form instruction starts...");
                 begin
-                    ls_address_output = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
+                    ls_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
                     rt_value = ls_data_output;
 
                     unit_latency = 4'd7;
@@ -343,7 +345,7 @@ module oddpipe(
             LOAD_QUADWORD_AFORM:
                 $display("Load quadform A-form instruction starts...");
                 begin
-                    ls_address_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
+                    ls_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
                     rt_value = ls_data_output;
 
                     unit_latency = 4'd7;
@@ -356,11 +358,13 @@ module oddpipe(
             STORE_QUADFORM_DFORM:
                 $display("Store quadform D-form instruction starts...");
                 begin
-                    ls_address_output = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
+                    ls_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
                     ls_data_input = rt_value;
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
+
+                    ls_wrt_en = 1'b1;
 
                     wrt_en_op = 1'd0;
                     fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
@@ -369,11 +373,13 @@ module oddpipe(
             STORE_QUADFORM_AFORM:
                 $display("Store quadform A-form instruction starts...");
                 begin
-                    ls_address_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
+                    ls_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
                     ls_data_input = rt_value;
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
+
+                    ls_wrt_en = 1'b1;
 
                     wrt_en_op = 1'd0;
                     fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
