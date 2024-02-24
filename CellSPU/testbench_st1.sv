@@ -25,7 +25,20 @@ module testbench_st1();
     logic [0:127] ls_data_input;
     logic [0:127] ls_data_output;
 
-    oddpipe dut(
+    evenpipe dut1(
+        .clock(clock),
+        .reset(reset),
+        .ep_input_op_code(ep_input_op_code),
+        .ra_input(ra_input),
+        .rb_input(rb_input),
+        .rc_input(rc_input),
+        .rt_address_input(rt_address_input),
+        .I7_input(I7_input),
+        .I10_input(I10_input),
+        .I16_input(I16_input),
+        .I18_input(I18_input)
+    );
+    oddpipe dut2(
         .clock(clock),
         .reset(reset),
         .op_input_op_code(op_op_code),
@@ -42,7 +55,6 @@ module testbench_st1();
         .LS_address_output(ls_address_output),
         .LS_data_input(ls_address_output),
         .LS_data_output(ls_data_output),
-
     );
 
     initial clock = 0;
