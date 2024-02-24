@@ -8,6 +8,7 @@ import descriptions::*;
 // r_XX = temporary register of XX bits
 // wrt_en_ep = write enable
 // fw_ep_st_X = forward even pipe stage X = Total 143 bits = 3 bits uid + 128 bits rt_value + 1 bit write enable + 7 bits rt address value + 4 bits instruction latency
+// out_ep = output of ep of length 143 bits
 
 module evenpipe(
     input clock,
@@ -20,7 +21,8 @@ module evenpipe(
     input [0:6] I7_input,
     input [0:9] I10_input,
     input [0:15] I16_input,
-    input [0:17] I18_input
+    input [0:17] I18_input,
+    output [0:142] out_ep;
 );
     opcode ep_op_code;
     logic [0:127] ra, rb, rc, rt_value;
@@ -50,12 +52,52 @@ module evenpipe(
     logic [0:31] t_32;
 
     logic [0:142] fw_ep_st_1;
+    logic [0:142] fw_ep_st_2;
+    logic [0:142] fw_ep_st_3;
+    logic [0:142] fw_ep_st_4;
+    logic [0:142] fw_ep_st_5;
+    logic [0:142] fw_ep_st_6;
+    logic [0:142] fw_ep_st_7;
 
     assign logic [0:16] rep_left_bit_I7_16 = {{9{I7[0]}}, I7};
     assign logic [0:32] rep_left_bit_I7_32 = {{25{I7[0]}}, I7};
     assign logic [0:15] rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
     assign logic [0:31] rep_left_bit_I10_32 = {{22{I10[0]}}, I10};
     
+    always_ff @(posedge clock) begin
+        ra <= ra_input;
+        rb <= rb_input;
+        rc <= rc_input;
+        rt_address <= rt_address_input;
+        ep_op_code <= ep_input_op_code;
+        I7 <= I7_input;
+        I10 <= I10_input;
+        I16 <= I16_input;
+        I18 <= I18_input;
+    end
+
+    always_ff @(posedge clock) begin
+        if(reset==1) begin 
+            fw_ep_st_1 <= 143'd0;
+            fw_ep_st_2 <= 143'd0;
+            fw_ep_st_3 <= 143'd0;
+            fw_ep_st_4 <= 143'd0;
+            fw_ep_st_5 <= 143'd0;
+            fw_ep_st_6 <= 143'd0;
+            fw_ep_st_7 <= 143'd0;
+            out_ep     <= 143'd0;
+        end
+        else begin 
+            fw_ep_st_2 <= fw_ep_st_1;
+            fw_ep_st_3 <= fw_ep_st_2;
+            fw_ep_st_4 <= fw_ep_st_3;
+            fw_ep_st_5 <= fw_ep_st_4;
+            fw_ep_st_6 <= fw_ep_st_5;
+            fw_ep_st_7 <= fw_ep_st_6;
+            out_ep     <= fw_ep_st_7;
+        end
+    end
+
     always_comb begin 
         case(ep_op_code)
 
