@@ -1,10 +1,12 @@
+import descriptions::*;
+
 module LocalStore(
     input clock,
     input ls_wrt_en,
-    input LS_address,
-    input LS_data_input,
+    input [0:14] LS_address,
+    input [0:127] LS_data_input,
 
-    output LS_data_output,
+    output [0:127] LS_data_output,
 );
 
 logic [0:7] ls [0:32767];
