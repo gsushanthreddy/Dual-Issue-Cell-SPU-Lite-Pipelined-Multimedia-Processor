@@ -22,7 +22,10 @@ module oddpipe(
     output [0:14] LS_address,
     output [0:127] LS_data_input,
     input [0:127] LS_data_output,
+   
     output ls_wrt_en, // write enable for storing data in the local store
+
+    output [0:142] out_op;
 
     input [0:31] PC_input,
     output [0:31] PC_output,
@@ -44,6 +47,7 @@ module oddpipe(
     logic [0:127] t_128;
 
     logic wrt_en_op;
+
     logic ls_wrt_en;
 
     logic [0:14] ls_address;
@@ -54,8 +58,55 @@ module oddpipe(
     logic [0:31] pc_output;
 
     logic [0:142] fw_op_st_1;
+    logic [0:142] fw_op_st_2;
+    logic [0:142] fw_op_st_3;
+    logic [0:142] fw_op_st_4;
+    logic [0:142] fw_op_st_5;
+    logic [0:142] fw_op_st_6;
+    logic [0:142] fw_op_st_7;
 
     int s;
+
+    always_ff @(posedge clock) begin
+        ra <= ra_input;
+        rb <= rb_input;
+        rc <= rc_input;
+        rt_address <= rt_address_input;
+        op_op_code <= op_input_op_code;
+        I7 <= I7_input;
+        I10 <= I10_input;
+        I16 <= I16_input;
+        I18 <= I18_input;
+
+        // check if we have to add the fallowing lines
+
+        ls_data_output <= LS_data_output;
+        pc_input <= PC_input
+
+        // and also check where to add always_ff for outputs: pc_output, LS_address, LS_data_input, ls_wrt _en
+    end
+
+    always_ff @(posedge clock) begin
+        if(reset==1) begin 
+            fw_op_st_1 <= 143'd0;
+            fw_op_st_2 <= 143'd0;
+            fw_op_st_3 <= 143'd0;
+            fw_op_st_4 <= 143'd0;
+            fw_op_st_5 <= 143'd0;
+            fw_op_st_6 <= 143'd0;
+            fw_op_st_7 <= 143'd0;
+            out_op     <= 143'd0;
+        end
+        else begin 
+            fw_op_st_2 <= fw_op_st_1;
+            fw_op_st_3 <= fw_op_st_2;
+            fw_op_st_4 <= fw_op_st_3;
+            fw_op_st_5 <= fw_op_st_4;
+            fw_op_st_6 <= fw_op_st_5;
+            fw_op_st_7 <= fw_op_st_6;
+            out_op     <= fw_op_st_7;
+        end
+    end
     
     always_comb begin 
         case(op_op_code)
