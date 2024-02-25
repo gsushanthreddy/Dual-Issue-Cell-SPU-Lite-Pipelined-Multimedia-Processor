@@ -21,7 +21,7 @@ module testbench_st1();
 
     logic wrt_en_op;
 
-    logic [0:14] ls_address_output;
+    logic [0:14] ls_address;
     logic [0:127] ls_data_input;
     logic [0:127] ls_data_output;
 
@@ -52,8 +52,8 @@ module testbench_st1();
         .rt_address_input(rt_address),
         .PC_input(pc_input),
         .PC_output(pc_output),
-        .LS_address_output(ls_address_output),
-        .LS_data_input(ls_address_output),
+        .LS_address_output(ls_address),
+        .LS_data_input(ls_data_input),
         .LS_data_output(ls_data_output),
     );
 
@@ -68,7 +68,7 @@ module testbench_st1();
         rb = 128'd10;
         ra = 128'd20;
 
-         @(posedge clock)
+        @(posedge clock)
 
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE;
         I7 = 7'd5;
