@@ -22,7 +22,7 @@ module evenpipe(
     input [0:9] I10_input,
     input [0:15] I16_input,
     input [0:17] I18_input,
-    output [0:142] out_ep;
+    output logic [0:142] out_ep;
 );
     opcode ep_op_code;
     logic [0:127] ra, rb, rc, rt_value;
