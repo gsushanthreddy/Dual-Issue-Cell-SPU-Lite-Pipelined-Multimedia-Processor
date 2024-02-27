@@ -128,6 +128,319 @@ module testbench_ep();
         ra_input = 128'd2;
         rb_input = 128'd4;
 
+        @(posedge clock)
+
+        ep_input_op_code =  AND_HALFWORD_IMMEDIATE;
+        ra_input = 128'd2;
+        I10_input = 10'd16;
+
+        @(posedge clock)
+
+        ep_input_op_code =  AND_WORD_IMMEDIATE;
+        ra_input = 128'd2;
+        I10_input = 10'd32;
+
+        @(posedge clock)
+
+        ep_input_op_code =  OR;
+        ra_input = 128'd2;
+        rb_input = 128'd4;
+
+        @(posedge clock)
+
+        ep_input_op_code =  OR_COMPLEMENT;
+        ra_input = 128'd2;
+        rb_input = 128'd32;
+
+        @(posedge clock)
+
+        ep_input_op_code =  OR_HALFWORD_IMMEDIATE;
+        ra_input = 128'd4;
+        I10_input = 10'd32;
+
+        @(posedge clock)
+
+        ep_input_op_code =  OR_WORD_IMMEDIATE;
+        ra_input = 128'd4;
+        I10_input = 10'd64;
+
+        @(posedge clock)
+
+        ep_input_op_code =  EXCLUSIVE_OR;
+        ra_input = 128'd4;
+        rb_input = 128'd4;
+
+        @(posedge clock)
+
+        ep_input_op_code =  EXCLUSIVE_OR_HALFWORD_IMMEDIATE;
+        ra_input = 128'd4;
+        I10_input = 10'd8;
+
+        @(posedge clock)
+
+        ep_input_op_code =  EXCLUSIVE_OR_WORD_IMMEDIATE;
+        ra_input = 128'd8;
+        I10_input = 10'd16;
+
+        @(posedge clock)
+
+        ep_input_op_code =  NAND;
+        ra_input = 128'd4;
+        rb_input = 128'd16;
+
+        @(posedge clock)
+
+        ep_input_op_code =  NOR;
+        ra_input = 128'd123;
+        rb_input = 128'd234;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COUNT_LEADING_ZEROS;
+        ra_input = 128'd1025;
+        
+        @(posedge clock)
+
+        ep_input_op_code =  FORM_SELECT_MASK_FOR_HALFWORDS;
+        ra_input = 128'd578;
+
+        @(posedge clock)
+
+        ep_input_op_code =  FORM_SELECT_MASK_FOR_WORDS;
+        ra_input = 128'd234;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_EQUAL_HALFWORD;
+        ra_input = 128'd234;
+        rb_input = 128'd234;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_EQUAL_HALFWORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd3128;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_EQUAL_HALFWORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd3128;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_EQUAL_WORD;
+        ra_input = 128'd234;
+        rb_input = 128'd235;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_EQUAL_WORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd84;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_GREATER_THAN_HALFWORD;
+        ra_input = 128'd234;
+        rb_input = 128'd739;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_GREATER_THAN_HALFWORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd127;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_GREATER_THAN_WORD;
+        ra_input = 128'd234;
+        rb_input = 128'd2347;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_GREATER_THAN_WORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd327;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_LOGICAL_GREATER_THAN_HALFWORD;
+        ra_input = 128'd234;
+        rb_input = 128'd23;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_LOGICAL_GREATER_THAN_HALFWORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd123;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_LOGICAL_GREATER_THAN_WORD;
+        ra_input = 128'd234;
+        rb_input = 128'd789;
+
+        @(posedge clock)
+
+        ep_input_op_code =  COMPARE_LOGICAL_GREATER_THAN_WORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I10_input = 10'd1233;
+
+        @(posedge clock)
+
+        ep_input_op_code =  IMMEDIATE_LOAD_HALFWORD;
+        I16_input = 16'd3234;
+
+        @(posedge clock)
+
+        ep_input_op_code =  IMMEDIATE_LOAD_HALFWORD_UPPER;
+        I16_input = 16'd324;
+
+        @(posedge clock)
+
+        ep_input_op_code =  IMMEDIATE_LOAD_WORD;
+        I16_input = 16'd374;
+
+        @(posedge clock)
+
+        ep_input_op_code =  IMMEDIATE_LOAD_ADDRESS;
+        I18_input = 18'd2348;
+
+        @(posedge clock)
+
+        ep_input_op_code =  SHIFT_LEFT_HALFWORD;
+        ra_input = 128'd24;
+        rb_input = 128'd123;
+
+        @(posedge clock)
+
+        ep_input_op_code =  SHIFT_LEFT_HALFWORD_IMMEDIATE;
+        ra_input = 128'd234;
+        I7_input = 7'd327;
+
+        @(posedge clock)
+
+        ep_input_op_code =  SHIFT_LEFT_WORD;
+        ra_input = 128'd213;
+        rb_input = 128'd2;
+
+        @(posedge clock)
+
+        ep_input_op_code =  SHIFT_LEFT_WORD_IMMEDIATE;
+        ra_input = 128'd345;
+        I7_input = 7'd2;
+
+        @(posedge clock)
+
+        ep_input_op_code =  ROTATE_HALFWORD;
+        ra_input = 128'd213;
+        rb_input = 128'd4;
+
+        @(posedge clock)
+
+        ep_input_op_code =  ROTATE_HALFWORD_IMMEDIATE;
+        ra_input = 128'd64;
+        I7_input = 7'd4;
+
+        @(posedge clock)
+
+        ep_input_op_code =  ROTATE_WORD;
+        ra_input = 128'd64;
+        rb_input = 128'd8;
+
+        @(posedge clock)
+
+        ep_input_op_code =  ROTATE_WORD_IMMEDIATE;
+        ra_input = 128'd64;
+        I7_input = 7'd8;
+
+        @(posedge clock)
+
+        ep_input_op_code =  FLOATING_MULTIPLY;
+        ra_input = 128'd123;
+        rb_input = 128'd987;
+
+        @(posedge clock)
+
+        ep_input_op_code =  FLOATING_MULTIPLY_AND_ADD;
+        ra_input = 128'd456;
+        rb_input = 128'd654;
+        rc_input = 218'd21;
+
+        @(posedge clock)
+
+        ep_input_op_code =  FLOATING_NEGATIVE_MULTIPLY_AND_SUBTRACT;
+        ra_input = 128'd456;
+        rb_input = 128'd654;
+        rc_input = 128'd123771;
+        
+        @(posedge clock)
+
+        ep_input_op_code =  FLOATING_MULTIPLY_AND_SUBTRACT;
+        ra_input = 128'd129;
+        rb_input = 128'd481;
+        rc_input = 128'd34820;
+
+        @(posedge clock)
+
+        ep_input_op_code = MULTIPLY;
+        rb_input = 128'd128;
+        ra_input = 128'd64;
+
+        @(posedge clock)
+
+        ep_input_op_code = MULTIPLY_UNSIGNED;
+        rb_input = 128'd216;
+        ra_input = 128'd512;
+
+        @(posedge clock)
+
+        ep_input_op_code = MULTIPLY_IMMEDIATE;
+        ra_input = 128'd216;
+        I10_input = 10'd2;
+
+        @(posedge clock)
+
+        ep_input_op_code = MULTIPLY_UNSIGNED_IMMEDIATE;
+        ra_input = 128'd216;
+        I10_input = 10'd4;
+
+        @(posedge clock)
+
+        ep_input_op_code = MULTIPLY_AND_ADD;
+        ra_input = 128'd216;
+        rb_input = 128'd8;
+        rc_input = 128'd2138;
+
+        @(posedge clock)
+
+        ep_input_op_code = MULTIPLY_HIGH;
+        ra_input = 128'd216;
+        rb_input = 128'd8;
+
+        @(posedge clock)
+
+        ep_input_op_code = ABSOLUTE_DIFFERENCES_OF_BYTES;
+        ra_input = 128'd216;
+        rb_input = 128'd1024;
+
+        @(posedge clock)
+
+        ep_input_op_code = AVERAGE_BYTES;
+        ra_input = 128'd216;
+        rb_input = 128'd216;
+
+        @(posedge clock)
+
+        ep_input_op_code = SUM_BYTES_INTO_HALFWORDS;
+        ra_input = 128'd216;
+        rb_input = 128'd4;
+
+        @(posedge clock)
+
+        ep_input_op_code = COUNT_ONES_IN_BYTES;
+        ra_input = 128'd216;
     end
 
 

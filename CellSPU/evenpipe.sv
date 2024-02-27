@@ -303,12 +303,12 @@ module evenpipe(
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
             
-            AND_HALFWORD_IMMEDIATE:
+            AND_WORD_IMMEDIATE:
                 $display("And halfword Immediate instruction starts...");
                 begin
-                    for(int i=0;i<8;i++) 
+                    for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = ra[i*HALFWORD : (i+1)*HALFWORD-1] & rep_left_bit_I10_32;
+                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] & rep_left_bit_I10_32;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -767,7 +767,7 @@ module evenpipe(
                     fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
 
-            IMMEDIATE_LOAD_HALFWORD: 
+            IMMEDIATE_LOAD_WORD: 
                 $display("Immediate Load word instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
