@@ -366,7 +366,7 @@ module testbench_ep();
         ep_input_op_code =  FLOATING_MULTIPLY_AND_ADD;
         ra_input = 128'd456;
         rb_input = 128'd654;
-        rc_input = 218'd21;
+        rc_input = 128'd21;
 
         @(posedge clock)
 
