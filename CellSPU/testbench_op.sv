@@ -2,7 +2,7 @@ import descriptions::*;
 
 // this file for testing the First stage of the odd pipe
 
-module testbench_st1();
+module testbench_op();
 
     logic clock;
     logic reset;
@@ -20,6 +20,8 @@ module testbench_st1();
     logic [0:31] pc_output;
 
     logic wrt_en_op;
+
+    logic ls_wrt_en;
 
     logic [0:14] ls_address;
     logic [0:127] ls_data_input;
@@ -42,6 +44,7 @@ module testbench_st1();
         .LS_address_output(ls_address),
         .LS_data_input(ls_data_input),
         .LS_data_output(ls_data_output),
+        .LS_wrt_en(ls_wrt_en),
     );
 
     initial clock = 0;

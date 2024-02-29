@@ -23,7 +23,7 @@ module oddpipe(
     output [0:127] LS_data_input,
     input [0:127] LS_data_output,
    
-    output ls_wrt_en, // write enable for storing data in the local store
+    output LS_wrt_en, // write enable for storing data in the local store
 
     output [0:142] out_op;
 
@@ -48,14 +48,14 @@ module oddpipe(
 
     logic wrt_en_op;
 
-    logic ls_wrt_en;
+    logic LS_wrt_en;
 
-    logic [0:14] ls_address;
-    logic [0:127] ls_data_input;
-    logic [0:127] ls_data_output;
+    logic [0:14] LS_address;
+    logic [0:127] LS_data_input;
+    logic [0:127] LS_data_output;
 
-    logic [0:31] pc_input;
-    logic [0:31] pc_output;
+    logic [0:31] PC_input;
+    logic [0:31] PC_output;
 
     logic [0:142] fw_op_st_1;
     logic [0:142] fw_op_st_2;
@@ -78,12 +78,6 @@ module oddpipe(
         I16 <= I16_input;
         I18 <= I18_input;
 
-        // check if we have to add the fallowing lines
-
-        ls_data_output <= LS_data_output;
-        pc_input <= PC_input
-
-        // and also check where to add always_ff for outputs: pc_output, LS_address, LS_data_input, ls_wrt _en
     end
 
     always_ff @(posedge clock) begin
@@ -383,8 +377,8 @@ module oddpipe(
             LOAD_QUADFORM_DFORM:
                 $display("Load quadform D-form instruction starts...");
                 begin
-                    ls_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
-                    rt_value = ls_data_output;
+                    LS_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
+                    rt_value = LS_data_output;
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
@@ -396,8 +390,8 @@ module oddpipe(
             LOAD_QUADWORD_AFORM:
                 $display("Load quadform A-form instruction starts...");
                 begin
-                    ls_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
-                    rt_value = ls_data_output;
+                    LS_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
+                    rt_value = LS_data_output;
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
@@ -409,13 +403,13 @@ module oddpipe(
             STORE_QUADFORM_DFORM:
                 $display("Store quadform D-form instruction starts...");
                 begin
-                    ls_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
-                    ls_data_input = rt_value;
+                    LS_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
+                    LS_data_input = rt_value;
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
 
-                    ls_wrt_en = 1'b1;
+                    LS_wrt_en = 1'b1;
 
                     wrt_en_op = 1'd0;
                     fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
@@ -424,13 +418,13 @@ module oddpipe(
             STORE_QUADFORM_AFORM:
                 $display("Store quadform A-form instruction starts...");
                 begin
-                    ls_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
-                    ls_data_input = rt_value;
+                    LS_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
+                    LS_data_input = rt_value;
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
 
-                    ls_wrt_en = 1'b1;
+                    LS_wrt_en = 1'b1;
 
                     wrt_en_op = 1'd0;
                     fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
@@ -440,7 +434,7 @@ module oddpipe(
             BRANCH_RELATIVE:
                 $display("Branch relative instruction starts...");
                 begin
-                    pc_output = ($signed(pc_input) + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
+                    PC_output = ($signed(PC_input) + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
 
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -452,7 +446,7 @@ module oddpipe(
             BRANCH_ABSOLUTE:
                 $display("Branch absolute instruction starts...");
                 begin
-                    pc_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
+                    PC_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
 
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -464,9 +458,9 @@ module oddpipe(
             BRANCH_RELATIVE_AND_SET_LINK:
                 $display("Branch relative and set link instruction starts...");
                 begin
-                    rt_value[0:31] = (pc_input + 4) & LSLR;
+                    rt_value[0:31] = (PC_input + 4) & LSLR;
                     rt_value[32:127] = 96'd0;
-                    pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
+                    PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
 
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -478,9 +472,9 @@ module oddpipe(
             BRANCH_ABSOLUTE_AND_SET_LINK:
                 $display("Branch absolute and set link instruction starts...");
                 begin
-                    rt_value[0:31] = (pc_input + 4)& LSLR;
+                    rt_value[0:31] = (PC_input + 4)& LSLR;
                     rt_value[32:127] = 96'd0;
-                    pc_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
+                    PC_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
 
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -493,11 +487,11 @@ module oddpipe(
                 $display("Branch if not zero word instruction starts...");
                 begin
                     if (rt_value[0:31] != 0) begin
-                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                     end 
                     else begin
-                        pc_output = (pc_input + 4) & LSLR;
+                        PC_output = (PC_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -510,11 +504,11 @@ module oddpipe(
                 $display("Branch if zero word instruction starts...");
                 begin
                     if (rt_value[0:31] = 0) begin
-                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                     end 
                     else begin
-                        pc_output = (pc_input + 4) & LSLR;
+                        PC_output = (PC_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -527,11 +521,11 @@ module oddpipe(
                 $display("Branch if not zero halfword instruction starts...");
                 begin
                     if (rt_value[16:31] != 0) begin
-                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                     end 
                     else begin
-                        pc_output = (pc_input + 4) & LSLR;
+                        PC_output = (PC_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -544,11 +538,11 @@ module oddpipe(
                 $display("Branch if zero halfword instruction starts...");
                 begin
                     if (rt_value[16:31] = 0) begin
-                        pc_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                     end 
                     else begin
-                        pc_output = (pc_input + 4) & LSLR;
+                        PC_output = (PC_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -557,24 +551,13 @@ module oddpipe(
                     fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
-                // stop ans signal
-                STOP_AND_SIGNAL:
-                $display("Stop and Signal instruction starts...");
-                begin
-                   pc_output = (pc_input + 4) & LSLR;
-                   
-                   rt_value = 128'd0;
-                   wrt_en_op = 1'd0;
-
-                end
-
                 // No operation ( load )
                 NO_OPERATION_LOAD:
                 $display("No operation (load) instruction starts...");
                 begin
                    
                    rt_value = 128'd0;
-                   pc_output = 32'd0;
+                   PC_output = 32'd0;
                    wrt_en_op = 1'd0;
 
                 end
