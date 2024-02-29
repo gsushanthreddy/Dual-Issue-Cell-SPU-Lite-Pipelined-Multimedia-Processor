@@ -1,12 +1,12 @@
 import descriptions::*;
 
-// this file for testing the First stage of the odd pipe
+// this file for testing the First stage of the even pipe
 
 module testbench_ep();
 
     logic clock;
     logic reset;
-    opcode op_op_code;
+    opcode ep_op_code;
 
     logic [0:6] I7;
     logic [0:9] I10;
@@ -16,27 +16,23 @@ module testbench_ep();
     logic [0:127] ra, rb, rc, rt_value;
     logic [0:6] rt_address;
 
-    logic [0:31] pc_input;
-    logic [0:31] pc_output;
+    logic wrt_en_ep;
 
-    logic wrt_en_op;
-
-    logic [0:14] ls_address;
-    logic [0:127] ls_data_input;
-    logic [0:127] ls_data_output;
+    logic [0:142] ep_output;
 
     evenpipe dut(
         .clock(clock),
         .reset(reset),
-        .ep_input_op_code(ep_input_op_code),
-        .ra_input(ra_input),
-        .rb_input(rb_input),
-        .rc_input(rc_input),
-        .rt_address_input(rt_address_input),
-        .I7_input(I7_input),
-        .I10_input(I10_input),
-        .I16_input(I16_input),
-        .I18_input(I18_input)
+        .ep_input_op_code(ep_op_code),
+        .ra_input(ra),
+        .rb_input(rb),
+        .rc_input(rc),
+        .rt_address_input(rt_address),
+        .I7_input(I7),
+        .I10_input(I10),
+        .I16_input(I16),
+        .I18_input(I18),
+        .out_ep(ep_output),
     );
 
     initial clock = 0;
