@@ -47,7 +47,7 @@ module testbench_op();
         .LS_data_input(ls_data_input),
         .LS_data_output(ls_data_output),
         .LS_wrt_en(ls_wrt_en),
-        .out_op(op_output),
+        .out_op(op_output)
     );
 
     initial clock = 0;

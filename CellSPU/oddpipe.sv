@@ -25,10 +25,10 @@ module oddpipe(
    
     output logic LS_wrt_en, // write enable for storing data in the local store
 
-    output logic [0:142] out_op;
+    output logic [0:142] out_op,
 
     input logic [0:31] PC_input,
-    output logic [0:31] PC_output,
+    output logic [0:31] PC_output
 );
     opcode op_op_code;
     logic [0:127] ra, rb, rc, rt_value;
@@ -73,7 +73,6 @@ module oddpipe(
 
     always_ff @(posedge clock) begin
         if(reset==1) begin 
-            fw_op_st_1 <= 143'd0;
             fw_op_st_2 <= 143'd0;
             fw_op_st_3 <= 143'd0;
             fw_op_st_4 <= 143'd0;
@@ -311,7 +310,7 @@ module oddpipe(
                 //$display("Gather bits from bytes instruction starts...");
                 begin
                     s6 = 16'd0;
-                    for(int j=0;b<16;j++) 
+                    for(int j=0;j<16;j++) 
                         begin
                             s6[j] = ra[(j*BYTE + (BYTE-1))];
                         end
@@ -330,7 +329,7 @@ module oddpipe(
                 //$display("Gather bits from halfwords instruction starts...");
                 begin
                     s5 = 8'd0;
-                    for(int j=0;b<8;j++) 
+                    for(int j=0;j<8;j++) 
                         begin
                             s5[j] = ra[(j*HALFWORD + (HALFWORD-1))];
                         end
@@ -349,7 +348,7 @@ module oddpipe(
                 //$display("Gather bits from words instruction starts...");
                 begin
                     s4 = 4'd0;
-                    for(int j=0;b<4;j++) 
+                    for(int j=0;j<4;j++) 
                         begin
                             s4[j] = ra[(j*WORD + (WORD-1))];
                         end
@@ -494,7 +493,7 @@ module oddpipe(
             BRANCH_IF_ZERO_WORD:
                 //$display("Branch if zero word instruction starts...");
                 begin
-                    if (rt_value[0:31] = 0) begin
+                    if (rt_value[0:31] == 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                     end 
@@ -528,7 +527,7 @@ module oddpipe(
             BRANCH_IF_ZERO_HALFWORD:
                 //$display("Branch if zero halfword instruction starts...");
                 begin
-                    if (rt_value[16:31] = 0) begin
+                    if (rt_value[16:31] == 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                     end 
@@ -553,12 +552,7 @@ module oddpipe(
 
                 end 
         endcase
-
-        fw_op_st_1[0:2] = unit_id;
-        fw_op_st_1[3:130] = rt_value;
-        fw_op_st_1[131] = wrt_en_ep;
-        fw_op_st_1[132:138] = rt_address;
-        fw_op_st_1[139:142] = unit_latency;
+        fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
     end
             
 endmodule           
