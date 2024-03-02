@@ -15,7 +15,7 @@ always_comb
 begin
     for (int i=0; i<16 ; i++)
     begin
-        LS_data_output[i*BYTE : (i+1)*BYTE-1] = ls[i + LS_address];
+        LS_data_output[i*BYTE +: BYTE] = ls[i + LS_address];
     end
 end
 
@@ -24,7 +24,7 @@ always_ff @(posedge clock) begin
         begin
             for(int i=0; i<16 ; i++)
             begin
-                ls[i + LS_address] <= LS_data_input[i*BYTE : (i+1)*BYTE-1];
+                ls[i + LS_address] <= LS_data_input[i*BYTE +: BYTE];
             end
         end
 end
