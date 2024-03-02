@@ -256,11 +256,11 @@ module evenpipe(
                         begin
                             if($unsigned(ra[i*WORD +: WORD]) >= $unsigned(rb[i*WORD +: WORD])) 
                                 begin 
-                                    rt_value[i*WORD +: WORD] = 32'b1;
+					                rt_value[i*WORD +: WORD] = 32'b1;
                                 end
                             else 
                                 begin
-                                    rt_value[i*WORD +: WORD] = 32'b0;
+					                rt_value[i*WORD +: WORD] = 32'b0;
                                 end
                         end
                     unit_latency = 4'd3;
