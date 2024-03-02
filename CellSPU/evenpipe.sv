@@ -1,5 +1,3 @@
-import descriptions::*;
-
 // ep_input_op_code = even pipe op code given as input (declaring port)
 // ep_op_code = even pipe op code
 // rep_left_bit_I10_xx = repeat left bit of I10 so that I10 converts to XX bits
@@ -9,6 +7,7 @@ import descriptions::*;
 // wrt_en_ep = write enable
 // fw_ep_st_X = forward even pipe stage X = Total 143 bits = 3 bits uid + 128 bits rt_value + 1 bit write enable + 7 bits rt address value + 4 bits instruction latency
 // out_ep = output of ep of length 143 bits
+import descriptions::*;
 
 module evenpipe(
     input clock,
@@ -22,8 +21,9 @@ module evenpipe(
     input [0:9] I10_input,
     input [0:15] I16_input,
     input [0:17] I18_input,
-    output logic [0:142] out_ep;
+    output logic [0:142] out_ep
 );
+    // input opcode ep_input_op_code;
     opcode ep_op_code;
     logic [0:127] ra, rb, rc, rt_value;
     logic [0:6] rt_address;
@@ -59,10 +59,15 @@ module evenpipe(
     logic [0:142] fw_ep_st_6;
     logic [0:142] fw_ep_st_7;
 
-    assign logic [0:16] rep_left_bit_I7_16 = {{9{I7[0]}}, I7};
-    assign logic [0:32] rep_left_bit_I7_32 = {{25{I7[0]}}, I7};
-    assign logic [0:15] rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
-    assign logic [0:31] rep_left_bit_I10_32 = {{22{I10[0]}}, I10};
+    logic [0:16] rep_left_bit_I7_16;
+    logic [0:32] rep_left_bit_I7_32;
+    logic [0:15] rep_left_bit_I10_16;
+    logic [0:31] rep_left_bit_I10_32;
+
+    assign rep_left_bit_I7_16 = {{9{I7[0]}}, I7};
+    assign rep_left_bit_I7_32 = {{25{I7[0]}}, I7};
+    assign rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
+    assign rep_left_bit_I10_32 = {{22{I10[0]}}, I10};
     
     always_ff @(posedge clock) begin
         ra <= ra_input;
@@ -100,13 +105,12 @@ module evenpipe(
 
     always_comb begin 
         case(ep_op_code)
-
             ADD_WORD:
-                $display("Add Word instruction starts...");
+                //$display("Add Word instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] + rb[i*WORD : (i+1)*WORD-1]; 
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] + rb[i*WORD +: WORD]; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -115,11 +119,11 @@ module evenpipe(
                 end
             
             ADD_HALFWORD:
-                $display("Add Halfword instruction starts...");
+                //$display("Add Halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = ra[i*HALFWORD : (i+1)*HALFWORD-1] + rb[i*HALFWORD : (i+1)*HALFWORD-1]; 
+                            rt_value[i*HALFWORD +: HALFWORD] = ra[i*HALFWORD +: HALFWORD] + rb[i*HALFWORD +: HALFWORD]; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -128,11 +132,11 @@ module evenpipe(
                 end
             
             ADD_HALFWORD_IMMEDIATE:
-                $display("Add Halfword Immediate instruction starts...");
+                //$display("Add Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = ra[i*HALFWORD : (i+1)*HALFWORD-1] + rep_left_bit_I10_16; 
+                            rt_value[i*HALFWORD +: HALFWORD] = ra[i*HALFWORD +: HALFWORD] + rep_left_bit_I10_16; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -141,11 +145,11 @@ module evenpipe(
                 end
             
             ADD_WORD_IMMEDIATE:
-                $display("Add Word Immediate instruction starts...");
+                //$display("Add Word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] + rep_left_bit_I10_32; 
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] + rep_left_bit_I10_32; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -154,11 +158,11 @@ module evenpipe(
                 end
             
             SUBTRACT_FROM_WORD:
-                $display("Subtract from Word instruction starts...");
+                //$display("Subtract from Word instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = rb[i*WORD : (i+1)*WORD-1] + ~(ra[i*WORD : (i+1)*WORD-1]) + 1; 
+                            rt_value[i*WORD +: WORD] = rb[i*WORD +: WORD] + ~(ra[i*WORD +: WORD]) + 1; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -167,11 +171,11 @@ module evenpipe(
                 end
             
             SUBTRACT_FROM_HALFWORD:
-                $display("Subtract from Halfword instruction starts...");
+                //$display("Subtract from Halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = rb[i*HALFWORD : (i+1)*HALFWORD-1] + ~(ra[i*HALFWORD : (i+1)*HALFWORD-1]) + 1; 
+                            rt_value[i*HALFWORD +: HALFWORD] = rb[i*HALFWORD +: HALFWORD] + ~(ra[i*HALFWORD +: HALFWORD]) + 1; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -180,11 +184,11 @@ module evenpipe(
                 end
             
             SUBTRACT_FROM_HALFWORD_IMMEDIATE:
-                $display("Subtract from Halfword Immediate instruction starts...");
+                //$display("Subtract from Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = rep_left_bit_I10_16 + ~(ra[i*HALFWORD : (i+1)*HALFWORD-1]) + 1; 
+                            rt_value[i*HALFWORD +: HALFWORD] = rep_left_bit_I10_16 + ~(ra[i*HALFWORD +: HALFWORD]) + 1; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -193,11 +197,11 @@ module evenpipe(
                 end
             
             SUBTRACT_FROM_WORD_IMMEDIATE:
-                $display("Subtract from word Immediate instruction starts...");
+                //$display("Subtract from word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = rep_left_bit_I10_32 + ~(ra[i*WORD : (i+1)*WORD-1]) + 1; 
+                            rt_value[i*WORD +: WORD] = rep_left_bit_I10_32 + ~(ra[i*WORD +: WORD]) + 1; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -206,11 +210,11 @@ module evenpipe(
                 end
             
             ADD_EXTENDED:
-                $display("Add Extended instruction starts...");
+                //$display("Add Extended instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] + rb[i*WORD : (i+1)*WORD-1] + rt_value[31 + i*WORD]; 
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] + rb[i*WORD +: WORD] + rt_value[31 + i*WORD]; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -219,11 +223,11 @@ module evenpipe(
                 end
             
             SUBTRACT_FROM_EXTENDED:
-                $display("Subtract from extended instruction starts...");
+                //$display("Subtract from extended instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = rb[i*WORD : (i+1)*WORD-1] + ~(ra[i*WORD : (i+1)*WORD-1]) + rt_value[31 + i*WORD]; 
+                            rt_value[i*WORD +: WORD] = rb[i*WORD +: WORD] + ~(ra[i*WORD +: WORD]) + rt_value[31 + i*WORD]; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -232,12 +236,12 @@ module evenpipe(
                 end
 
             CARRY_GENERATE:
-                $display("Carry Generate instruction starts...");
+                //$display("Carry Generate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            t_32 = ra[i*WORD : (i+1)*WORD-1] + rb[i*WORD : (i+1)*WORD-1]
-                            rt_value[i*WORD : (i+1)*WORD-1] = {31'b0, t_32[0]}; 
+                            t_32 = ra[i*WORD +: WORD] + rb[i*WORD +: WORD];
+                            rt_value[i*WORD +: WORD] = {31'b0, t_32[0]}; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -246,17 +250,17 @@ module evenpipe(
                 end
 
             BORROW_GENERATE:
-                $display("Borrow Generate instruction starts...");
+                //$display("Borrow Generate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if($unsigned(ra[i*WORD : (i+1)*WORD-1]) >= $unsigned(rb[i*WORD : (i+1)*WORD-1])) 
+                            if($unsigned(ra[i*WORD +: WORD]) >= $unsigned(rb[i*WORD +: WORD])) 
                                 begin 
-                                    rt_value[i*WORD : (i+1)*WORD-1] = 31'b1;
+                                    rt_value[i*WORD +: WORD] = 31'b1;
                                 end
                             else 
                                 begin
-                                    rt_value[i*WORD : (i+1)*WORD-1] = 31'b0;
+                                    rt_value[i*WORD +: WORD] = 31'b0;
                                 end
                         end
                     unit_latency = 4'd3;
@@ -266,11 +270,11 @@ module evenpipe(
                 end
             
             AND:
-                $display("And instruction starts...");
+                //$display("And instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] & rb[i*WORD : (i+1)*WORD-1];
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] & rb[i*WORD +: WORD];
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -278,11 +282,11 @@ module evenpipe(
                 end
             
             AND_WITH_COMPLEMENT:
-                $display("And with complement instruction starts...");
+                //$display("And with complement instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] & ~(rb[i*WORD : (i+1)*WORD-1]);
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] & ~(rb[i*WORD +: WORD]);
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -291,11 +295,11 @@ module evenpipe(
                 end
             
             AND_HALFWORD_IMMEDIATE:
-                $display("And Halfword Immediate instruction starts...");
+                //$display("And Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = ra[i*HALFWORD : (i+1)*HALFWORD-1] & rep_left_bit_I10_16;
+                            rt_value[i*HALFWORD +: HALFWORD] = ra[i*HALFWORD +: HALFWORD] & rep_left_bit_I10_16;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -304,11 +308,11 @@ module evenpipe(
                 end
             
             AND_WORD_IMMEDIATE:
-                $display("And halfword Immediate instruction starts...");
+                //$display("And halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] & rep_left_bit_I10_32;
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] & rep_left_bit_I10_32;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -317,11 +321,11 @@ module evenpipe(
                 end
             
             OR:
-                $display("Or instruction starts...");
+                //$display("Or instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] | rb[i*WORD : (i+1)*WORD-1];
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] | rb[i*WORD +: WORD];
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -330,11 +334,11 @@ module evenpipe(
                 end
 
             OR_COMPLEMENT:
-                $display("Or with complement instruction starts...");
+                //$display("Or with complement instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] | ~(rb[i*WORD : (i+1)*WORD-1]);
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] | ~(rb[i*WORD +: WORD]);
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -343,11 +347,11 @@ module evenpipe(
                 end
 
             OR_HALFWORD_IMMEDIATE:
-                $display("Or Halfword Immediate instruction starts...");
+                //$display("Or Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = ra[i*HALFWORD : (i+1)*HALFWORD-1] | rep_left_bit_I10_16;
+                            rt_value[i*HALFWORD +: HALFWORD] = ra[i*HALFWORD +: HALFWORD] | rep_left_bit_I10_16;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -356,11 +360,11 @@ module evenpipe(
                 end
 
             OR_WORD_IMMEDIATE:
-                $display("Or word Immediate instruction starts...");
+                //$display("Or word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] | rep_left_bit_I10_32;
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] | rep_left_bit_I10_32;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -369,11 +373,11 @@ module evenpipe(
                 end
             
             EXCLUSIVE_OR:
-                $display("Exclusive Or instruction starts...");
+                //$display("Exclusive Or instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] ^ rb[i*WORD : (i+1)*WORD-1];
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] ^ rb[i*WORD +: WORD];
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -382,11 +386,11 @@ module evenpipe(
                 end
             
             EXCLUSIVE_OR_HALFWORD_IMMEDIATE:
-                $display("Exclusive Or Halfword Immediate instruction starts...");
+                //$display("Exclusive Or Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            rt_value[i*HALFWORD : (i+1)*HALFWORD-1] = ra[i*HALFWORD : (i+1)*HALFWORD-1] ^ rep_left_bit_I10_16;
+                            rt_value[i*HALFWORD +: HALFWORD] = ra[i*HALFWORD +: HALFWORD] ^ rep_left_bit_I10_16;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -395,11 +399,11 @@ module evenpipe(
                 end
             
             EXCLUSIVE_OR_WORD_IMMEDIATE:
-                $display("Exclusive Or word Immediate instruction starts...");
+                //$display("Exclusive Or word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ra[i*WORD : (i+1)*WORD-1] ^ rep_left_bit_I10_32;
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] ^ rep_left_bit_I10_32;
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -408,11 +412,11 @@ module evenpipe(
                 end
             
             NAND:
-                $display("NAND instruction starts...");
+                //$display("NAND instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ~(ra[i*WORD : (i+1)*WORD-1] & rb[i*WORD : (i+1)*WORD-1]);
+                            rt_value[i*WORD +: WORD] = ~(ra[i*WORD +: WORD] & rb[i*WORD +: WORD]);
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -421,11 +425,11 @@ module evenpipe(
                 end
             
             NOR:
-                $display("NOR instruction starts...");
+                //$display("NOR instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD-1] = ~(ra[i*WORD : (i+1)*WORD-1] | rb[i*WORD : (i+1)*WORD-1]);
+                            rt_value[i*WORD +: WORD] = ~(ra[i*WORD +: WORD] | rb[i*WORD +: WORD]);
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -434,23 +438,23 @@ module evenpipe(
                 end
             
             COUNT_LEADING_ZEROS:
-                $display("Count Leading Zeros instruction starts...");
+                //$display("Count Leading Zeros instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
                             t_1 = 'b0;
-                            t_32 = ra[i*WORD : (i+1)*WORD-1];
+                            t_32 = ra[i*WORD +: WORD];
                             for(int j=0;j<WORD;j++)
                             begin
                                 if(t_32[j] == 1 && t_1 == 'b0)
                                 begin
                                     t_1 = 'b1;
-                                    rt_value[i*WORD : (i+1)*WORD-1] = j;
+                                    rt_value[i*WORD +: WORD] = j;
                                 end
                             end
                             if(t_1 == 'b0)
                             begin
-                                rt_value[i*WORD : (i+1)*WORD-1] = 32;
+                                rt_value[i*WORD +: WORD] = 32;
                             end
                         end
                     unit_latency = 4'd3;
@@ -460,18 +464,18 @@ module evenpipe(
                 end
             
             FORM_SELECT_MASK_FOR_HALFWORDS:
-                $display("Form Select Mask for Halfwords instruction starts...");
+                //$display("Form Select Mask for Halfwords instruction starts...");
                 begin
-                    t_8 = ra[24:31]
+                    t_8 = ra[24:31];
                     for(int i=0;i<8;i++) 
                         begin
                             if(t_8[i] == 0)
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hffff;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hffff;
                             end
                         end
                     unit_latency = 4'd3;
@@ -481,18 +485,18 @@ module evenpipe(
                 end
             
             FORM_SELECT_MASK_FOR_WORDS:
-                $display("Form Select Mask for Words instruction starts...");
+                //$display("Form Select Mask for Words instruction starts...");
                 begin
-                    t_4 = ra[28:31]
+                    t_4 = ra[28:31];
                     for(int i=0;i<4;i++) 
                         begin
                             if(t_4[i] == 0)
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hffffffff;
+                                rt_value[i*WORD +: WORD] = 32'hffffffff;
                             end
                         end
                     unit_latency = 4'd3;
@@ -502,17 +506,17 @@ module evenpipe(
                 end
             
             COMPARE_EQUAL_HALFWORD:
-                $display("Compare Equal Halfword instruction starts...");
+                //$display("Compare Equal Halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            if(ra[i*HALFWORD : (i+1)*HALFWORD -1] == rb[i*HALFWORD : (i+1)*HALFWORD -1])
+                            if(ra[i*HALFWORD +: HALFWORD] == rb[i*HALFWORD +: HALFWORD])
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hffff;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hffff;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -522,17 +526,17 @@ module evenpipe(
                 end
             
             COMPARE_EQUAL_HALFWORD_IMMEDIATE:
-                $display("Compare Equal Halfword Immediate instruction starts...");
+                //$display("Compare Equal Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            if(ra[i*HALFWORD : (i+1)*HALFWORD -1] == rep_left_bit_I10_16)
+                            if(ra[i*HALFWORD +: HALFWORD] == rep_left_bit_I10_16)
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hFFFF;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -542,17 +546,17 @@ module evenpipe(
                 end
             
             COMPARE_EQUAL_WORD:
-                $display("Compare Equal word instruction starts...");
+                //$display("Compare Equal word instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if(ra[i*WORD : (i+1)*WORD -1] == rb[i*WORD : (i+1)*WORD -1])
+                            if(ra[i*WORD +: WORD] == rb[i*WORD +: WORD])
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hFFFFFFFF;
+                                rt_value[i*WORD +: WORD] = 32'hFFFFFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -562,17 +566,17 @@ module evenpipe(
                 end
             
             COMPARE_EQUAL_WORD_IMMEDIATE:
-                $display("Compare Equal word Immediate instruction starts...");
+                //$display("Compare Equal word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if(ra[i*WORD : (i+1)*WORD -1] == rep_left_bit_I10_32)
+                            if(ra[i*WORD +: WORD] == rep_left_bit_I10_32)
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hFFFFFFFF;
+                                rt_value[i*WORD +: WORD] = 32'hFFFFFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -582,17 +586,17 @@ module evenpipe(
                 end
 
             COMPARE_GREATER_THAN_HALFWORD:
-                $display("Compare greater than Halfword instruction starts...");
+                //$display("Compare greater than Halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            if($signed(ra[i*HALFWORD : (i+1)*HALFWORD -1]) > $signed(rb[i*HALFWORD : (i+1)*HALFWORD -1]))
+                            if($signed(ra[i*HALFWORD +: HALFWORD]) > $signed(rb[i*HALFWORD +: HALFWORD]))
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hFFFF;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -602,17 +606,17 @@ module evenpipe(
                 end
             
             COMPARE_GREATER_THAN_HALFWORD_IMMEDIATE:
-                $display("Compare greater than Halfword Immediate instruction starts...");
+                //$display("Compare greater than Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            if($signed(ra[i*HALFWORD : (i+1)*HALFWORD -1]) > rep_left_bit_I10_16)
+                            if($signed(ra[i*HALFWORD +: HALFWORD]) > rep_left_bit_I10_16)
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hFFFF;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -622,17 +626,17 @@ module evenpipe(
                 end
             
             COMPARE_GREATER_THAN_WORD:
-                $display("Compare greater than word instruction starts...");
+                //$display("Compare greater than word instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if($signed(ra[i*WORD : (i+1)*WORD -1]) > $signed(rb[i*WORD : (i+1)*WORD -1]))
+                            if($signed(ra[i*WORD +: WORD]) > $signed(rb[i*WORD +: WORD]))
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hFFFFFFFF;
+                                rt_value[i*WORD +: WORD] = 32'hFFFFFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -642,17 +646,17 @@ module evenpipe(
                 end
             
             COMPARE_GREATER_THAN_WORD_IMMEDIATE:
-                $display("Compare greater than word Immediate instruction starts...");
+                //$display("Compare greater than word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if($signed(ra[i*WORD : (i+1)*WORD -1]) > rep_left_bit_I10_32)
+                            if($signed(ra[i*WORD +: WORD]) > rep_left_bit_I10_32)
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hFFFFFFFF;
+                                rt_value[i*WORD +: WORD] = 32'hFFFFFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -662,17 +666,17 @@ module evenpipe(
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_HALFWORD:
-                $display("Compare logical greater than halfword instruction starts...");
+                //$display("Compare logical greater than halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            if(ra[i*HALFWORD : (i+1)*HALFWORD -1] > rb[i*HALFWORD : (i+1)*HALFWORD -1])
+                            if(ra[i*HALFWORD +: HALFWORD] > rb[i*HALFWORD +: HALFWORD])
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hFFFF;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -682,17 +686,17 @@ module evenpipe(
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_HALFWORD_IMMEDIATE:
-                $display("Compare Logical greater than Halfword Immediate instruction starts...");
+                //$display("Compare Logical greater than Halfword Immediate instruction starts...");
                 begin
                     for(int i=0;i<8;i++) 
                         begin
-                            if(ra[i*HALFWORD : (i+1)*HALFWORD -1] > rep_left_bit_I10_16)
+                            if(ra[i*HALFWORD +: HALFWORD] > rep_left_bit_I10_16)
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'hFFFF;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'hFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = 16'h0000;
+                                rt_value[i*HALFWORD +: HALFWORD] = 16'h0000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -702,17 +706,17 @@ module evenpipe(
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_WORD:
-                $display("Compare Logical greater than word instruction starts...");
+                //$display("Compare Logical greater than word instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if(ra[i*WORD : (i+1)*WORD -1] > rb[i*WORD : (i+1)*WORD -1])
+                            if(ra[i*WORD +: WORD] > rb[i*WORD +: WORD])
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hFFFFFFFF;
+                                rt_value[i*WORD +: WORD] = 32'hFFFFFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -722,17 +726,17 @@ module evenpipe(
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_WORD_IMMEDIATE:
-                $display("Compare Logical greater than word Immediate instruction starts...");
+                //$display("Compare Logical greater than word Immediate instruction starts...");
                 begin
                     for(int i=0;i<4;i++) 
                         begin
-                            if(ra[i*WORD : (i+1)*WORD -1] > rep_left_bit_I10_32)
+                            if(ra[i*WORD +: WORD] > rep_left_bit_I10_32)
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'hFFFFFFFF;
+                                rt_value[i*WORD +: WORD] = 32'hFFFFFFFF;
                             end
                             else
                             begin 
-                                rt_value[i*WORD : (i+1)*WORD -1] = 32'h00000000;
+                                rt_value[i*WORD +: WORD] = 32'h00000000;
                             end
                         end
                     unit_latency = 4'd3;
@@ -742,11 +746,11 @@ module evenpipe(
                 end
             
             IMMEDIATE_LOAD_HALFWORD: 
-                $display("Immediate Load halfword instruction starts...");
+                //$display("Immediate Load halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++)
                     begin
-                        rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = I16;
+                        rt_value[i*HALFWORD +: HALFWORD] = I16;
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -755,11 +759,11 @@ module evenpipe(
                 end
             
             IMMEDIATE_LOAD_HALFWORD_UPPER:
-                $display("Immediate Load Halfword Upper instruction starts...");
+                //$display("Immediate Load Halfword Upper instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = {I16,16'b0};
+                        rt_value[i*WORD +: WORD] = {I16,16'b0};
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -768,11 +772,11 @@ module evenpipe(
                 end
 
             IMMEDIATE_LOAD_WORD: 
-                $display("Immediate Load word instruction starts...");
+                //$display("Immediate Load word instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = rep_left_bit_I10_32;
+                        rt_value[i*WORD +: WORD] = rep_left_bit_I10_32;
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -781,11 +785,11 @@ module evenpipe(
                 end
             
             IMMEDIATE_LOAD_ADDRESS:
-                $display("Immediate Load Address instruction starts...");
+                //$display("Immediate Load Address instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*WORD : (i+1)*WORD -1] = {14'b0,I18};
+                        rt_value[i*WORD +: WORD] = {14'b0,I18};
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -794,12 +798,12 @@ module evenpipe(
                 end
             
             SHIFT_LEFT_HALFWORD: 
-                $display("Shift Left Half Word instruction starts...");
+                //$display("Shift Left Half Word instruction starts...");
                 begin
                     for(int i=0;i<8;i++)
                     begin
-                        s = rb[i*HALFWORD : (i+1)*HALFWORD-1] & 16'h001f;
-                        t_16 = ra[i*HALFWORD : (i+1)*HALFWORD-1];
+                        s = rb[i*HALFWORD +: HALFWORD] & 16'h001f;
+                        t_16 = ra[i*HALFWORD +: HALFWORD];
                         for(int b=0;b<16;b++)
                         begin
                             if(b+s<16)
@@ -811,7 +815,7 @@ module evenpipe(
                                 r_16[b] = 0;
                             end
                         end
-                        rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = r_16;
+                        rt_value[i*HALFWORD +: HALFWORD] = r_16;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -820,12 +824,12 @@ module evenpipe(
                 end
 
             SHIFT_LEFT_HALFWORD_IMMEDIATE: 
-                $display("Shift Left Halfword Immediate instruction starts...");
+                //$display("Shift Left Halfword Immediate instruction starts...");
                 begin
                     s = rep_left_bit_I7_16 & 16'h001f;
                     for(int i=0;i<8;i++)
                     begin
-                    t_16 = ra[i*HALFWORD : (i+1)*HALFWORD -1];
+                    t_16 = ra[i*HALFWORD +: HALFWORD];
                         for(int b=0;b<16;b++)
                         begin
                             if(b+s<16)
@@ -837,7 +841,7 @@ module evenpipe(
                                 r_16[b] = 0;
                             end
                         end
-                        rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = r_16;
+                        rt_value[i*HALFWORD +: HALFWORD] = r_16;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -846,12 +850,12 @@ module evenpipe(
                 end
 
             SHIFT_LEFT_WORD: 
-                $display("Shift Left Word instruction starts...");
+                //$display("Shift Left Word instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        s = rb[i*WORD : (i+1)*WORD-1] & 32'h0000003f;
-                        t_32 = ra[i*WORD : (i+1)*WORD-1];
+                        s = rb[i*WORD +: WORD] & 32'h0000003f;
+                        t_32 = ra[i*WORD +: WORD];
                         for(int b=0;b<32;b++)
                         begin
                             if(b+s<32)
@@ -863,7 +867,7 @@ module evenpipe(
                                 r_32[b] = 0;
                             end
                         end
-                        rt_value[i*WORD : (i+1)*WORD -1] = r_32;
+                        rt_value[i*WORD +: WORD] = r_32;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -872,12 +876,12 @@ module evenpipe(
                 end
 
             SHIFT_LEFT_WORD_IMMEDIATE: 
-                $display("Shift Left Word Immediate instruction starts...");
+                //$display("Shift Left Word Immediate instruction starts...");
                 begin
                     s = rep_left_bit_I7_32 & 32'h0000003f;
                     for(int i=0;i<4;i++)
                     begin
-                    t_32 = ra[i*WORD : (i+1)*WORD -1];
+                    t_32 = ra[i*WORD +: WORD];
                         for(int b=0;b<32;b++)
                         begin
                             if(b+s<32)
@@ -889,7 +893,7 @@ module evenpipe(
                                 r_32[b] = 0;
                             end
                         end
-                        rt_value[i*WORD : (i+1)*WORD -1] = r_32;
+                        rt_value[i*WORD +: WORD] = r_32;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -898,12 +902,12 @@ module evenpipe(
                 end
             
             ROTATE_HALFWORD: 
-                $display("Rotate Halfword instruction starts...");
+                //$display("Rotate Halfword instruction starts...");
                 begin
                     for(int i=0;i<8;i++)
                     begin
-                    s = rb[i*HALFWORD : (i+1)*HALFWORD-1] & 16'h000f;
-                    t_16 = ra[i*HALFWORD : (i+1)*HALFWORD -1];
+                    s = rb[i*HALFWORD +: HALFWORD] & 16'h000f;
+                    t_16 = ra[i*HALFWORD +: HALFWORD];
                         for(int b=0;b<16;b++)
                         begin
                             if(b+s<16)
@@ -915,7 +919,7 @@ module evenpipe(
                                 r_16[b] = t_16[b+s-16];
                             end
                         end
-                        rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = r_16;
+                        rt_value[i*HALFWORD +: HALFWORD] = r_16;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -924,12 +928,12 @@ module evenpipe(
                 end
             
             ROTATE_HALFWORD_IMMEDIATE: 
-                $display("Rotate Halfword Immediate instruction starts...");
+                //$display("Rotate Halfword Immediate instruction starts...");
                 begin
                     s = rep_left_bit_I7_16 & 16'h000f;
                     for(int i=0;i<8;i++)
                     begin
-                    t_16 = ra[i*HALFWORD : (i+1)*HALFWORD -1];
+                    t_16 = ra[i*HALFWORD +: HALFWORD];
                         for(int b=0;b<16;b++)
                         begin
                             if(b+s<16)
@@ -941,7 +945,7 @@ module evenpipe(
                                 r_16[b] = t_16[b+s-16];
                             end
                         end
-                        rt_value[i*HALFWORD : (i+1)*HALFWORD -1] = r_16;
+                        rt_value[i*HALFWORD +: HALFWORD] = r_16;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -950,12 +954,12 @@ module evenpipe(
                 end
                 
             ROTATE_WORD: 
-                $display("Rotate word instruction starts...");
+                //$display("Rotate word instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                    s = rb[i*WORD : (i+1)*WORD-1] & 32'h0000001f;
-                    t_32 = ra[i*WORD : (i+1)*WORD -1];
+                    s = rb[i*WORD +: WORD] & 32'h0000001f;
+                    t_32 = ra[i*WORD +: WORD];
                         for(int b=0;b<32;b++)
                         begin
                             if(b+s<32)
@@ -967,7 +971,7 @@ module evenpipe(
                                 r_32[b] = t_32[b+s-32];
                             end
                         end
-                        rt_value[i*WORD : (i+1)*WORD -1] = r_32;
+                        rt_value[i*WORD +: WORD] = r_32;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -976,12 +980,12 @@ module evenpipe(
                 end
             
             ROTATE_WORD_IMMEDIATE: 
-                $display("Rotate word Immediate instruction starts...");
+                //$display("Rotate word Immediate instruction starts...");
                 begin
                     s = rep_left_bit_I7_32 & 32'h0000001f;
                     for(int i=0;i<4;i++)
                     begin
-                    t_32 = ra[i*WORD : (i+1)*WORD -1];
+                    t_32 = ra[i*WORD +: WORD];
                         for(int b=0;b<32;b++)
                         begin
                             if(b+s<32)
@@ -993,7 +997,7 @@ module evenpipe(
                                 r_32[b] = t_32[b+s-32];
                             end
                         end
-                        rt_value[i*WORD : (i+1)*WORD -1] = r_32;
+                        rt_value[i*WORD +: WORD] = r_32;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd2;
@@ -1002,29 +1006,29 @@ module evenpipe(
                 end
             
             FLOATING_MULTIPLY: 
-                $display("Floating Multiply instruction starts...");
+                //$display("Floating Multiply instruction starts...");
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
+					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
 					    t_4_real = t_1_real * t_2_real;
 
                         if (t_4_real < -SMAX)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                            rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
                         else if (t_4_real) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                            rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
                         else if (t_4_real > -SMIN && t_4_real < SMIN)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                            rt_value[i*WORD +: WORD] = 0;
                         end
                         else 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                            rt_value[i*WORD +: WORD] = shortrealtobits(t_4_real);
                         end
 
                     end
@@ -1035,30 +1039,30 @@ module evenpipe(
                 end
             
             FLOATING_MULTIPLY_AND_ADD: 
-                $display("Floating Multiply and Add instruction starts...");
+                //$display("Floating Multiply and Add instruction starts...");
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD +: WORD]);
 					    t_4_real = (t_1_real * t_2_real) + t_3_real;
 
                         if (t_4_real < -SMAX)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                            rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
                         else if (t_4_real) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                            rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
                         else if (t_4_real > -SMIN && t_4_real < SMIN)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                            rt_value[i*WORD +: WORD] = 0;
                         end
                         else 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                            rt_value[i*WORD +: WORD] = shortrealtobits(t_4_real);
                         end
 
                     end
@@ -1069,30 +1073,30 @@ module evenpipe(
                 end
             
             FLOATING_NEGATIVE_MULTIPLY_AND_SUBTRACT: 
-                $display("Floating Negative Multiply and Subtract instruction starts...");
+                //$display("Floating Negative Multiply and Subtract instruction starts...");
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD +: WORD]);
 					    t_4_real = t_3_real - (t_1_real * t_2_real);
 
                         if (t_4_real < -SMAX)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                            rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
                         else if (t_4_real) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                            rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
                         else if (t_4_real > -SMIN && t_4_real < SMIN)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                            rt_value[i*WORD +: WORD] = 0;
                         end
                         else 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                            rt_value[i*WORD +: WORD] = shortrealtobits(t_4_real);
                         end
 
                     end
@@ -1103,30 +1107,30 @@ module evenpipe(
                 end
             
             FLOATING_MULTIPLY_AND_SUBTRACT: 
-                $display("Floating Multiply and Subtract instruction starts...");
+                //$display("Floating Multiply and Subtract instruction starts...");
                 begin
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD : (i+1)*WORD -1]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD : (i+1)*WORD -1]);
-                        t_3_real = $bitstoshortreal(rc[i*WORD : (i+1)*WORD -1]);
+					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
+					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
+                        t_3_real = $bitstoshortreal(rc[i*WORD +: WORD]);
 					    t_4_real = (t_1_real * t_2_real) - t_3_real;
 
                         if (t_4_real < -SMAX)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = -$shortrealtobits(SMAX);
+                            rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
                         else if (t_4_real) 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = $shortrealtobits(SMAX);   
+                            rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
                         else if (t_4_real > -SMIN && t_4_real < SMIN)
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = 0;
+                            rt_value[i*WORD +: WORD] = 0;
                         end
                         else 
                         begin
-                            rt_value[i*WORD : (i+1)*WORD -1] = shortrealtobits(t_4_real);
+                            rt_value[i*WORD +: WORD] = shortrealtobits(t_4_real);
                         end
 
                     end
@@ -1137,11 +1141,11 @@ module evenpipe(
                 end
             
             MULTIPLY: 
-                $display("Multiply instruction starts...");
+                //$display("Multiply instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*(WORD) : (i+1)*WORD-1] = $signed(ra[i*WORD+2*BYTE : (i+1)*WORD-1]) * $signed(rb[i*WORD+2*BYTE : (i+1)*WORD-1]);   
+                        rt_value[i*(WORD) +: WORD] = $signed(ra[i*WORD+2*BYTE +: 2*BYTE]) * $signed(rb[i*WORD+2*BYTE +: 2*BYTE]);   
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
@@ -1149,11 +1153,11 @@ module evenpipe(
                 end
 
             MULTIPLY_UNSIGNED: 
-                $display("Multiply Unsigned instruction starts...");
+                //$display("Multiply Unsigned instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*(WORD) : (i+1)*WORD-1] = $unsigned(ra[i*WORD+2*BYTE : (i+1)*WORD-1]) * $unsigned(rb[i*WORD+2*BYTE : (i+1)*WORD-1]);   
+                        rt_value[i*(WORD) +: WORD] = $unsigned(ra[i*WORD+2*BYTE +: 2*BYTE]) * $unsigned(rb[i*WORD+2*BYTE +: 2*BYTE]);   
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
@@ -1162,12 +1166,12 @@ module evenpipe(
                 end
             
             MULTIPLY_IMMEDIATE: 
-                $display("Multiply Immediate instruction starts...");
+                //$display("Multiply Immediate instruction starts...");
                 begin
                     t_16 = rep_left_bit_I10_16;
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*(WORD) : (i+1)*WORD-1] = $signed(ra[i*WORD+2*BYTE : (i+1)*WORD-1]) * $signed(t_16);   
+                        rt_value[i*(WORD) +: WORD] = $signed(ra[i*WORD+2*BYTE +: 2*BYTE]) * $signed(t_16);   
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
@@ -1175,12 +1179,12 @@ module evenpipe(
                 end
             
             MULTIPLY_UNSIGNED_IMMEDIATE: 
-                $display("Multiply Unsigned Immediate instruction starts...");
+                //$display("Multiply Unsigned Immediate instruction starts...");
                 begin
                     t_16 = rep_left_bit_I10_16;
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*(WORD) : (i+1)*WORD-1] = $unsigned(ra[i*WORD+2*BYTE : (i+1)*WORD-1]) * $unsigned(t_16);   
+                        rt_value[i*(WORD) +: WORD] = $unsigned(ra[i*WORD+2*BYTE +: 2*BYTE]) * $unsigned(t_16);   
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
@@ -1189,12 +1193,12 @@ module evenpipe(
                 end
 
             MULTIPLY_AND_ADD: 
-                $display("Multiply and Add instruction starts...");
+                //$display("Multiply and Add instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        t_16 = $signed(ra[i*WORD+2*BYTE : (i+1)*WORD-1]) * $signed(rb[i*WORD+2*BYTE : (i+1)*WORD-1]);
-                        rt_value[i*(WORD) : (i+1)*WORD-1] = t_16 + $signed(rc[i*WORD + (i+1)*WORD-1]);   
+                        t_16 = $signed(ra[i*WORD+2*BYTE +: 2*BYTE]) * $signed(rb[i*WORD+2*BYTE +: 2*BYTE]);
+                        rt_value[i*(WORD) +: WORD] = t_16 + $signed(rc[i*WORD +: WORD]);   
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
@@ -1203,12 +1207,12 @@ module evenpipe(
                 end
             
             MULTIPLY_HIGH: 
-                $display("Multiply High instruction starts...");
+                //$display("Multiply High instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        t_16 = $signed(ra[i*WORD : (i+1)*HALFWORD]) * $signed(rb[i*WORD+2*BYTE : (i+1)*WORD-1]);
-                        rt_value[i*(WORD) : (i+1)*WORD-1] = {t_16,16'b0};   
+                        t_16 = $signed(ra[i*WORD +: HALFWORD]) * $signed(rb[i*WORD+2*BYTE +: HALFWORD]);
+                        rt_value[i*(WORD) +: WORD] = {t_16,16'b0};   
                     end
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
@@ -1217,17 +1221,17 @@ module evenpipe(
                 end
             
             ABSOLUTE_DIFFERENCES_OF_BYTES: 
-                $display("Absolute Differences Of Bytes instruction starts...");
+                //$display("Absolute Differences Of Bytes instruction starts...");
                 begin
                     for(int i=0;i<16;i++)
                     begin
-                        if($unsigned(rb[i*BYTE : (i+1)*BYTE-1]) > $unsigned(ra[i*BYTE : (i+1)*BYTE-1])) 
+                        if($unsigned(rb[i*BYTE +: BYTE]) > $unsigned(ra[i*BYTE +: BYTE])) 
                         begin
-                            rt_value[i*BYTE : (i+1)*BYTE-1] = rb[i*BYTE : (i+1)*BYTE-1] - ra[i*BYTE : (i+1)*BYTE-1];
+                            rt_value[i*BYTE +: BYTE] = rb[i*BYTE +: BYTE] - ra[i*BYTE +:BYTE];
                         end
                         else
                         begin
-                            rt_value[i*BYTE : (i+1)*BYTE-1] = ra[i*BYTE : (i+1)*BYTE-1] - rb[i*BYTE : (i+1)*BYTE-1];
+                            rt_value[i*BYTE +: BYTE] = ra[i*BYTE +: BYTE] - rb[i*BYTE +: BYTE];
                         end
                     end
                     unit_latency = 4'd4;
@@ -1237,11 +1241,11 @@ module evenpipe(
                 end
             
             AVERAGE_BYTES: 
-                $display("Average Bytes instruction starts...");
+                //$display("Average Bytes instruction starts...");
                 begin
                     for(int i=0;i<16;i++)
                     begin
-                        rt_value[i*BYTE : (i+1)*BYTE-1] = {8'b0,ra[i*BYTE : (i+1)*BYTE-1]} + {8'b0,rb[i*BYTE : (i+1)*BYTE-1]} + 1;
+                        rt_value[i*BYTE +: BYTE] = {8'b0,ra[i*BYTE +: BYTE]} + {8'b0,rb[i*BYTE +: BYTE]} + 1;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
@@ -1250,12 +1254,12 @@ module evenpipe(
                 end
             
             SUM_BYTES_INTO_HALFWORDS: 
-                $display("Sum Bytes into Halfwords instruction starts...");
+                //$display("Sum Bytes into Halfwords instruction starts...");
                 begin
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*WORD : i*WORD + 2*BYTES-1] = rb[i*4 : i*4+BYTE-1] + rb[(i*4+1)*BYTE : (i*4+1)*BYTE+BYTE-1] + rb[(i*4+2)*BYTE : (i*4+2)*BYTE+BYTE-1]+ rb[(i*4+3)*BYTE : (i*4+3)*BYTE+BYTE-1];
-                        rt_value[i*WORD + 2*BYTES : (i+1)*WORD-1] = ra[i*4 : i*4+BYTE-1] + ra[(i*4+1)*BYTE : (i*4+1)*BYTE+BYTE-1] + ra[(i*4+2)*BYTE : (i*4+2)*BYTE+BYTE-1]+ ra[(i*4+3)*BYTE : (i*4+3)*BYTE+BYTE-1]
+                        rt_value[i*WORD +: HALFWORD] = rb[i*WORD +: BYTE] + rb[i*WORD+BYTE +: BYTE] + rb[i*WORD+2*BYTE +: BYTE]+ rb[i*WORD+3*BYTE +: BYTE];
+                        rt_value[i*WORD+HALFWORD +: HALFWORD] = ra[i*WORD +: BYTE] + ra[i*WORD+BYTE +: BYTE] + ra[i*WORD+2*BYTE +: BYTE]+ ra[i*WORD+3*BYTE +: BYTE];
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
@@ -1264,12 +1268,12 @@ module evenpipe(
                 end
             
             COUNT_ONES_IN_BYTES: 
-                $display("Count ones in bytes instruction starts...");
+                //$display("Count ones in bytes instruction starts...");
                 begin
                     for(int i=0;i<16;i++)
                     begin
                         t_8 = 0;
-                        t_8_1 = ra[i*BYTE : (i+1)*BYTE-1];
+                        t_8_1 = ra[i*BYTE +: BYTE];
                         for(int m=0;m<8;m++)
                         begin
                             if(t_8_1[m] == 1) 
