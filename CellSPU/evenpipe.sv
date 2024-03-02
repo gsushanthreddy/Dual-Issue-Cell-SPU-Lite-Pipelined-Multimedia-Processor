@@ -116,6 +116,11 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    fw_ep_st_1[140:142] = unit_id;
+                    fw_ep_st_1[12:139] = rt_value;
+                    fw_ep_st_1[11] = wrt_en_ep;
+                    fw_ep_st_1[4:10] = rt_address;
+                    fw_ep_st_1[0:3] = unit_latency; 
                 end
             
             ADD_HALFWORD:
