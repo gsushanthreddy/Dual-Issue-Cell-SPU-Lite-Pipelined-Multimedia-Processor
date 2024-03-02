@@ -115,7 +115,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE:
@@ -136,7 +136,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BYTES:
@@ -157,7 +157,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
             SHIFT_LEFT_QUADWORD_BY_BYTE_IMMEDIATE:
@@ -178,7 +178,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT:
@@ -199,7 +199,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
             ROTATE_QUADWORD_BY_BYTES:
@@ -220,7 +220,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             ROTATE_QUADWORD_BY_BYTES_IMMEDIATE:
@@ -241,7 +241,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             ROTATE_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT:
@@ -262,7 +262,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
             ROTATE_QUADWORD_BY_BITS:
@@ -283,7 +283,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             ROTATE_QUADWORD_BY_BITS_IMMEDIATE:
@@ -304,7 +304,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             GATHER_BITS_FROM_BYTES:
@@ -323,7 +323,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             GATHER_BITS_FROM_HALFWORDS:
@@ -342,7 +342,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
                 
             GATHER_BITS_FROM_WORDS:
@@ -361,7 +361,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             // Load and store
@@ -375,7 +375,7 @@ module oddpipe(
                     unit_id = 3'd6;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             LOAD_QUADWORD_AFORM:
@@ -388,7 +388,7 @@ module oddpipe(
                     unit_id = 3'd6;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             STORE_QUADFORM_DFORM:
@@ -403,7 +403,7 @@ module oddpipe(
                     LS_wrt_en = 1'b1;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             STORE_QUADFORM_AFORM:
@@ -418,7 +418,7 @@ module oddpipe(
                     LS_wrt_en = 1'b1;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             // Branch
@@ -431,7 +431,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_ABSOLUTE:
@@ -443,7 +443,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_RELATIVE_AND_SET_LINK:
@@ -457,7 +457,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_ABSOLUTE_AND_SET_LINK:
@@ -471,7 +471,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd1;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_IF_NOT_ZERO_WORD:
@@ -488,7 +488,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_IF_ZERO_WORD:
@@ -505,7 +505,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_IF_NOT_ZERO_HALFWORD:
@@ -522,7 +522,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             BRANCH_IF_ZERO_HALFWORD:
@@ -539,7 +539,7 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
-                    fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
                 // No operation ( load )
@@ -551,10 +551,14 @@ module oddpipe(
                    PC_output = 32'd0;
                    wrt_en_op = 1'd0;
 
-                end
-
-            
+                end 
         endcase
+
+        fw_op_st_1[0:2] = unit_id;
+        fw_op_st_1[3:130] = rt_value;
+        fw_op_st_1[131] = wrt_en_ep;
+        fw_op_st_1[132:138] = rt_address;
+        fw_op_st_1[139:142] = unit_latency;
     end
             
 endmodule           
