@@ -83,7 +83,6 @@ module evenpipe(
 
     always_ff @(posedge clock) begin
         if(reset==1) begin 
-            fw_ep_st_1 <= 143'd0;
             fw_ep_st_2 <= 143'd0;
             fw_ep_st_3 <= 143'd0;
             fw_ep_st_4 <= 143'd0;
@@ -1288,10 +1287,11 @@ module evenpipe(
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                 end
         endcase
-        fw_ep_st_1[0:2] = unit_id;
-        fw_ep_st_1[3:130] = rt_value;
-        fw_ep_st_1[131] = wrt_en_ep;
-        fw_ep_st_1[132:138] = rt_address;
-        fw_ep_st_1[139:142] = unit_latency; 
+        // fw_ep_st_1[0:2] = unit_id;
+        // fw_ep_st_1[3:130] = rt_value;
+        // fw_ep_st_1[131] = wrt_en_ep;
+        // fw_ep_st_1[132:138] = rt_address;
+        // fw_ep_st_1[139:142] = unit_latency; 
+        fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
     end
 endmodule
