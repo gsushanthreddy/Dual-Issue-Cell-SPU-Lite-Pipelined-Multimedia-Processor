@@ -98,7 +98,7 @@ module oddpipe(
 
             // permute block
             SHIFT_LEFT_QUADWORD_BY_BITS:
-                $display("Shift left quadword by bits instruction starts...");
+                //$display("Shift left quadword by bits instruction starts...");
                 begin
                     s = rb[29:31];
                     for(int b=0;b<128;b++) 
@@ -119,7 +119,7 @@ module oddpipe(
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE:
-                $display("Shift left quadword by bits immediate instruction starts...");
+                //$display("Shift left quadword by bits immediate instruction starts...");
                 begin
                     s = I7 & 7'h07;
                     for(int b=0;b<128;b++) 
@@ -140,7 +140,7 @@ module oddpipe(
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BYTES:
-                $display("Shift left quadword by bytes instruction starts...");
+                //$display("Shift left quadword by bytes instruction starts...");
                 begin
                     s = rb[27:31];
                     for(int b=0;b<16;b++) 
@@ -161,7 +161,7 @@ module oddpipe(
                 end
             
             SHIFT_LEFT_QUADWORD_BY_BYTE_IMMEDIATE:
-                $display("Shift left quadword by byte immediate instruction starts...");
+                //$display("Shift left quadword by byte immediate instruction starts...");
                 begin
                     s = I7 & 7'h1F;
                     for(int b=0;b<16;b++) 
@@ -182,7 +182,7 @@ module oddpipe(
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT:
-                $display("Shift left quadword by bytes from bit shift count instruction starts...");
+                //$display("Shift left quadword by bytes from bit shift count instruction starts...");
                 begin
                     s = rb[24:28];
                     for(int b=0;b<16;b++) 
@@ -203,7 +203,7 @@ module oddpipe(
                 end
             
             ROTATE_QUADWORD_BY_BYTES:
-                $display("Rotate Quadword by bytes instruction starts...");
+                //$display("Rotate Quadword by bytes instruction starts...");
                 begin
                     s = rb[28:31];
                     for(int b=0;b<16;b++) 
@@ -224,7 +224,7 @@ module oddpipe(
                 end
 
             ROTATE_QUADWORD_BY_BYTES_IMMEDIATE:
-                $display("Rotate Quadword by bytes immediate instruction starts...");
+                //$display("Rotate Quadword by bytes immediate instruction starts...");
                 begin
                     s = I7[3:6];
                     for(int b=0;b<16;b++) 
@@ -245,7 +245,7 @@ module oddpipe(
                 end
 
             ROTATE_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT:
-                $display("Rotate Quadword by bytes from bit shift count instruction starts...");
+                //$display("Rotate Quadword by bytes from bit shift count instruction starts...");
                 begin
                     s = rb[24:28];
                     for(int b=0;b<16;b++) 
@@ -266,7 +266,7 @@ module oddpipe(
                 end
             
             ROTATE_QUADWORD_BY_BITS:
-                $display("Rotate Quadword by bits instruction starts...");
+                //$display("Rotate Quadword by bits instruction starts...");
                 begin
                     s = rb[29:31];
                     for(int b=0;b<128;b++) 
@@ -287,7 +287,7 @@ module oddpipe(
                 end
 
             ROTATE_QUADWORD_BY_BITS_IMMEDIATE:
-                $display("Rotate Quadword by bits immediate instruction starts...");
+                //$display("Rotate Quadword by bits immediate instruction starts...");
                 begin
                     s = I7[4:6];
                     for(int b=0;b<128;b++) 
@@ -308,7 +308,7 @@ module oddpipe(
                 end
 
             GATHER_BITS_FROM_BYTES:
-                $display("Gather bits from bytes instruction starts...");
+                //$display("Gather bits from bytes instruction starts...");
                 begin
                     s6 = 16'd0;
                     for(int j=0;b<16;j++) 
@@ -327,7 +327,7 @@ module oddpipe(
                 end
 
             GATHER_BITS_FROM_HALFWORDS:
-                $display("Gather bits from halfwords instruction starts...");
+                //$display("Gather bits from halfwords instruction starts...");
                 begin
                     s5 = 8'd0;
                     for(int j=0;b<8;j++) 
@@ -346,7 +346,7 @@ module oddpipe(
                 end
                 
             GATHER_BITS_FROM_WORDS:
-                $display("Gather bits from words instruction starts...");
+                //$display("Gather bits from words instruction starts...");
                 begin
                     s4 = 4'd0;
                     for(int j=0;b<4;j++) 
@@ -366,7 +366,7 @@ module oddpipe(
 
             // Load and store
             LOAD_QUADFORM_DFORM:
-                $display("Load quadform D-form instruction starts...");
+                //$display("Load quadform D-form instruction starts...");
                 begin
                     LS_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
                     rt_value = LS_data_output;
@@ -379,7 +379,7 @@ module oddpipe(
                 end
 
             LOAD_QUADWORD_AFORM:
-                $display("Load quadform A-form instruction starts...");
+                //$display("Load quadform A-form instruction starts...");
                 begin
                     LS_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
                     rt_value = LS_data_output;
@@ -392,7 +392,7 @@ module oddpipe(
                 end
 
             STORE_QUADFORM_DFORM:
-                $display("Store quadform D-form instruction starts...");
+                //$display("Store quadform D-form instruction starts...");
                 begin
                     LS_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
                     LS_data_input = rt_value;
@@ -407,7 +407,7 @@ module oddpipe(
                 end
 
             STORE_QUADFORM_AFORM:
-                $display("Store quadform A-form instruction starts...");
+                //$display("Store quadform A-form instruction starts...");
                 begin
                     LS_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
                     LS_data_input = rt_value;
@@ -423,7 +423,7 @@ module oddpipe(
 
             // Branch
             BRANCH_RELATIVE:
-                $display("Branch relative instruction starts...");
+                //$display("Branch relative instruction starts...");
                 begin
                     PC_output = ($signed(PC_input) + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
 
@@ -435,7 +435,7 @@ module oddpipe(
                 end
 
             BRANCH_ABSOLUTE:
-                $display("Branch absolute instruction starts...");
+                //$display("Branch absolute instruction starts...");
                 begin
                     PC_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
 
@@ -447,7 +447,7 @@ module oddpipe(
                 end
 
             BRANCH_RELATIVE_AND_SET_LINK:
-                $display("Branch relative and set link instruction starts...");
+                //$display("Branch relative and set link instruction starts...");
                 begin
                     rt_value[0:31] = (PC_input + 4) & LSLR;
                     rt_value[32:127] = 96'd0;
@@ -461,7 +461,7 @@ module oddpipe(
                 end
 
             BRANCH_ABSOLUTE_AND_SET_LINK:
-                $display("Branch absolute and set link instruction starts...");
+                //$display("Branch absolute and set link instruction starts...");
                 begin
                     rt_value[0:31] = (PC_input + 4)& LSLR;
                     rt_value[32:127] = 96'd0;
@@ -475,7 +475,7 @@ module oddpipe(
                 end
 
             BRANCH_IF_NOT_ZERO_WORD:
-                $display("Branch if not zero word instruction starts...");
+                //$display("Branch if not zero word instruction starts...");
                 begin
                     if (rt_value[0:31] != 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
@@ -492,7 +492,7 @@ module oddpipe(
                 end
 
             BRANCH_IF_ZERO_WORD:
-                $display("Branch if zero word instruction starts...");
+                //$display("Branch if zero word instruction starts...");
                 begin
                     if (rt_value[0:31] = 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
@@ -509,7 +509,7 @@ module oddpipe(
                 end
 
             BRANCH_IF_NOT_ZERO_HALFWORD:
-                $display("Branch if not zero halfword instruction starts...");
+                //$display("Branch if not zero halfword instruction starts...");
                 begin
                     if (rt_value[16:31] != 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
@@ -526,7 +526,7 @@ module oddpipe(
                 end
 
             BRANCH_IF_ZERO_HALFWORD:
-                $display("Branch if zero halfword instruction starts...");
+                //$display("Branch if zero halfword instruction starts...");
                 begin
                     if (rt_value[16:31] = 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
@@ -544,7 +544,7 @@ module oddpipe(
 
                 // No operation ( load )
                 NO_OPERATION_LOAD:
-                $display("No operation (load) instruction starts...");
+                //$display("No operation (load) instruction starts...");
                 begin
                    
                    rt_value = 128'd0;
