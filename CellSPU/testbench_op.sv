@@ -132,6 +132,10 @@ module testbench_op();
         op_op_code = GATHER_BITS_FROM_WORDS;
         ra = 128'd45;
 
+        #10;
+
+        $finish;
+
     end
 
 endmodule
