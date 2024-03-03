@@ -59,76 +59,89 @@ module testbench_op();
 
         @(posedge clock)
 
+        #1;
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS;
         rb = 128'd10;
         ra = 128'd20;
 
         @(posedge clock)
 
+        #1;
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE;
         I7 = 7'd5;
         ra = 128'd15;
 
         @(posedge clock)
 
+        #1;
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BYTES;
         rb = 128'd110;
         ra = 128'd25;
 
         @(posedge clock)
 
+        #1;
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BYTE_IMMEDIATE;
         I7 = 7'd15;
         ra = 128'd33;
 
         @(posedge clock)
-
+        
+        #1;
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT;
         rb = 128'd45;
         ra = 128'd18;
 
         @(posedge clock)
-
+        
+        #1;
         op_op_code = ROTATE_QUADWORD_BY_BYTES;
         rb = 128'd34;
         ra = 128'd77;
  
         @(posedge clock)
-
+        
+        #1;
         op_op_code = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE;
         I7 = 7'd7;
         ra = 128'd37;
    
         @(posedge clock)
-
+        
+        #1;
         op_op_code = ROTATE_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT;
         rb = 128'd46;
         ra = 128'd71;
 
         @(posedge clock)
-
+        
+        #1;
         op_op_code = ROTATE_QUADWORD_BY_BITS;
         rb = 128'd61;
         ra = 128'd75;
 
         @(posedge clock)
-
+        
+        #1;
         op_op_code = ROTATE_QUADWORD_BY_BITS_IMMEDIATE;
         I7 = 7'd5;
         ra = 128'd65;
 
         @(posedge clock)
-
+        
+        #1;
         op_op_code = GATHER_BITS_FROM_BYTES;
         ra = 128'd15;
         
         @(posedge clock)
-
+        
+        #1;
         op_op_code = GATHER_BITS_FROM_HALFWORDS;
         ra = 128'd95;
 
         @(posedge clock)
-
+        
+        #1;
         op_op_code = GATHER_BITS_FROM_WORDS;
         ra = 128'd45;
 
