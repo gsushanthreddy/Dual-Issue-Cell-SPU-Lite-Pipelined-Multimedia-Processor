@@ -24,7 +24,14 @@ module oddpipe(
     input logic [0:127] LS_data_output,
    
     output logic LS_wrt_en, // write enable for storing data in the local store
-
+    
+    output logic [0:142] fw_op_st_1;
+    output logic [0:142] fw_op_st_2;
+    output logic [0:142] fw_op_st_3;
+    output logic [0:142] fw_op_st_4;
+    output logic [0:142] fw_op_st_5;
+    output logic [0:142] fw_op_st_6;
+    output logic [0:142] fw_op_st_7;
     output logic [0:142] out_op,
 
     input logic [0:31] PC_input,
@@ -47,14 +54,6 @@ module oddpipe(
     logic [0:127] t_128;
 
     logic wrt_en_op;
-
-    logic [0:142] fw_op_st_1;
-    logic [0:142] fw_op_st_2;
-    logic [0:142] fw_op_st_3;
-    logic [0:142] fw_op_st_4;
-    logic [0:142] fw_op_st_5;
-    logic [0:142] fw_op_st_6;
-    logic [0:142] fw_op_st_7;
 
     int s;
 
