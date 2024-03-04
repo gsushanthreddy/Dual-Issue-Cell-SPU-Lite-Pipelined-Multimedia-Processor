@@ -41,16 +41,14 @@ module testbench_op();
         .clock(clock),
         .reset(reset),
         .op_input_op_code(op_op_code),
-        .I7_input(I7),
-        .I10_input(I10),
-        .I16_input(I16),
-        .I18_input(I18),
         .ra_input(ra),
         .rb_input(rb),
         .rc_input(rc),
         .rt_address_input(rt_address),
-        .PC_input(pc_input),
-        .PC_output(pc_output),
+        .I7_input(I7),
+        .I10_input(I10),
+        .I16_input(I16),
+        .I18_input(I18),
         .LS_address_output(ls_address),
         .LS_data_input(ls_data_input),
         .LS_data_output(ls_data_output),
@@ -62,7 +60,9 @@ module testbench_op();
         .fw_op_st_5(FW_op_st_5),
         .fw_op_st_6(FW_op_st_6),
         .fw_op_st_7(FW_op_st_7),
-        .out_op(op_output)
+        .out_op(op_output),
+        .PC_input(pc_input),
+        .PC_output(pc_output)
     );
 
     initial clock = 0;
