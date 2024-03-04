@@ -18,6 +18,13 @@ module testbench_ep();
 
     logic wrt_en_ep;
 
+    logic [0:142] FW_ep_st_1;
+    logic [0:142] FW_ep_st_2;
+    logic [0:142] FW_ep_st_3;
+    logic [0:142] FW_ep_st_4;
+    logic [0:142] FW_ep_st_5;
+    logic [0:142] FW_ep_st_6;
+    logic [0:142] FW_ep_st_7;
     logic [0:142] ep_output;
 
     evenpipe dut(
@@ -32,6 +39,13 @@ module testbench_ep();
         .I10_input(I10),
         .I16_input(I16),
         .I18_input(I18),
+        .fw_ep_st_1(FW_ep_st_1),
+        .fw_ep_st_2(FW_ep_st_2),
+        .fw_ep_st_3(FW_ep_st_3),
+        .fw_ep_st_4(FW_ep_st_4),
+        .fw_ep_st_5(FW_ep_st_5),
+        .fw_ep_st_6(FW_ep_st_6),
+        .fw_ep_st_7(FW_ep_st_7),
         .out_ep(ep_output)
     );
 

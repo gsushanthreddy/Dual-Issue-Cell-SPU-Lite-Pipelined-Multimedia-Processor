@@ -27,6 +27,14 @@ module testbench_op();
     logic [0:127] ls_data_input;
     logic [0:127] ls_data_output;
 
+    logic [0:142] FW_op_st_1;
+    logic [0:142] FW_op_st_2;
+    logic [0:142] FW_op_st_3;
+    logic [0:142] FW_op_st_4;
+    logic [0:142] FW_op_st_5;
+    logic [0:142] FW_op_st_6;
+    logic [0:142] FW_op_st_7;
+
     logic [0:142] op_output;
 
     oddpipe dut2(
@@ -47,6 +55,13 @@ module testbench_op();
         .LS_data_input(ls_data_input),
         .LS_data_output(ls_data_output),
         .LS_wrt_en(ls_wrt_en),
+        .fw_op_st_1(FW_op_st_1),
+        .fw_op_st_2(FW_op_st_2),
+        .fw_op_st_3(FW_op_st_3),
+        .fw_op_st_4(FW_op_st_4),
+        .fw_op_st_5(FW_op_st_5),
+        .fw_op_st_6(FW_op_st_6),
+        .fw_op_st_7(FW_op_st_7),
         .out_op(op_output)
     );
 
