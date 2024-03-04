@@ -21,6 +21,13 @@ module evenpipe(
     input [0:9] I10_input,
     input [0:15] I16_input,
     input [0:17] I18_input,
+    output logic [0:142] fw_ep_st_1,
+    output logic [0:142] fw_ep_st_2,
+    output logic [0:142] fw_ep_st_3,
+    output logic [0:142] fw_ep_st_4,
+    output logic [0:142] fw_ep_st_5,
+    output logic [0:142] fw_ep_st_6,
+    output logic [0:142] fw_ep_st_7,
     output logic [0:142] out_ep
 );
     // input opcode ep_input_op_code;
@@ -50,14 +57,6 @@ module evenpipe(
     logic [0:7] t_8_1;
     logic [0:15] t_16;
     logic [0:31] t_32;
-
-    logic [0:142] fw_ep_st_1;
-    logic [0:142] fw_ep_st_2;
-    logic [0:142] fw_ep_st_3;
-    logic [0:142] fw_ep_st_4;
-    logic [0:142] fw_ep_st_5;
-    logic [0:142] fw_ep_st_6;
-    logic [0:142] fw_ep_st_7;
 
     logic [0:16] rep_left_bit_I7_16;
     logic [0:32] rep_left_bit_I7_32;
