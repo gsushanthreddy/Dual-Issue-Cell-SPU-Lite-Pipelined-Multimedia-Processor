@@ -12,7 +12,7 @@ module oddpipe(
     input opcode op_input_op_code,
     input [0:127] ra_input,
     input [0:127] rb_input,
-    input [0:127] rc_input,
+    //input [0:127] rc_input,
     input [0:6] rt_address_input,
     input [0:6] I7_input,
     input [0:9] I10_input,
@@ -24,14 +24,23 @@ module oddpipe(
     input logic [0:127] LS_data_output,
    
     output logic LS_wrt_en, // write enable for storing data in the local store
-
+    
+    output logic [0:142] fw_op_st_1,
+    output logic [0:142] fw_op_st_2,
+    output logic [0:142] fw_op_st_3,
+    output logic [0:142] fw_op_st_4,
+    output logic [0:142] fw_op_st_5,
+    output logic [0:142] fw_op_st_6,
+    output logic [0:142] fw_op_st_7,
     output logic [0:142] out_op,
+
+    output logic branch_taken,
 
     input logic [0:31] PC_input,
     output logic [0:31] PC_output
 );
     opcode op_op_code;
-    logic [0:127] ra, rb, rc, rt_value;
+    logic [0:127] ra, rb, rt_value;
     logic [0:6] rt_address;
     logic [0:6] I7;
     logic [0:9] I10;
@@ -48,20 +57,12 @@ module oddpipe(
 
     logic wrt_en_op;
 
-    logic [0:142] fw_op_st_1;
-    logic [0:142] fw_op_st_2;
-    logic [0:142] fw_op_st_3;
-    logic [0:142] fw_op_st_4;
-    logic [0:142] fw_op_st_5;
-    logic [0:142] fw_op_st_6;
-    logic [0:142] fw_op_st_7;
-
     int s;
 
     always_ff @(posedge clock) begin
         ra <= ra_input;
         rb <= rb_input;
-        rc <= rc_input;
+        //rc <= rc_input;
         rt_address <= rt_address_input;
         op_op_code <= op_input_op_code;
         I7 <= I7_input;
@@ -430,6 +431,8 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
+
+                    branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -442,6 +445,8 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
+
+                    branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -456,6 +461,8 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd1;
+
+                    branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -470,6 +477,8 @@ module oddpipe(
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd1;
+
+                    branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -479,6 +488,7 @@ module oddpipe(
                     if (rt_value[0:31] != 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
+                        branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (PC_input + 4) & LSLR;
@@ -496,6 +506,7 @@ module oddpipe(
                     if (rt_value[0:31] == 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
+                        branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (PC_input + 4) & LSLR;
@@ -513,6 +524,7 @@ module oddpipe(
                     if (rt_value[16:31] != 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
+                        branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (PC_input + 4) & LSLR;
@@ -530,6 +542,7 @@ module oddpipe(
                     if (rt_value[16:31] == 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
+                        branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (PC_input + 4) & LSLR;
