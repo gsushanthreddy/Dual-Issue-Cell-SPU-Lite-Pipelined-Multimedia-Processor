@@ -23,7 +23,7 @@ module toplevel_part1(
     // data from the instruction of odd pipe
     input logic [0:6] ra_op_address, 
     input logic [0:6] rb_op_address, 
-    input logic [0:6] rc_op_address,
+    //input logic [0:6] rc_op_address,
     input logic [0:6] rt_op_address,
 
     input [0:7] I7_op,
@@ -53,6 +53,9 @@ module toplevel_part1(
     output [0:142] fw_op_st_7,
     output [0:142] out_op,
 
+    // Branch related ports
+    output logic branch_taken,
+
     // PC input and output
 
     input logic [0:31] PC_input,
@@ -75,7 +78,7 @@ module toplevel_part1(
     logic [0:127] rc_ep_value;
     logic [0:127] ra_op_value;
     logic [0:127] rb_op_value;
-    logic [0:127] rc_op_value;
+    //logic [0:127] rc_op_value;
 
     // forwarding units outputs
     logic [0:127] ra_value_fw_ep;
@@ -83,7 +86,7 @@ module toplevel_part1(
     logic [0:127] rc_value_fw_ep;
     logic [0:127] ra_value_fw_op;
     logic [0:127] rb_value_fw_op;
-    logic [0:127] rc_value_fw_op;
+    //logic [0:127] rc_value_fw_op;
 
     // Local store access logic between odd pipe and the local store
 
@@ -105,7 +108,7 @@ module toplevel_part1(
         .wrt_en_ep(wrt_en_ep),
         .ra_op_address(ra_op_address),
         .rb_op_address(rb_op_address),
-        .rc_op_address(rc_op_address),
+        //.rc_op_address(rc_op_address),
         .rt_op_address(rt_op_address),
         .rt_value_op(rt_value_op),
         .wrt_en_op(wrt_en_op),
@@ -113,8 +116,8 @@ module toplevel_part1(
         .rb_ep_value(rb_ep_value),
         .rc_ep_value(rc_ep_value),
         .ra_op_value(ra_op_value),
-        .rb_op_value(rb_op_value),
-        .rc_op_value(rc_op_value)
+        .rb_op_value(rb_op_value)
+        //.rc_op_value(rc_op_value)
 
     );
 
@@ -147,10 +150,10 @@ module toplevel_part1(
         .op_opcode(op_opcode),
         .ra_address_op(ra_op_address),
         .rb_address_op(rb_op_address),
-        .rc_address_op(rc_op_address),
+        //.rc_address_op(rc_op_address),
         .ra_value_op(ra_op_value),
         .rb_value_op(rb_op_value),
-        .rc_value_op(rc_op_value),
+        //.rc_value_op(rc_op_value),
         .rt_address_op(rt_op_address),
         .I7_op(I7_op),
         .I10_op(I10_op),
@@ -170,8 +173,8 @@ module toplevel_part1(
         .rb_value_fw_ep(rb_value_fw_ep),
         .rc_value_fw_ep(rc_value_fw_ep),
         .ra_value_fw_op(ra_value_fw_op),
-        .rb_value_fw_op(rb_value_fw_op),
-        .rc_value_fw_op(rc_value_fw_op)
+        .rb_value_fw_op(rb_value_fw_op)
+        //.rc_value_fw_op(rc_value_fw_op)
 
     );
 
@@ -206,7 +209,7 @@ module toplevel_part1(
         .op_input_op_code(op_opcode), // check whether this connection is legit
         .ra_input(ra_value_fw_op), // This value is direct connection from the forwarding block 
         .rb_input(rb_value_fw_op),
-        .rc_input(rc_value_fw_op),
+        //.rc_input(rc_value_fw_op),
         .rt_address_input(rt_op_address),
         .I7_input(I7_op),
         .I10_input(I10_op),
@@ -227,6 +230,8 @@ module toplevel_part1(
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
         .out_op(out_op),
+
+        .branch_taken(branch_taken),
 
         .PC_input(PC_input),
         .PC_output(PC_output)

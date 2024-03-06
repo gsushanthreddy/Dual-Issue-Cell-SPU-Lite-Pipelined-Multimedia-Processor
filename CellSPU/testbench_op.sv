@@ -13,7 +13,7 @@ module testbench_op();
     logic [0:15] I16;
     logic [0:17] I18;
 
-    logic [0:127] ra, rb, rc, rt_value;
+    logic [0:127] ra, rb, rt_value;
     logic [0:6] rt_address;
 
     logic [0:31] pc_input;
@@ -22,6 +22,8 @@ module testbench_op();
     logic wrt_en_op;
 
     logic ls_wrt_en;
+
+    logic Branch_Taken;
 
     logic [0:14] ls_address;
     logic [0:127] ls_data_input;
@@ -43,7 +45,7 @@ module testbench_op();
         .op_input_op_code(op_op_code),
         .ra_input(ra),
         .rb_input(rb),
-        .rc_input(rc),
+        //.rc_input(rc),
         .rt_address_input(rt_address),
         .I7_input(I7),
         .I10_input(I10),
@@ -61,6 +63,7 @@ module testbench_op();
         .fw_op_st_6(FW_op_st_6),
         .fw_op_st_7(FW_op_st_7),
         .out_op(op_output),
+        .branch_taken(Branch_Taken),
         .PC_input(pc_input),
         .PC_output(pc_output)
     );
