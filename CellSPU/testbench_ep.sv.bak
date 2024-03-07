@@ -75,8 +75,8 @@ module testbench_ep();
         @(posedge clock)
 
         ep_op_code = ADD_WORD_IMMEDIATE;
-        ra = 128'd15;
-        I10 = 10'd40;
+        ra = 128'd4;
+        I10 = 10'd8;
 
         @(posedge clock)
 
