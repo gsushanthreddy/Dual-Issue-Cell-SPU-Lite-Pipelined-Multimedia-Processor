@@ -98,8 +98,8 @@ module oddpipe(
 
             // permute block
             SHIFT_LEFT_QUADWORD_BY_BITS:
-                //$display("Shift left quadword by bits instruction starts...");
                 begin
+                    $display("Shift left quadword by bits instruction starts...");
                     s = rb[29:31];
                     for(int b=0;b<128;b++) 
                         begin
@@ -115,12 +115,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE:
-                //$display("Shift left quadword by bits immediate instruction starts...");
                 begin
+                    $display("Shift left quadword by bits immediate instruction starts...");
                     s = I7 & 7'h07;
                     for(int b=0;b<128;b++) 
                         begin
@@ -136,12 +137,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BYTES:
-                //$display("Shift left quadword by bytes instruction starts...");
                 begin
+                    $display("Shift left quadword by bytes instruction starts...");
                     s = rb[27:31];
                     for(int b=0;b<16;b++) 
                         begin
@@ -157,12 +159,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
             SHIFT_LEFT_QUADWORD_BY_BYTE_IMMEDIATE:
-                //$display("Shift left quadword by byte immediate instruction starts...");
                 begin
+                    $display("Shift left quadword by byte immediate instruction starts...");
                     s = I7 & 7'h1F;
                     for(int b=0;b<16;b++) 
                         begin
@@ -178,12 +181,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             SHIFT_LEFT_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT:
-                //$display("Shift left quadword by bytes from bit shift count instruction starts...");
                 begin
+                    $display("Shift left quadword by bytes from bit shift count instruction starts...");
                     s = rb[24:28];
                     for(int b=0;b<16;b++) 
                         begin
@@ -199,12 +203,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
             ROTATE_QUADWORD_BY_BYTES:
-                //$display("Rotate Quadword by bytes instruction starts...");
                 begin
+                    $display("Rotate Quadword by bytes instruction starts...");
                     s = rb[28:31];
                     for(int b=0;b<16;b++) 
                         begin
@@ -220,12 +225,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             ROTATE_QUADWORD_BY_BYTES_IMMEDIATE:
-                //$display("Rotate Quadword by bytes immediate instruction starts...");
                 begin
+                    $display("Rotate Quadword by bytes immediate instruction starts...");
                     s = I7[3:6];
                     for(int b=0;b<16;b++) 
                         begin
@@ -241,12 +247,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             ROTATE_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT:
-                //$display("Rotate Quadword by bytes from bit shift count instruction starts...");
                 begin
+                    $display("Rotate Quadword by bytes from bit shift count instruction starts...");
                     s = rb[24:28];
                     for(int b=0;b<16;b++) 
                         begin
@@ -262,12 +269,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
             ROTATE_QUADWORD_BY_BITS:
-                //$display("Rotate Quadword by bits instruction starts...");
                 begin
+                    $display("Rotate Quadword by bits instruction starts...");
                     s = rb[29:31];
                     for(int b=0;b<128;b++) 
                         begin
@@ -283,12 +291,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             ROTATE_QUADWORD_BY_BITS_IMMEDIATE:
-                //$display("Rotate Quadword by bits immediate instruction starts...");
                 begin
+                    $display("Rotate Quadword by bits immediate instruction starts...");
                     s = I7[4:6];
                     for(int b=0;b<128;b++) 
                         begin
@@ -304,12 +313,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             GATHER_BITS_FROM_BYTES:
-                //$display("Gather bits from bytes instruction starts...");
                 begin
+                    $display("Gather bits from bytes instruction starts...");
                     s6 = 16'd0;
                     for(int j=0;j<16;j++) 
                         begin
@@ -323,12 +333,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d,rt_value = %d",ra,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             GATHER_BITS_FROM_HALFWORDS:
-                //$display("Gather bits from halfwords instruction starts...");
                 begin
+                    $display("Gather bits from halfwords instruction starts...");
                     s5 = 8'd0;
                     for(int j=0;j<8;j++) 
                         begin
@@ -342,12 +353,13 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d,rt_value = %d",ra,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
                 
             GATHER_BITS_FROM_WORDS:
-                //$display("Gather bits from words instruction starts...");
                 begin
+                    $display("Gather bits from words instruction starts...");
                     s4 = 4'd0;
                     for(int j=0;j<4;j++) 
                         begin
@@ -361,13 +373,14 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
+                    $display("ra value = %d,rt_value = %d",ra,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             // Load and store
             LOAD_QUADFORM_DFORM:
-                //$display("Load quadform D-form instruction starts...");
                 begin
+                    $display("Load quadform D-form instruction starts...");
                     LS_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
                     rt_value = LS_data_output;
 
@@ -379,8 +392,8 @@ module oddpipe(
                 end
 
             LOAD_QUADWORD_AFORM:
-                //$display("Load quadform A-form instruction starts...");
                 begin
+                    $display("Load quadform A-form instruction starts...");
                     LS_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
                     rt_value = LS_data_output;
 
@@ -388,12 +401,13 @@ module oddpipe(
                     unit_id = 3'd6;
 
                     wrt_en_op = 1'd1;
+                    
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
             STORE_QUADFORM_DFORM:
-                //$display("Store quadform D-form instruction starts...");
                 begin
+                    $display("Store quadform D-form instruction starts...");
                     LS_address = ($signed({{18{I10[0]}}, I10, 4'b0}) + $signed(ra[0:31])) & LSLR & 32'hFFFFFFF0;
                     LS_data_input = rt_value;
 
@@ -407,8 +421,8 @@ module oddpipe(
                 end
 
             STORE_QUADFORM_AFORM:
-                //$display("Store quadform A-form instruction starts...");
                 begin
+                    $display("Store quadform A-form instruction starts...");
                     LS_address = ({{14{I16[0]}}, I16, 2'b0}) & LSLR & 32'hFFFFFFF0;
                     LS_data_input = rt_value;
 
@@ -423,8 +437,8 @@ module oddpipe(
 
             // Branch
             BRANCH_RELATIVE:
-                //$display("Branch relative instruction starts...");
                 begin
+                    $display("Branch relative instruction starts...");
                     PC_output = ($signed(PC_input) + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
 
                     unit_latency = 4'd1;
@@ -437,8 +451,8 @@ module oddpipe(
                 end
 
             BRANCH_ABSOLUTE:
-                //$display("Branch absolute instruction starts...");
                 begin
+                    $display("Branch absolute instruction starts...");
                     PC_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
 
                     unit_latency = 4'd1;
@@ -451,8 +465,8 @@ module oddpipe(
                 end
 
             BRANCH_RELATIVE_AND_SET_LINK:
-                //$display("Branch relative and set link instruction starts...");
                 begin
+                    $display("Branch relative and set link instruction starts...");
                     rt_value[0:31] = (PC_input + 4) & LSLR;
                     rt_value[32:127] = 96'd0;
                     PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
@@ -467,8 +481,8 @@ module oddpipe(
                 end
 
             BRANCH_ABSOLUTE_AND_SET_LINK:
-                //$display("Branch absolute and set link instruction starts...");
                 begin
+                    $display("Branch absolute and set link instruction starts...");
                     rt_value[0:31] = (PC_input + 4)& LSLR;
                     rt_value[32:127] = 96'd0;
                     PC_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
@@ -483,8 +497,8 @@ module oddpipe(
                 end
 
             BRANCH_IF_NOT_ZERO_WORD:
-                //$display("Branch if not zero word instruction starts...");
                 begin
+                    $display("Branch if not zero word instruction starts...");
                     if (rt_value[0:31] != 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
@@ -501,8 +515,8 @@ module oddpipe(
                 end
 
             BRANCH_IF_ZERO_WORD:
-                //$display("Branch if zero word instruction starts...");
                 begin
+                    $display("Branch if zero word instruction starts...");
                     if (rt_value[0:31] == 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
@@ -519,8 +533,8 @@ module oddpipe(
                 end
 
             BRANCH_IF_NOT_ZERO_HALFWORD:
-                //$display("Branch if not zero halfword instruction starts...");
                 begin
+                    $display("Branch if not zero halfword instruction starts...");
                     if (rt_value[16:31] != 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
@@ -537,8 +551,8 @@ module oddpipe(
                 end
 
             BRANCH_IF_ZERO_HALFWORD:
-                //$display("Branch if zero halfword instruction starts...");
                 begin
+                    $display("Branch if zero halfword instruction starts...");
                     if (rt_value[16:31] == 0) begin
                         PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
@@ -556,9 +570,8 @@ module oddpipe(
 
                 // No operation ( load )
                 NO_OPERATION_LOAD:
-                //$display("No operation (load) instruction starts...");
                 begin
-                   
+                   $display("No operation (load) instruction starts...");
                    rt_value = 128'd0;
                    PC_output = 32'd0;
                    wrt_en_op = 1'd0;
