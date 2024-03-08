@@ -1,7 +1,7 @@
 import descriptions::*;
 
 // this file for testing the First stage of the even pipe
-`timescale  1ns/1ps
+`timescale  1ns/1ns
 
 module testbench_ep();
 
@@ -201,8 +201,8 @@ module testbench_ep();
         @(posedge clock)
 
         ep_op_code =  NOR;
-        ra = 128'd123;
-        rb = 128'd234;
+        ra = 128'd4;
+        rb = 128'd16;
 
         @(posedge clock)
 
@@ -368,29 +368,29 @@ module testbench_ep();
         @(posedge clock)
 
         ep_op_code =  FLOATING_MULTIPLY;
-        ra = 128'd123;
-        rb = 128'd987;
+        ra = 128'd4;
+        rb = 128'd8;
 
         @(posedge clock)
 
         ep_op_code =  FLOATING_MULTIPLY_AND_ADD;
-        ra = 128'd456;
-        rb = 128'd654;
-        rc = 128'd21;
+        ra = 128'd8;
+        rb = 128'd4;
+        rc = 128'd1;
 
         @(posedge clock)
 
         ep_op_code =  FLOATING_NEGATIVE_MULTIPLY_AND_SUBTRACT;
-        ra = 128'd456;
-        rb = 128'd654;
-        rc = 128'd123771;
+        ra = 128'd8;
+        rb = 128'd4;
+        rc = 128'd1;
         
         @(posedge clock)
 
         ep_op_code =  FLOATING_MULTIPLY_AND_SUBTRACT;
-        ra = 128'd129;
-        rb = 128'd481;
-        rc = 128'd34820;
+        ra = 128'd8;
+        rb = 128'd4;
+        rc = 128'd1;
 
         @(posedge clock)
 

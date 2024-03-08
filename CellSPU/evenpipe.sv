@@ -114,7 +114,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             ADD_HALFWORD:
@@ -128,7 +128,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             ADD_HALFWORD_IMMEDIATE:
@@ -142,7 +142,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, I10 value = %d, rt_value = %d",ra,I10_input,rt_value);
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             ADD_WORD_IMMEDIATE:
@@ -156,7 +156,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, I10 value = %d, rt_value = %d",ra,I10_input,rt_value);
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             SUBTRACT_FROM_WORD:
@@ -170,7 +170,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             SUBTRACT_FROM_HALFWORD:
@@ -184,7 +184,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             SUBTRACT_FROM_HALFWORD_IMMEDIATE:
@@ -198,6 +198,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             SUBTRACT_FROM_WORD_IMMEDIATE:
@@ -211,6 +212,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             ADD_EXTENDED:
@@ -251,7 +253,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
 
             BORROW_GENERATE:
@@ -261,7 +263,7 @@ module evenpipe(
                         begin
                             if($unsigned(ra[i*WORD +: WORD]) >= $unsigned(rb[i*WORD +: WORD])) 
                                 begin 
-					                rt_value[i*WORD +: WORD] = 32'b1;
+					                rt_value[i*WORD +: WORD] = 32'b1; //1 value or 32 1 bits? 
                                 end
                             else 
                                 begin
@@ -272,7 +274,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             AND:
@@ -285,7 +287,7 @@ module evenpipe(
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             AND_WITH_COMPLEMENT:
@@ -299,7 +301,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             AND_HALFWORD_IMMEDIATE:
@@ -313,6 +315,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             AND_WORD_IMMEDIATE:
@@ -326,6 +329,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             OR:
@@ -339,7 +343,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
 
             OR_COMPLEMENT:
@@ -353,7 +357,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
 
             OR_HALFWORD_IMMEDIATE:
@@ -367,6 +371,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
 
             OR_WORD_IMMEDIATE:
@@ -380,6 +385,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             EXCLUSIVE_OR:
@@ -393,7 +399,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             EXCLUSIVE_OR_HALFWORD_IMMEDIATE:
@@ -407,6 +413,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             EXCLUSIVE_OR_WORD_IMMEDIATE:
@@ -420,6 +427,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             NAND:
@@ -433,7 +441,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             NOR:
@@ -447,7 +455,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COUNT_LEADING_ZEROS:
@@ -474,6 +482,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, rt_value = %h",ra,rt_value);
                 end
             
             FORM_SELECT_MASK_FOR_HALFWORDS:
@@ -495,6 +504,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, rt_value = %h",ra,rt_value);
                 end
             
             FORM_SELECT_MASK_FOR_WORDS:
@@ -516,6 +526,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, rt_value = %h",ra,rt_value);
                 end
             
             COMPARE_EQUAL_HALFWORD:
@@ -536,7 +547,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COMPARE_EQUAL_HALFWORD_IMMEDIATE:
@@ -557,6 +568,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                     
                 end
             
@@ -578,7 +590,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COMPARE_EQUAL_WORD_IMMEDIATE:
@@ -599,6 +611,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
 
             COMPARE_GREATER_THAN_HALFWORD:
@@ -619,7 +632,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COMPARE_GREATER_THAN_HALFWORD_IMMEDIATE:
@@ -640,6 +653,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             COMPARE_GREATER_THAN_WORD:
@@ -660,7 +674,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COMPARE_GREATER_THAN_WORD_IMMEDIATE:
@@ -681,6 +695,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_HALFWORD:
@@ -701,7 +716,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_HALFWORD_IMMEDIATE:
@@ -722,6 +737,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_WORD:
@@ -742,7 +758,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COMPARE_LOGICAL_GREATER_THAN_WORD_IMMEDIATE:
@@ -763,6 +779,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             IMMEDIATE_LOAD_HALFWORD: 
@@ -776,6 +793,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I16 = %h, rt_value = %h",I16,rt_value);
                 end
             
             IMMEDIATE_LOAD_HALFWORD_UPPER:
@@ -789,6 +807,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I16 = %h, rt_value = %h",I16,rt_value);
                 end
 
             IMMEDIATE_LOAD_WORD: 
@@ -802,6 +821,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I10 value = %h, rt_value = %h",I10,rt_value);
                 end
             
             IMMEDIATE_LOAD_ADDRESS:
@@ -815,6 +835,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I18 value = %h, rt_value = %h",I18,rt_value);
                 end
             
             SHIFT_LEFT_HALFWORD: 
@@ -841,7 +862,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
 
             SHIFT_LEFT_HALFWORD_IMMEDIATE: 
@@ -868,6 +889,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
                 end
 
             SHIFT_LEFT_WORD: 
@@ -894,7 +916,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
 
             SHIFT_LEFT_WORD_IMMEDIATE: 
@@ -921,6 +943,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
                 end
             
             ROTATE_HALFWORD: 
@@ -947,7 +970,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             ROTATE_HALFWORD_IMMEDIATE: 
@@ -974,6 +997,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
                 end
                 
             ROTATE_WORD: 
@@ -1000,7 +1024,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             ROTATE_WORD_IMMEDIATE: 
@@ -1027,6 +1051,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
                 end
             
             FLOATING_MULTIPLY: 
@@ -1042,7 +1067,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
-                        else if (t_4_real) 
+                        else if (t_4_real > SMAX) 
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
@@ -1060,7 +1085,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             FLOATING_MULTIPLY_AND_ADD: 
@@ -1077,7 +1102,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
-                        else if (t_4_real) 
+                        else if (t_4_real > SMAX) 
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
@@ -1095,7 +1120,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d, rc value = %d,rt_value = %d",ra,rb,rc,rt_value);
+                    $display("ra value = %h, rb value = %h, rc value = %h,rt_value = %h",ra,rb,rc,rt_value);
                 end
             
             FLOATING_NEGATIVE_MULTIPLY_AND_SUBTRACT: 
@@ -1112,7 +1137,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
-                        else if (t_4_real) 
+                        else if (t_4_real > SMAX) 
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
@@ -1130,7 +1155,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d, rc value = %d, rt_value = %d",ra,rb,rc,rt_value);
+                    $display("ra value = %h, rb value = %h, rc value = %h, rt_value = %h",ra,rb,rc,rt_value);
                 end
             
             FLOATING_MULTIPLY_AND_SUBTRACT: 
@@ -1147,7 +1172,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = -$shortrealtobits(SMAX);
                         end
-                        else if (t_4_real) 
+                        else if (t_4_real > SMAX) 
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
@@ -1165,7 +1190,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d, rc value = %d, rt_value = %d",ra,rb,rc,rt_value);
+                    $display("ra value = %h, rb value = %h, rc value = %h, rt_value = %h",ra,rb,rc,rt_value);
                 end
             
             MULTIPLY: 
@@ -1178,7 +1203,7 @@ module evenpipe(
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
 
             MULTIPLY_UNSIGNED: 
@@ -1192,7 +1217,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             MULTIPLY_IMMEDIATE: 
@@ -1206,6 +1231,7 @@ module evenpipe(
                     unit_latency = 4'd8;
                     unit_id = 3'd3;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
             
             MULTIPLY_UNSIGNED_IMMEDIATE: 
@@ -1220,6 +1246,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, I10 value = %h, rt_value = %h",ra,I10,rt_value);
                 end
 
             MULTIPLY_AND_ADD: 
@@ -1234,7 +1261,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             MULTIPLY_HIGH: 
@@ -1249,7 +1276,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             ABSOLUTE_DIFFERENCES_OF_BYTES: 
@@ -1270,7 +1297,7 @@ module evenpipe(
                     unit_id = 3'd4;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             AVERAGE_BYTES: 
@@ -1284,7 +1311,7 @@ module evenpipe(
                     unit_id = 3'd4;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             SUM_BYTES_INTO_HALFWORDS: 
@@ -1299,7 +1326,7 @@ module evenpipe(
                     unit_id = 3'd4;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                 end
             
             COUNT_ONES_IN_BYTES: 
@@ -1316,11 +1343,13 @@ module evenpipe(
                                 t_8 = t_8 + 1;
                             end
                         end
+                        rt_value[i*BYTE +: BYTE] = t_8;
                     end
                     unit_latency = 4'd4;
                     unit_id = 3'd4;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, rt_value = %h",ra,rt_value);
                 end
         endcase
         // fw_ep_st_1[0:2] = unit_id;
