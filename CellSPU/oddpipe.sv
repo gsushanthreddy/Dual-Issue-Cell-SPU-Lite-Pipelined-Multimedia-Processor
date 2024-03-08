@@ -115,7 +115,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -137,7 +137,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
+                    $display("ra value = %h, I7 value = %h,rt_value = %h",ra,I7,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -159,7 +159,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
@@ -181,7 +181,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
+                    $display("ra value = %h, I7 value = %h,rt_value = %h",ra,I7,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -203,7 +203,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
@@ -225,7 +225,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -247,7 +247,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
+                    $display("ra value = %h, I7 value = %h,rt_value = %h",ra,I7,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -269,7 +269,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
             
@@ -291,7 +291,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, rb value = %d,rt_value = %d",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -313,7 +313,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d, I7 value = %d,rt_value = %d",ra,I7_input,rt_value);
+                    $display("ra value = %h, I7 value = %h,rt_value = %h",ra,I7,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -333,7 +333,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d,rt_value = %d",ra,rt_value);
+                    $display("ra value = %h,rt_value = %h",ra,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -353,7 +353,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d,rt_value = %d",ra,rt_value);
+                    $display("ra value = %h,rt_value = %h",ra,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
                 
@@ -373,7 +373,7 @@ module oddpipe(
                     unit_id = 3'd5;
 
                     wrt_en_op = 1'd1;
-                    $display("ra value = %d,rt_value = %d",ra,rt_value);
+                    $display("ra value = %h,rt_value = %h",ra,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                 end
 
@@ -448,6 +448,8 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
+
                 end
 
             BRANCH_ABSOLUTE:
@@ -462,6 +464,7 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
                 end
 
             BRANCH_RELATIVE_AND_SET_LINK:
@@ -478,6 +481,7 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,PC_input,branch_taken,rt_value);
                 end
 
             BRANCH_ABSOLUTE_AND_SET_LINK:
@@ -494,6 +498,7 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,PC_input,branch_taken,rt_value);
                 end
 
             BRANCH_IF_NOT_ZERO_WORD:
@@ -512,6 +517,7 @@ module oddpipe(
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
                 end
 
             BRANCH_IF_ZERO_WORD:
@@ -530,6 +536,7 @@ module oddpipe(
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
                 end
 
             BRANCH_IF_NOT_ZERO_HALFWORD:
@@ -548,6 +555,7 @@ module oddpipe(
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
                 end
 
             BRANCH_IF_ZERO_HALFWORD:
@@ -566,6 +574,7 @@ module oddpipe(
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken); 
                 end
 
                 // No operation ( load )
