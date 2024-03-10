@@ -44,10 +44,7 @@ module evenpipe(
     logic [0:3] unit_latency;
     logic [0:2] unit_id; 
 
-    real t_1_real; // for bits to short real conversion value of ra
-    real t_2_real; // for bits to short real conversion value of rb
-    real t_3_real; // for bits to short real conversion value of rc
-    real t_4_real; // for bits to short real value of result
+    shortreal t_4_real; // for bits to short real value of result
 
     int s;
 
@@ -1059,9 +1056,8 @@ module evenpipe(
                     $display("Floating Multiply instruction starts...");
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
-					    t_4_real = t_1_real * t_2_real;
+
+					    t_4_real = ($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD]));
 
                         if (t_4_real < -SMAX)
                         begin
@@ -1071,7 +1067,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
-                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        else if ((t_4_real > -SMIN) && (t_4_real < SMIN))
                         begin
                             rt_value[i*WORD +: WORD] = 0;
                         end
@@ -1093,10 +1089,8 @@ module evenpipe(
                     $display("Floating Multiply and Add instruction starts...");
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
-                        t_3_real = $bitstoshortreal(rc[i*WORD +: WORD]);
-					    t_4_real = (t_1_real * t_2_real) + t_3_real;
+
+					    t_4_real = (($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD]))) + ($bitstoshortreal(rc[i*WORD +: WORD]));
 
                         if (t_4_real < -SMAX)
                         begin
@@ -1106,7 +1100,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
-                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        else if ((t_4_real > -SMIN) && (t_4_real < SMIN))
                         begin
                             rt_value[i*WORD +: WORD] = 0;
                         end
@@ -1128,10 +1122,8 @@ module evenpipe(
                     $display("Floating Negative Multiply and Subtract instruction starts...");
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
-                        t_3_real = $bitstoshortreal(rc[i*WORD +: WORD]);
-					    t_4_real = t_3_real - (t_1_real * t_2_real);
+					
+					    t_4_real = ($bitstoshortreal(rc[i*WORD +: WORD])) - (($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD])));
 
                         if (t_4_real < -SMAX)
                         begin
@@ -1141,7 +1133,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
-                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        else if ((t_4_real > -SMIN) && (t_4_real < SMIN))
                         begin
                             rt_value[i*WORD +: WORD] = 0;
                         end
@@ -1163,10 +1155,8 @@ module evenpipe(
                     $display("Floating Multiply and Subtract instruction starts...");
                     for(int i=0; i < 4; i++) 
                     begin
-					    t_1_real = $bitstoshortreal(ra[i*WORD +: WORD]); 
-					    t_2_real = $bitstoshortreal(rb[i*WORD +: WORD]);
-                        t_3_real = $bitstoshortreal(rc[i*WORD +: WORD]);
-					    t_4_real = (t_1_real * t_2_real) - t_3_real;
+					    
+					    t_4_real = (($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD]))) -($bitstoshortreal(rc[i*WORD +: WORD]));
 
                         if (t_4_real < -SMAX)
                         begin

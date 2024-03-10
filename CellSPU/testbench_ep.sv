@@ -27,6 +27,9 @@ module testbench_ep();
     logic [0:142] fw_ep_st_6;
     logic [0:142] fw_ep_st_7;
     logic [0:142] ep_output;
+    
+    initial clock = 1;
+    always #5 clock = ~clock;
 
     evenpipe dut(
         .clock(clock),
@@ -50,8 +53,8 @@ module testbench_ep();
         .out_ep(ep_output)
     );
 
-    initial clock = 0;
-    always #5 clock = ~clock;
+    
+    
 
     initial begin
         @(posedge clock)
@@ -368,8 +371,8 @@ module testbench_ep();
         @(posedge clock)
 
         ep_op_code =  FLOATING_MULTIPLY;
-        ra = 128'd4;
-        rb = 128'd8;
+        ra = 128'd467;
+        rb = 128'd876;
 
         @(posedge clock)
 
