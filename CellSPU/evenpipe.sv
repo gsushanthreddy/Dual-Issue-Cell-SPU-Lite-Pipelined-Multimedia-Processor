@@ -886,7 +886,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
+                    $display("ra value = %h,I7 value = %h, rt_value = %h",ra,I7,rt_value);
                 end
 
             SHIFT_LEFT_WORD: 
@@ -940,7 +940,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
+                    $display("ra value = %h,I7 value = %h, rt_value = %h",ra,I7,rt_value);
                 end
             
             ROTATE_HALFWORD: 
@@ -994,7 +994,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
+                    $display("ra value = %h, I7 value = %h, rt_value = %h",ra,I7,rt_value);
                 end
                 
             ROTATE_WORD: 
@@ -1048,7 +1048,7 @@ module evenpipe(
                     unit_id = 3'd2;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("I7 value = %h, rt_value = %h",I7,rt_value);
+                    $display("ra value = %h, I7 value = %h, rt_value = %h",ra,I7,rt_value);
                 end
             
             FLOATING_MULTIPLY: 
@@ -1056,7 +1056,6 @@ module evenpipe(
                     $display("Floating Multiply instruction starts...");
                     for(int i=0; i < 4; i++) 
                     begin
-
 					    t_4_real = ($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD]));
 
                         if (t_4_real < -SMAX)
