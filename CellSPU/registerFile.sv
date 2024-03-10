@@ -4,14 +4,14 @@ module registerFile(
     input logic [0:6] ra_ep_address,
     input logic [0:6] rb_ep_address, 
     input logic [0:6] rc_ep_address,
-    input logic [0:6] rt_ep_address,
+    //input logic [0:6] rt_ep_address,
     input logic [0:142] wrt_back_arr_ep,
-    input wrt_en_ep, 
+    //input wrt_en_ep, 
     input logic [0:6] ra_op_address, 
     input logic [0:6] rb_op_address, 
-    input logic [0:6] rt_op_address,
+    //input logic [0:6] rt_op_address,
     input logic [0:142] wrt_back_arr_op,
-    input wrt_en_op,
+    //input wrt_en_op,
     output logic [0:127] ra_ep_value,
     output logic [0:127] rb_ep_value,
     output logic [0:127] rc_ep_value,
@@ -29,14 +29,14 @@ module registerFile(
     end
 
     always_ff @(posedge clock) begin
-        if(wrt_en_ep) 
+        if(wrt_back_arr_ep[131]) 
         begin
-            reg_file[rt_ep_address] <= wrt_back_arr_ep[3:130];
+            reg_file[wrt_back_arr_ep[132:138]] <= wrt_back_arr_ep[3:130];
         end
 
-        if(wrt_en_op)
+        if(wrt_back_arr_op[131])
         begin
-            reg_file[rt_op_address] <= wrt_back_arr_op[3:130];
+            reg_file[wrt_back_arr_op[132:138]] <= wrt_back_arr_op[3:130];
         end
         // What if wrt_en_ep and wrt_en_op are both 1 and they write to same RT address? Which value from either of the pipes should RT store? Stall odd pipe 
     end
