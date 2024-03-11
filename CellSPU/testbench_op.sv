@@ -46,7 +46,6 @@ module testbench_op();
         .op_input_op_code(op_op_code),
         .ra_input(ra),
         .rb_input(rb),
-        //.rc_input(rc),
         .rt_address_input(rt_address),
         .I7_input(I7),
         .I10_input(I10),
