@@ -13,25 +13,24 @@ module toplevel_part1(
     input logic [0:6] rc_ep_address,
     input logic [0:6] rt_ep_address,
 
-    input [0:7] I7_ep,
+    input [0:6] I7_ep,
     input [0:9] I10_ep,
     input [0:15] I16_ep,
     input [0:17] I18_ep,
 
-    input ep_opcode,
+    input opcode ep_opcode,
     
     // data from the instruction of odd pipe
     input logic [0:6] ra_op_address, 
     input logic [0:6] rb_op_address, 
-    //input logic [0:6] rc_op_address,
     input logic [0:6] rt_op_address,
 
-    input [0:7] I7_op,
+    input [0:6] I7_op,
     input [0:9] I10_op,
     input [0:15] I16_op,
     input [0:17] I18_op,
 
-    input op_opcode,
+    input opcode op_opcode,
 
     // outputs of every propagation state of even pipe
     output [0:142] fw_ep_st_1,
@@ -103,24 +102,15 @@ module toplevel_part1(
         .ra_ep_address(ra_ep_address),
         .rb_ep_address(rb_ep_address),
         .rc_ep_address(rc_ep_address),
-        //.rt_ep_address(rt_ep_address),
-        //.rt_value_ep(rt_value_ep),
         .wrt_back_arr_ep(out_ep),
-        //.wrt_en_ep(wrt_en_ep),
         .ra_op_address(ra_op_address),
         .rb_op_address(rb_op_address),
-        //.rc_op_address(rc_op_address),
-        //.rt_op_address(rt_op_address),
         .wrt_back_arr_op(out_op),
-        //.rt_value_op(rt_value_op),
-        //.wrt_en_op(wrt_en_op),
         .ra_ep_value(ra_ep_value),
         .rb_ep_value(rb_ep_value),
         .rc_ep_value(rc_ep_value),
         .ra_op_value(ra_op_value),
         .rb_op_value(rb_op_value)
-        //.rc_op_value(rc_op_value)
-
     );
 
     forwardunit FW (
@@ -148,14 +138,11 @@ module toplevel_part1(
         .fw_ep_st_7(fw_ep_st_7),
         .out_ep(out_ep),
         .wrt_en_ep(wrt_en_ep),
-
         .op_opcode(op_opcode),
         .ra_address_op(ra_op_address),
         .rb_address_op(rb_op_address),
-        //.rc_address_op(rc_op_address),
         .ra_value_op(ra_op_value),
         .rb_value_op(rb_op_value),
-        //.rc_value_op(rc_op_value),
         .rt_address_op(rt_op_address),
         .I7_op(I7_op),
         .I10_op(I10_op),
@@ -170,14 +157,11 @@ module toplevel_part1(
         .fw_op_st_7(fw_op_st_7),
         .out_op(out_op),
         .wrt_en_op(wrt_en_op),
-
         .ra_value_fw_ep(ra_value_fw_ep),
         .rb_value_fw_ep(rb_value_fw_ep),
         .rc_value_fw_ep(rc_value_fw_ep),
         .ra_value_fw_op(ra_value_fw_op),
         .rb_value_fw_op(rb_value_fw_op)
-        //.rc_value_fw_op(rc_value_fw_op)
-
     );
 
     evenpipe EP (
@@ -211,19 +195,15 @@ module toplevel_part1(
         .op_input_op_code(op_opcode), // check whether this connection is legit
         .ra_input(ra_value_fw_op), // This value is direct connection from the forwarding block 
         .rb_input(rb_value_fw_op),
-        //.rc_input(rc_value_fw_op),
         .rt_address_input(rt_op_address),
         .I7_input(I7_op),
         .I10_input(I10_op),
         .I16_input(I16_op),
         .I18_input(I18_op),
-
         .LS_address(LS_address),
         .LS_data_input(LS_data_input),
         .LS_data_output(LS_data_output),
-
         .LS_wrt_en(LS_wrt_en),
-
         .fw_op_st_1(fw_op_st_1),
         .fw_op_st_2(fw_op_st_2),
         .fw_op_st_3(fw_op_st_3),
@@ -232,9 +212,7 @@ module toplevel_part1(
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
         .out_op(out_op),
-
         .branch_taken(branch_taken),
-
         .PC_input(PC_input),
         .PC_output(PC_output)
 
@@ -246,7 +224,6 @@ module toplevel_part1(
         .localstore_wrt_en(LS_wrt_en),
         .LS_address(LS_address),
         .LS_data_input(LS_data_input),
-
         .LS_data_output(LS_data_output)
 
     );
