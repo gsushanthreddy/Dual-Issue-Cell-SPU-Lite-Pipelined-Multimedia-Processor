@@ -10,7 +10,6 @@ module toplevel_part1_tb();
     logic [0 : 15]                          I16_ep, I16_op;
     logic [0 : 17]                          I18_ep, I18_op;
     logic [0 : 142]                         fw_ep_st_1, fw_op_st_1, fw_ep_st_2, fw_op_st_2, fw_ep_st_3, fw_op_st_3, fw_ep_st_4, fw_op_st_4, fw_ep_st_5, fw_op_st_5, fw_ep_st_6, fw_op_st_6, fw_ep_st_7, fw_op_st_7;
-    logic [0 : 142]                         out_ep, out_op;
     logic [0 : 31]                          PC_input, PC_output;
     logic [0:127]                           reg_file[128];
 
@@ -41,7 +40,6 @@ module toplevel_part1_tb();
         .fw_ep_st_5(fw_ep_st_5),
         .fw_ep_st_6(fw_ep_st_6),
         .fw_ep_st_7(fw_ep_st_7),
-        .out_ep(out_ep),
         .fw_op_st_1(fw_op_st_1),
         .fw_op_st_2(fw_op_st_2),
         .fw_op_st_3(fw_op_st_3),
@@ -49,7 +47,6 @@ module toplevel_part1_tb();
         .fw_op_st_5(fw_op_st_5),
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
-        .out_op(out_op),
         .branch_taken(branch_taken),
         .PC_input(PC_input),
         .PC_output(PC_output),

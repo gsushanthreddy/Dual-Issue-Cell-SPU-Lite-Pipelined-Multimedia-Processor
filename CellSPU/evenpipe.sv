@@ -27,8 +27,7 @@ module evenpipe(
     output logic [0:142] fw_ep_st_4,
     output logic [0:142] fw_ep_st_5,
     output logic [0:142] fw_ep_st_6,
-    output logic [0:142] fw_ep_st_7,
-    output logic [0:142] out_ep
+    output logic [0:142] fw_ep_st_7
 );
     // input opcode ep_input_op_code;
     opcode ep_op_code;
@@ -85,7 +84,6 @@ module evenpipe(
             fw_ep_st_5 <= 143'd0;
             fw_ep_st_6 <= 143'd0;
             fw_ep_st_7 <= 143'd0;
-            out_ep     <= 143'd0;
         end
         else begin 
             fw_ep_st_2 <= fw_ep_st_1;
@@ -94,7 +92,6 @@ module evenpipe(
             fw_ep_st_5 <= fw_ep_st_4;
             fw_ep_st_6 <= fw_ep_st_5;
             fw_ep_st_7 <= fw_ep_st_6;
-            out_ep     <= fw_ep_st_7;
         end
     end
 
