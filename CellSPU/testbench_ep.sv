@@ -26,7 +26,6 @@ module testbench_ep();
     logic [0:142] fw_ep_st_5;
     logic [0:142] fw_ep_st_6;
     logic [0:142] fw_ep_st_7;
-    logic [0:142] ep_output;
 
     evenpipe dut(
         .clock(clock),
@@ -46,8 +45,7 @@ module testbench_ep();
         .fw_ep_st_4(fw_ep_st_4),
         .fw_ep_st_5(fw_ep_st_5),
         .fw_ep_st_6(fw_ep_st_6),
-        .fw_ep_st_7(fw_ep_st_7),
-        .out_ep(ep_output)
+        .fw_ep_st_7(fw_ep_st_7)
     );
 
     initial clock = 1;

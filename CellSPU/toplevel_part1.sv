@@ -40,7 +40,6 @@ module toplevel_part1(
     output [0:142] fw_ep_st_5,
     output [0:142] fw_ep_st_6,
     output [0:142] fw_ep_st_7,
-    output [0:142] out_ep,
 
     // outputs of every propagation state of odd pipe
     output [0:142] fw_op_st_1,
@@ -50,7 +49,6 @@ module toplevel_part1(
     output [0:142] fw_op_st_5,
     output [0:142] fw_op_st_6,
     output [0:142] fw_op_st_7,
-    output [0:142] out_op,
 
     // Branch related ports
     output logic branch_taken,
@@ -103,10 +101,10 @@ module toplevel_part1(
         .ra_ep_address(ra_ep_address),
         .rb_ep_address(rb_ep_address),
         .rc_ep_address(rc_ep_address),
-        .wrt_back_arr_ep(out_ep),
+        .wrt_back_arr_ep(fw_ep_st_7),
         .ra_op_address(ra_op_address),
         .rb_op_address(rb_op_address),
-        .wrt_back_arr_op(out_op),
+        .wrt_back_arr_op(fw_op_st_7),
         .ra_ep_value(ra_ep_value),
         .rb_ep_value(rb_ep_value),
         .rc_ep_value(rc_ep_value),
@@ -138,7 +136,6 @@ module toplevel_part1(
         .fw_ep_st_5(fw_ep_st_5),
         .fw_ep_st_6(fw_ep_st_6),
         .fw_ep_st_7(fw_ep_st_7),
-        .out_ep(out_ep),
         .wrt_en_ep(wrt_en_ep),
         .op_opcode(op_opcode),
         .ra_address_op(ra_op_address),
@@ -157,7 +154,6 @@ module toplevel_part1(
         .fw_op_st_5(fw_op_st_5),
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
-        .out_op(out_op),
         .wrt_en_op(wrt_en_op),
         .ra_value_fw_ep(ra_value_fw_ep),
         .rb_value_fw_ep(rb_value_fw_ep),
@@ -185,8 +181,7 @@ module toplevel_part1(
         .fw_ep_st_4(fw_ep_st_4),
         .fw_ep_st_5(fw_ep_st_5),
         .fw_ep_st_6(fw_ep_st_6),
-        .fw_ep_st_7(fw_ep_st_7),
-        .out_ep(out_ep)
+        .fw_ep_st_7(fw_ep_st_7)
 
     );
 
@@ -213,7 +208,6 @@ module toplevel_part1(
         .fw_op_st_5(fw_op_st_5),
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
-        .out_op(out_op),
         .branch_taken(branch_taken),
         .PC_input(PC_input),
         .PC_output(PC_output)

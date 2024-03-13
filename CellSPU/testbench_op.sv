@@ -38,8 +38,6 @@ module testbench_op();
     logic [0:142] FW_op_st_6;
     logic [0:142] FW_op_st_7;
 
-    logic [0:142] op_output;
-
     oddpipe dut2(
         .clock(clock),
         .reset(reset),
@@ -62,7 +60,6 @@ module testbench_op();
         .fw_op_st_5(FW_op_st_5),
         .fw_op_st_6(FW_op_st_6),
         .fw_op_st_7(FW_op_st_7),
-        .out_op(op_output),
         .branch_taken(Branch_Taken),
         .PC_input(pc_input),
         .PC_output(pc_output)

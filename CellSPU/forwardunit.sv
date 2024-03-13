@@ -22,7 +22,6 @@ module forwardunit(
     input [0:142] fw_ep_st_5,
     input [0:142] fw_ep_st_6,
     input [0:142] fw_ep_st_7,
-    input [0:142] out_ep,
     input wrt_en_ep,
 
     input opcode op_opcode,
@@ -42,7 +41,6 @@ module forwardunit(
     input [0:142] fw_op_st_5,
     input [0:142] fw_op_st_6,
     input [0:142] fw_op_st_7,
-    input [0:142] out_op,
     input wrt_en_op,
 
     output logic [0:127] ra_value_fw_ep,
@@ -51,17 +49,17 @@ module forwardunit(
     output logic [0:127] ra_value_fw_op,
     output logic [0:127] rb_value_fw_op
 );
-    logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid, out_ep_unitid;
-    logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value, out_ep_rt_value;
-    logic fw_ep_st_1_wrt_en_ep, fw_ep_st_2_wrt_en_ep, fw_ep_st_3_wrt_en_ep, fw_ep_st_4_wrt_en_ep, fw_ep_st_5_wrt_en_ep, fw_ep_st_6_wrt_en_ep, fw_ep_st_7_wrt_en_ep, out_ep_wrt_en_ep;
-    logic [0:6] fw_ep_st_1_rt_address, fw_ep_st_2_rt_address, fw_ep_st_3_rt_address, fw_ep_st_4_rt_address, fw_ep_st_5_rt_address, fw_ep_st_6_rt_address, fw_ep_st_7_rt_address, out_ep_rt_address;
-    logic [0:3] fw_ep_st_1_unit_latency, fw_ep_st_2_unit_latency, fw_ep_st_3_unit_latency, fw_ep_st_4_unit_latency, fw_ep_st_5_unit_latency, fw_ep_st_6_unit_latency, fw_ep_st_7_unit_latency, out_ep_unit_latency;
+    logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid;
+    logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value;
+    logic fw_ep_st_1_wrt_en_ep, fw_ep_st_2_wrt_en_ep, fw_ep_st_3_wrt_en_ep, fw_ep_st_4_wrt_en_ep, fw_ep_st_5_wrt_en_ep, fw_ep_st_6_wrt_en_ep, fw_ep_st_7_wrt_en_ep;
+    logic [0:6] fw_ep_st_1_rt_address, fw_ep_st_2_rt_address, fw_ep_st_3_rt_address, fw_ep_st_4_rt_address, fw_ep_st_5_rt_address, fw_ep_st_6_rt_address, fw_ep_st_7_rt_address;
+    logic [0:3] fw_ep_st_1_unit_latency, fw_ep_st_2_unit_latency, fw_ep_st_3_unit_latency, fw_ep_st_4_unit_latency, fw_ep_st_5_unit_latency, fw_ep_st_6_unit_latency, fw_ep_st_7_unit_latency;
 
-    logic [0:2] fw_op_st_1_unitid, fw_op_st_2_unitid, fw_op_st_3_unitid, fw_op_st_4_unitid, fw_op_st_5_unitid, fw_op_st_6_unitid, fw_op_st_7_unitid, out_op_unitid;
-    logic [0:127] fw_op_st_1_rt_value, fw_op_st_2_rt_value, fw_op_st_3_rt_value, fw_op_st_4_rt_value, fw_op_st_5_rt_value, fw_op_st_6_rt_value, fw_op_st_7_rt_value, out_op_rt_value;
-    logic fw_op_st_1_wrt_en_op, fw_op_st_2_wrt_en_op, fw_op_st_3_wrt_en_op, fw_op_st_4_wrt_en_op, fw_op_st_5_wrt_en_op, fw_op_st_6_wrt_en_op, fw_op_st_7_wrt_en_op, out_op_wrt_en_op;
-    logic [0:6] fw_op_st_1_rt_address, fw_op_st_2_rt_address, fw_op_st_3_rt_address, fw_op_st_4_rt_address, fw_op_st_5_rt_address, fw_op_st_6_rt_address, fw_op_st_7_rt_address, out_op_rt_address;
-    logic [0:3] fw_op_st_1_unit_latency, fw_op_st_2_unit_latency, fw_op_st_3_unit_latency, fw_op_st_4_unit_latency, fw_op_st_5_unit_latency, fw_op_st_6_unit_latency, fw_op_st_7_unit_latency, out_op_unit_latency;
+    logic [0:2] fw_op_st_1_unitid, fw_op_st_2_unitid, fw_op_st_3_unitid, fw_op_st_4_unitid, fw_op_st_5_unitid, fw_op_st_6_unitid, fw_op_st_7_unitid;
+    logic [0:127] fw_op_st_1_rt_value, fw_op_st_2_rt_value, fw_op_st_3_rt_value, fw_op_st_4_rt_value, fw_op_st_5_rt_value, fw_op_st_6_rt_value, fw_op_st_7_rt_value;
+    logic fw_op_st_1_wrt_en_op, fw_op_st_2_wrt_en_op, fw_op_st_3_wrt_en_op, fw_op_st_4_wrt_en_op, fw_op_st_5_wrt_en_op, fw_op_st_6_wrt_en_op, fw_op_st_7_wrt_en_op;
+    logic [0:6] fw_op_st_1_rt_address, fw_op_st_2_rt_address, fw_op_st_3_rt_address, fw_op_st_4_rt_address, fw_op_st_5_rt_address, fw_op_st_6_rt_address, fw_op_st_7_rt_address;
+    logic [0:3] fw_op_st_1_unit_latency, fw_op_st_2_unit_latency, fw_op_st_3_unit_latency, fw_op_st_4_unit_latency, fw_op_st_5_unit_latency, fw_op_st_6_unit_latency, fw_op_st_7_unit_latency;
     
     assign fw_ep_st_1_unitid       = fw_ep_st_1[0:2];
     assign fw_ep_st_1_rt_value     = fw_ep_st_1[3:130];
@@ -103,13 +101,7 @@ module forwardunit(
     assign fw_ep_st_7_rt_value     = fw_ep_st_7[3:130];
     assign fw_ep_st_7_wrt_en_ep    = fw_ep_st_7[131];
     assign fw_ep_st_7_rt_address   = fw_ep_st_7[132:138];
-    assign fw_ep_st_7_unit_latency = fw_ep_st_7[139:142];
-
-    assign out_ep_unitid       = out_ep[0:2];
-    assign out_ep_rt_value     = out_ep[3:130];
-    assign out_ep_wrt_en_ep    = out_ep[131];
-    assign out_ep_rt_address   = out_ep[132:138];
-    assign out_ep_unit_latency = out_ep[139:142];  
+    assign fw_ep_st_7_unit_latency = fw_ep_st_7[139:142]; 
 
     assign fw_op_st_1_unitid       = fw_op_st_1[0:2];
     assign fw_op_st_1_rt_value     = fw_op_st_1[3:130];
@@ -153,12 +145,6 @@ module forwardunit(
     assign fw_op_st_7_rt_address   = fw_op_st_7[132:138];
     assign fw_op_st_7_unit_latency = fw_op_st_7[139:142];
 
-    assign out_op_unitid       = out_op[0:2];
-    assign out_op_rt_value     = out_op[3:130];
-    assign out_op_wrt_en_op    = out_op[131];
-    assign out_op_rt_address   = out_op[132:138];
-    assign out_op_unit_latency = out_op[139:142];
-
     // What happens for reset operation in forwarding unit? 
     always_comb begin 
         /* Forwarding logic to forward ra in even pipe */
@@ -192,17 +178,11 @@ module forwardunit(
             else if((fw_op_st_6_rt_address == ra_address_ep) && (fw_op_st_6_wrt_en_op == 1) && (fw_op_st_6_unit_latency==4'd1 || fw_op_st_6_unit_latency==4'd4)) begin
                 ra_value_fw_ep = fw_op_st_6_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == ra_address_ep) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_7_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == ra_address_ep) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_7_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7 || fw_ep_st_7_unit_latency==4'd8)) begin
                 ra_value_fw_ep = fw_ep_st_7_rt_value;
             end
             else if((fw_op_st_7_rt_address == ra_address_ep) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
                 ra_value_fw_ep = fw_op_st_7_rt_value;
-            end
-            else if((out_ep_rt_address == ra_address_ep) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
-                ra_value_fw_ep = out_ep_rt_value;
-            end
-            else if((out_op_rt_address == ra_address_ep) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
-                ra_value_fw_ep = out_op_rt_value;
             end
             else begin
                 ra_value_fw_ep = ra_value_ep;
@@ -242,14 +222,8 @@ module forwardunit(
             else if((fw_op_st_7_rt_address == ra_address_op) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
                 ra_value_fw_op = fw_op_st_7_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == ra_address_op) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == ra_address_op) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7 || fw_ep_st_7_unit_latency==4'd8)) begin
                 ra_value_fw_op = fw_ep_st_7_rt_value;
-            end
-            else if((out_op_rt_address == ra_address_op) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
-                ra_value_fw_op = out_op_rt_value;
-            end
-            else if((out_ep_rt_address == ra_address_op) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
-                ra_value_fw_op = out_ep_rt_value;
             end
             else begin
                 ra_value_fw_op = ra_value_op;
@@ -287,17 +261,11 @@ module forwardunit(
             else if((fw_op_st_6_rt_address == rb_address_ep) && (fw_op_st_6_wrt_en_op == 1) && (fw_op_st_6_unit_latency==4'd1 || fw_op_st_6_unit_latency==4'd4)) begin
                 rb_value_fw_ep = fw_op_st_6_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == rb_address_ep) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_7_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == rb_address_ep) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_7_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7 || fw_ep_st_7_unit_latency==4'd8)) begin
                 rb_value_fw_ep = fw_ep_st_7_rt_value;
             end
             else if((fw_op_st_7_rt_address == rb_address_ep) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
                 rb_value_fw_ep = fw_op_st_7_rt_value;
-            end
-            else if((out_ep_rt_address == rb_address_ep) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
-                rb_value_fw_ep = out_ep_rt_value;
-            end
-            else if((out_op_rt_address == rb_address_ep) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
-                rb_value_fw_ep = out_op_rt_value;
             end
             else begin
                 rb_value_fw_ep = rb_value_ep;
@@ -334,17 +302,11 @@ module forwardunit(
             else if((fw_ep_st_6_rt_address == rb_address_op) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_ep_st_6_rt_value;
             end
-            else if((fw_op_st_7_rt_address == rb_address_op) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
+            else if((fw_op_st_7_rt_address == rb_address_op) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7 )) begin
                 rb_value_fw_op = fw_op_st_7_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == rb_address_op) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == rb_address_op) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7 || fw_ep_st_7_unit_latency==4'd8)) begin
                 rb_value_fw_op = fw_ep_st_7_rt_value;
-            end
-            else if((out_op_rt_address == rb_address_op) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
-                rb_value_fw_op = out_op_rt_value;
-            end
-            else if((out_ep_rt_address == rb_address_op) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
-                rb_value_fw_op = out_ep_rt_value;
             end
             else begin
                 rb_value_fw_op = rb_value_op;
@@ -381,17 +343,11 @@ module forwardunit(
             else if((fw_op_st_6_rt_address == rc_address_ep) && (fw_op_st_6_wrt_en_op == 1) && (fw_op_st_6_unit_latency==4'd1 || fw_op_st_6_unit_latency==4'd4)) begin
                 rc_value_fw_ep = fw_op_st_6_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == rc_address_ep) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_7_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == rc_address_ep) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_7_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7 || fw_ep_st_7_unit_latency==4'd8)) begin
                 rc_value_fw_ep = fw_ep_st_7_rt_value;
             end
             else if((fw_op_st_7_rt_address == rc_address_ep) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
                 rc_value_fw_ep = fw_op_st_7_rt_value;
-            end
-            else if((out_ep_rt_address == rc_address_ep) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
-                rc_value_fw_ep = out_ep_rt_value;
-            end
-            else if((out_op_rt_address == rc_address_ep) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
-                rc_value_fw_ep = out_op_rt_value;
             end
             else begin
                 rc_value_fw_ep = rc_value_ep;

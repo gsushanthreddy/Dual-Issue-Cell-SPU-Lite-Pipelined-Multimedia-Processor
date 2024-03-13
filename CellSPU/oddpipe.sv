@@ -12,7 +12,6 @@ module oddpipe(
     input opcode op_input_op_code,
     input [0:127] ra_input,
     input [0:127] rb_input,
-    //input [0:127] rc_input,
     input [0:6] rt_address_input,
     input [0:6] I7_input,
     input [0:9] I10_input,
@@ -32,7 +31,6 @@ module oddpipe(
     output logic [0:142] fw_op_st_5,
     output logic [0:142] fw_op_st_6,
     output logic [0:142] fw_op_st_7,
-    output logic [0:142] out_op,
 
     output logic branch_taken,
 
@@ -80,7 +78,6 @@ module oddpipe(
             fw_op_st_5 <= 143'd0;
             fw_op_st_6 <= 143'd0;
             fw_op_st_7 <= 143'd0;
-            out_op     <= 143'd0;
         end
         else begin 
             fw_op_st_2 <= fw_op_st_1;
@@ -89,7 +86,6 @@ module oddpipe(
             fw_op_st_5 <= fw_op_st_4;
             fw_op_st_6 <= fw_op_st_5;
             fw_op_st_7 <= fw_op_st_6;
-            out_op     <= fw_op_st_7;
         end
     end
     
