@@ -18,7 +18,7 @@ module evenpipe(
     input [0:127] rc_input,
     input [0:6] rt_address_input,
     input [0:6] I7_input,
-    input [0:9] I10_input,
+    input [0:9] I10_input, 
     input [0:15] I16_input,
     input [0:17] I18_input,
     output logic [0:142] fw_ep_st_1,
@@ -1339,6 +1339,14 @@ module evenpipe(
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
                     $display("ra value = %h, rt_value = %h",ra,rt_value);
+                end
+            
+            NO_OPERATION_EXECUTE:
+                begin
+                    rt_value = 128'd0;
+                    unit_latency = 4'd0;
+                    unit_id = 3'd0;
+                    wrt_en_ep = 0;
                 end
         endcase
         // fw_ep_st_1[0:2] = unit_id;

@@ -58,7 +58,8 @@ module toplevel_part1(
     // PC input and output
 
     input logic [0:31] PC_input,
-    output logic [0:31] PC_output
+    output logic [0:31] PC_output,
+    output logic [0:127] reg_file [128]
 
    // CHECK WITH PROFESSOR THAT WE HAVE TO PUT THE LOCAL STORE AND REGISTER MEMORIES AS OUTPUT IN THE TOP FILE
 );
@@ -110,7 +111,8 @@ module toplevel_part1(
         .rb_ep_value(rb_ep_value),
         .rc_ep_value(rc_ep_value),
         .ra_op_value(ra_op_value),
-        .rb_op_value(rb_op_value)
+        .rb_op_value(rb_op_value),
+        .reg_file(reg_file)
     );
 
     forwardunit FW (
