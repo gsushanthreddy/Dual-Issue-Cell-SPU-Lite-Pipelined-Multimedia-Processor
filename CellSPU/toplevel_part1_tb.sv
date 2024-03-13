@@ -1,6 +1,8 @@
 import descriptions::*;
+`timescale  1ns/1ns
 module toplevel_part1_tb();
-    logic                                   clock, reset, branch_taken;
+    logic                                   clock;
+    logic                                   reset, branch_taken;
     opcode                                  ep_op_code, op_op_code;
     logic [0 : 6]                           ra_ep_address, ra_op_address, rb_ep_address, rb_op_address, rc_ep_address, rt_ep_address, rt_op_address;
     logic [0 : 6]                           I7_ep, I7_op;
@@ -10,9 +12,7 @@ module toplevel_part1_tb();
     logic [0 : 142]                         fw_ep_st_1, fw_op_st_1, fw_ep_st_2, fw_op_st_2, fw_ep_st_3, fw_op_st_3, fw_ep_st_4, fw_op_st_4, fw_ep_st_5, fw_op_st_5, fw_ep_st_6, fw_op_st_6, fw_ep_st_7, fw_op_st_7;
     logic [0 : 142]                         out_ep, out_op;
     logic [0 : 31]                          PC_input, PC_output;
-
-    initial clock = 0;
-    always #5 clock = ~clock;
+    logic [0:127]                           reg_file[128];
 
     toplevel_part1 dut(
         .clock(clock),
@@ -52,20 +52,313 @@ module toplevel_part1_tb();
         .out_op(out_op),
         .branch_taken(branch_taken),
         .PC_input(PC_input),
-        .PC_output(PC_output)
+        .PC_output(PC_output),
+        .reg_file(reg_file)
     );
 
-    initial begin
-        reset = 1;
-        @(posedge clock);
-        reset = 0;
-        repeat(100) begin
-            @(posedge clock);
-        end
-        $stop;
-    end
+    initial clock = 1;
+    always #5 clock = ~clock;
 
+    initial begin 
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd2;
+        rt_ep_address = 7'd1;
+        op_op_code = NO_OPERATION_EXECUTE;
 
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd4;
+        rt_ep_address = 7'd2;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd8;
+        rt_ep_address = 7'd3;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd16;
+        rt_ep_address = 7'd4;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd32;
+        rt_ep_address = 7'd5;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd10;
+        rt_ep_address = 7'd6;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd24;
+        rt_ep_address = 7'd7;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd64;
+        rt_ep_address = 7'd8;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+        
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd130;
+        rt_ep_address = 7'd9;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = IMMEDIATE_LOAD_WORD;
+        I10_ep = 10'd256;
+        rt_ep_address = 7'd10;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
+
+        @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_EXECUTE;
     // int even_q[$], odd_q[$];
 
     // initial begin
@@ -270,4 +563,7 @@ module toplevel_part1_tb();
     //         addr_rt_wt_odd = 0;
     //         @(posedge clk);
     //     end
+    #20;
+    $finish;
+    end
 endmodule

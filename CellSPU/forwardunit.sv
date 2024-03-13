@@ -3,7 +3,7 @@ import descriptions::*;
 module forwardunit(
     input clock,
     input reset,
-    input ep_opcode,
+    input opcode ep_opcode,
     input [0:6] ra_address_ep,
     input [0:6] rb_address_ep,
     input [0:6] rc_address_ep,
@@ -11,7 +11,7 @@ module forwardunit(
     input [0:127] rb_value_ep,
     input [0:127] rc_value_ep,
     input [0:6] rt_address_ep,
-    input [0:7] I7_ep,
+    input [0:6] I7_ep,
     input [0:9] I10_ep,
     input [0:15] I16_ep,
     input [0:17] I18_ep,
@@ -25,13 +25,13 @@ module forwardunit(
     input [0:142] out_ep,
     input wrt_en_ep,
 
-    input op_opcode,
+    input opcode op_opcode,
     input [0:6] ra_address_op,
     input [0:6] rb_address_op,
     input [0:127] ra_value_op,
     input [0:127] rb_value_op,
     input [0:6] rt_address_op,
-    input [0:7] I7_op,
+    input [0:6] I7_op,
     input [0:9] I10_op,
     input [0:15] I16_op,
     input [0:17] I18_op,
@@ -160,8 +160,6 @@ module forwardunit(
     assign out_op_unit_latency = out_op[139:142];
 
     // What happens for reset operation in forwarding unit? 
-    /* Independent combination logic for even pipe */ 
-
     always_comb begin 
         /* Forwarding logic to forward ra in even pipe */
             if((fw_op_st_1_rt_address == ra_address_ep) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_1_unit_latency==4'd1)) begin
@@ -203,7 +201,7 @@ module forwardunit(
             else if((out_ep_rt_address == ra_address_ep) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
                 ra_value_fw_ep = out_ep_rt_value;
             end
-            else if((out_op_rt_address == ra_address_ep) && (out_op_wrt_en_ep == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
+            else if((out_op_rt_address == ra_address_ep) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
                 ra_value_fw_ep = out_op_rt_value;
             end
             else begin
@@ -220,37 +218,37 @@ module forwardunit(
             else if((fw_op_st_3_rt_address == ra_address_op) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency==4'd1)) begin
                 ra_value_fw_op = fw_op_st_3_rt_value;
             end
-            else if((fw_ep_st_3_rt_address == ra_address_op) && (fw_ep_st_3_wrt_en_op == 1) && (fw_ep_st_3_unit_latency==4'd3)) begin
+            else if((fw_ep_st_3_rt_address == ra_address_op) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency==4'd3)) begin
                 ra_value_fw_op = fw_ep_st_3_rt_value;
             end
             else if((fw_op_st_4_rt_address == ra_address_op) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency==4'd1 || fw_op_st_4_unit_latency==4'd4)) begin
                 ra_value_fw_op = fw_op_st_4_rt_value;
             end
-            else if((fw_ep_st_4_rt_address == ra_address_op) && (fw_ep_st_4_wrt_en_op == 1) && (fw_ep_st_4_unit_latency==4'd3 || fw_ep_st_4_unit_latency==4'd4)) begin
+            else if((fw_ep_st_4_rt_address == ra_address_op) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency==4'd3 || fw_ep_st_4_unit_latency==4'd4)) begin
                 ra_value_fw_op = fw_ep_st_4_rt_value;
             end
             else if((fw_op_st_5_rt_address == ra_address_op) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency==4'd1 || fw_op_st_5_unit_latency==4'd4)) begin
                 ra_value_fw_op = fw_op_st_5_rt_value;
             end
-            else if((fw_ep_st_5_rt_address == ra_address_op) && (fw_ep_st_5_wrt_en_op == 1) && (fw_ep_st_5_unit_latency==4'd3 || fw_ep_st_5_unit_latency==4'd4)) begin
+            else if((fw_ep_st_5_rt_address == ra_address_op) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency==4'd3 || fw_ep_st_5_unit_latency==4'd4)) begin
                 ra_value_fw_op = fw_ep_st_5_rt_value;
             end
             else if((fw_op_st_6_rt_address == ra_address_op) && (fw_op_st_6_wrt_en_op == 1) && (fw_op_st_6_unit_latency==4'd1 || fw_op_st_6_unit_latency==4'd4)) begin
                 ra_value_fw_op = fw_op_st_6_rt_value;
             end
-            else if((fw_ep_st_6_rt_address == ra_address_op) && (fw_ep_st_6_wrt_en_op == 1) && (fw_ep_st_6_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4)) begin
+            else if((fw_ep_st_6_rt_address == ra_address_op) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4)) begin
                 ra_value_fw_op = fw_ep_st_6_rt_value;
             end
             else if((fw_op_st_7_rt_address == ra_address_op) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
                 ra_value_fw_op = fw_op_st_7_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == ra_address_op) && (fw_ep_st_7_wrt_en_op == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == ra_address_op) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
                 ra_value_fw_op = fw_ep_st_7_rt_value;
             end
             else if((out_op_rt_address == ra_address_op) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
                 ra_value_fw_op = out_op_rt_value;
             end
-            else if((out_ep_rt_address == ra_address_op) && (out_ep_wrt_en_op == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
+            else if((out_ep_rt_address == ra_address_op) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
                 ra_value_fw_op = out_ep_rt_value;
             end
             else begin
@@ -298,7 +296,7 @@ module forwardunit(
             else if((out_ep_rt_address == rb_address_ep) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
                 rb_value_fw_ep = out_ep_rt_value;
             end
-            else if((out_op_rt_address == rb_address_ep) && (out_op_wrt_en_ep == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
+            else if((out_op_rt_address == rb_address_ep) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
                 rb_value_fw_ep = out_op_rt_value;
             end
             else begin
@@ -315,37 +313,37 @@ module forwardunit(
             else if((fw_op_st_3_rt_address == rb_address_op) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency==4'd1)) begin
                 rb_value_fw_op = fw_op_st_3_rt_value;
             end
-            else if((fw_ep_st_3_rt_address == rb_address_op) && (fw_ep_st_3_wrt_en_op == 1) && (fw_ep_st_3_unit_latency==4'd3)) begin
+            else if((fw_ep_st_3_rt_address == rb_address_op) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency==4'd3)) begin
                 rb_value_fw_op = fw_ep_st_3_rt_value;
             end
             else if((fw_op_st_4_rt_address == rb_address_op) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency==4'd1 || fw_op_st_4_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_op_st_4_rt_value;
             end
-            else if((fw_ep_st_4_rt_address == rb_address_op) && (fw_ep_st_4_wrt_en_op == 1) && (fw_ep_st_4_unit_latency==4'd3 || fw_ep_st_4_unit_latency==4'd4)) begin
+            else if((fw_ep_st_4_rt_address == rb_address_op) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency==4'd3 || fw_ep_st_4_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_ep_st_4_rt_value;
             end
             else if((fw_op_st_5_rt_address == rb_address_op) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency==4'd1 || fw_op_st_5_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_op_st_5_rt_value;
             end
-            else if((fw_ep_st_5_rt_address == rb_address_op) && (fw_ep_st_5_wrt_en_op == 1) && (fw_ep_st_5_unit_latency==4'd3 || fw_ep_st_5_unit_latency==4'd4)) begin
+            else if((fw_ep_st_5_rt_address == rb_address_op) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency==4'd3 || fw_ep_st_5_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_ep_st_5_rt_value;
             end
             else if((fw_op_st_6_rt_address == rb_address_op) && (fw_op_st_6_wrt_en_op == 1) && (fw_op_st_6_unit_latency==4'd1 || fw_op_st_6_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_op_st_6_rt_value;
             end
-            else if((fw_ep_st_6_rt_address == rb_address_op) && (fw_ep_st_6_wrt_en_op == 1) && (fw_ep_st_6_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4)) begin
+            else if((fw_ep_st_6_rt_address == rb_address_op) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4)) begin
                 rb_value_fw_op = fw_ep_st_6_rt_value;
             end
             else if((fw_op_st_7_rt_address == rb_address_op) && (fw_op_st_7_wrt_en_op == 1) && (fw_op_st_7_unit_latency==4'd1 || fw_op_st_7_unit_latency==4'd4 || fw_op_st_7_unit_latency==4'd7)) begin
                 rb_value_fw_op = fw_op_st_7_rt_value;
             end
-            else if((fw_ep_st_7_rt_address == rb_address_op) && (fw_ep_st_7_wrt_en_op == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
+            else if((fw_ep_st_7_rt_address == rb_address_op) && (fw_ep_st_7_wrt_en_ep == 1) && (fw_ep_st_7_unit_latency==4'd3 || fw_ep_st_6_unit_latency==4'd4 || fw_ep_st_7_unit_latency==4'd7)) begin
                 rb_value_fw_op = fw_ep_st_7_rt_value;
             end
             else if((out_op_rt_address == rb_address_op) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
                 rb_value_fw_op = out_op_rt_value;
             end
-            else if((out_ep_rt_address == rb_address_op) && (out_ep_wrt_en_op == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
+            else if((out_ep_rt_address == rb_address_op) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
                 rb_value_fw_op = out_ep_rt_value;
             end
             else begin
@@ -392,7 +390,7 @@ module forwardunit(
             else if((out_ep_rt_address == rc_address_ep) && (out_ep_wrt_en_ep == 1) && (out_ep_unit_latency==4'd3 || out_ep_unit_latency==4'd4 || out_ep_unit_latency==4'd7 || out_ep_unit_latency==4'd8)) begin
                 rc_value_fw_ep = out_ep_rt_value;
             end
-            else if((out_op_rt_address == rc_address_ep) && (out_op_wrt_en_ep == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
+            else if((out_op_rt_address == rc_address_ep) && (out_op_wrt_en_op == 1) && (out_op_unit_latency==4'd1 || out_op_unit_latency==4'd4 || out_op_unit_latency==4'd7)) begin
                 rc_value_fw_ep = out_op_rt_value;
             end
             else begin

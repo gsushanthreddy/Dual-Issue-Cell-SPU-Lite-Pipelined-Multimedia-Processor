@@ -16,9 +16,9 @@ module registerFile(
     output logic [0:127] rb_ep_value,
     output logic [0:127] rc_ep_value,
     output logic [0:127] ra_op_value,
-    output logic [0:127] rb_op_value
+    output logic [0:127] rb_op_value,
+    output logic [0:127] reg_file[128]
 );
-    logic [0:127] reg_file[128];
     always_comb
     begin
         ra_ep_value = reg_file[ra_ep_address];
@@ -29,6 +29,11 @@ module registerFile(
     end
 
     always_ff @(posedge clock) begin
+        if(reset) begin
+            for(int i = 0; i < 128; i++) begin
+                reg_file[i] <= 128'd0;
+            end
+        end
         if(wrt_back_arr_ep[131]) 
         begin
             reg_file[wrt_back_arr_ep[132:138]] <= wrt_back_arr_ep[3:130];
@@ -36,7 +41,7 @@ module registerFile(
 
         if(wrt_back_arr_op[131])
         begin
-            reg_file[wrt_back_arr_op[132:138]] <= wrt_back_arr_op[3:130];
+            reg_file[wrt_back_arr_ep[132:138]] <= wrt_back_arr_op[3:130];
         end
         // What if wrt_en_ep and wrt_en_op are both 1 and they write to same RT address? Which value from either of the pipes should RT store? Stall odd pipe 
     end

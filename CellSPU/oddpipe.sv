@@ -578,13 +578,20 @@ module oddpipe(
                 end
 
                 // No operation ( load )
-                NO_OPERATION_LOAD:
+            NO_OPERATION_LOAD:
                 begin
                    $display("No operation (load) instruction starts...");
                    rt_value = 128'd0;
                    PC_output = 32'd0;
                    wrt_en_op = 1'd0;
+                end
 
+            NO_OPERATION_EXECUTE:
+                begin
+                    rt_value = 128'd0;
+                    unit_latency = 4'd0;
+                    unit_id = 3'd0;
+                    wrt_en_op = 0;
                 end 
         endcase
         fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
