@@ -57,7 +57,12 @@ module toplevel_part1(
 
     input logic [0:31] PC_input,
     output logic [0:31] PC_output,
-    output logic [0:127] reg_file [128]
+
+    // Register file
+    output logic [0:127] reg_file [128],
+
+    // Local store
+    output logic [0:7] ls [0:32767]
 
    // CHECK WITH PROFESSOR THAT WE HAVE TO PUT THE LOCAL STORE AND REGISTER MEMORIES AS OUTPUT IN THE TOP FILE
 );
@@ -220,7 +225,8 @@ module toplevel_part1(
         .localstore_wrt_en(LS_wrt_en),
         .LS_address(LS_address),
         .LS_data_input(LS_data_input),
-        .LS_data_output(LS_data_output)
+        .LS_data_output(LS_data_output),
+        .ls(ls)
 
     );
 

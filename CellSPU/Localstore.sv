@@ -6,10 +6,9 @@ module LocalStore(
     input [0:14] LS_address,
     input [0:127] LS_data_input,
 
-    output logic [0:127] LS_data_output
+    output logic [0:127] LS_data_output,
+    output logic [0:7] ls [0:32767]
 );
-
-logic [0:7] ls [0:32767];
 
 always_comb 
 begin
