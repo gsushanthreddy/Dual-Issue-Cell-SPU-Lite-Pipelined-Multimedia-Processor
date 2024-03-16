@@ -55,18 +55,20 @@ module oddpipe(
 
     logic wrt_en_op;
 
+    logic [0:31] pc_input;
+
     int s;
 
     always_ff @(posedge clock) begin
         ra <= ra_input;
         rb <= rb_input;
-        //rc <= rc_input;
         rt_address <= rt_address_input;
         op_op_code <= op_input_op_code;
         I7 <= I7_input;
         I10 <= I10_input;
         I16 <= I16_input;
         I18 <= I18_input;
+        pc_input <= PC_input;
 
     end
 
@@ -435,7 +437,7 @@ module oddpipe(
             BRANCH_RELATIVE:
                 begin
                     $display("Branch relative instruction starts...");
-                    PC_output = ($signed(PC_input) + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
+                    PC_output = ($signed(pc_input) + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
 
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -444,7 +446,7 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,pc_input,branch_taken);
 
                 end
 
@@ -460,15 +462,15 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
+                    $display("PC output = %h,Branch taken = %b",PC_output,branch_taken);
                 end
 
             BRANCH_RELATIVE_AND_SET_LINK:
                 begin
                     $display("Branch relative and set link instruction starts...");
-                    rt_value[0:31] = (PC_input + 4) & LSLR;
+                    rt_value[0:31] = (pc_input + 4) & LSLR;
                     rt_value[32:127] = 96'd0;
-                    PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
+                    PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR;
 
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -477,13 +479,13 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,PC_input,branch_taken,rt_value);
+                    $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,pc_input,branch_taken,rt_value);
                 end
 
             BRANCH_ABSOLUTE_AND_SET_LINK:
                 begin
                     $display("Branch absolute and set link instruction starts...");
-                    rt_value[0:31] = (PC_input + 4)& LSLR;
+                    rt_value[0:31] = (pc_input + 4)& LSLR;
                     rt_value[32:127] = 96'd0;
                     PC_output = ({{14{I16[0]}}, I16, 2'b0}) & LSLR;
 
@@ -494,86 +496,86 @@ module oddpipe(
 
                     branch_taken = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,PC_input,branch_taken,rt_value);
+                    $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,pc_input,branch_taken,rt_value);
                 end
 
             BRANCH_IF_NOT_ZERO_WORD:
                 begin
                     $display("Branch if not zero word instruction starts...");
                     if (rt_value[0:31] != 0) begin
-                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                         branch_taken = 1'd1;
                     end 
                     else begin
-                        PC_output = (PC_input + 4) & LSLR;
+                        PC_output = (pc_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,pc_input,branch_taken);
                 end
 
             BRANCH_IF_ZERO_WORD:
                 begin
                     $display("Branch if zero word instruction starts...");
                     if (rt_value[0:31] == 0) begin
-                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                         branch_taken = 1'd1;
                     end 
                     else begin
-                        PC_output = (PC_input + 4) & LSLR;
+                        PC_output = (pc_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,pc_input,branch_taken);
                 end
 
             BRANCH_IF_NOT_ZERO_HALFWORD:
                 begin
                     $display("Branch if not zero halfword instruction starts...");
                     if (rt_value[16:31] != 0) begin
-                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                         branch_taken = 1'd1;
                     end 
                     else begin
-                        PC_output = (PC_input + 4) & LSLR;
+                        PC_output = (pc_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken);
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,pc_input,branch_taken);
                 end
 
             BRANCH_IF_ZERO_HALFWORD:
                 begin
                     $display("Branch if zero halfword instruction starts...");
                     if (rt_value[16:31] == 0) begin
-                        PC_output = (PC_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
+                        PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
 
                         branch_taken = 1'd1;
                     end 
                     else begin
-                        PC_output = (PC_input + 4) & LSLR;
+                        PC_output = (pc_input + 4) & LSLR;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
                     wrt_en_op = 1'd0;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
-                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,PC_input,branch_taken); 
+                    $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,pc_input,branch_taken); 
                 end
 
-                // No operation ( load )
+            // No operation ( load )
             NO_OPERATION_LOAD:
                 begin
                    $display("No operation (load) instruction starts...");
@@ -582,13 +584,6 @@ module oddpipe(
                    wrt_en_op = 1'd0;
                 end
 
-            NO_OPERATION_EXECUTE:
-                begin
-                    rt_value = 128'd0;
-                    unit_latency = 4'd0;
-                    unit_id = 3'd0;
-                    wrt_en_op = 0;
-                end 
         endcase
         fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
     end

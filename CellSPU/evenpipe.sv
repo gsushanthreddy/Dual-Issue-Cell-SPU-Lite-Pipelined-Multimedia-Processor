@@ -58,11 +58,13 @@ module evenpipe(
     logic [0:32] rep_left_bit_I7_32;
     logic [0:15] rep_left_bit_I10_16;
     logic [0:31] rep_left_bit_I10_32;
+    logic [0:31] rep_left_bit_I16_32;
 
     assign rep_left_bit_I7_16 = {{9{I7[0]}}, I7};
     assign rep_left_bit_I7_32 = {{25{I7[0]}}, I7};
     assign rep_left_bit_I10_16 = {{6{I10[0]}}, I10};
     assign rep_left_bit_I10_32 = {{22{I10[0]}}, I10};
+    assign rep_left_bit_I16_32 = {{16{I16[0]}}, I16};
     
     always_ff @(posedge clock) begin
         ra <= ra_input;
@@ -809,13 +811,13 @@ module evenpipe(
                     $display("Immediate Load word instruction starts...");
                     for(int i=0;i<4;i++)
                     begin
-                        rt_value[i*WORD +: WORD] = rep_left_bit_I10_32;
+                        rt_value[i*WORD +: WORD] = rep_left_bit_I16_32;
                     end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("I10 value = %h, rt_value = %h",I10,rt_value);
+                    $display("I16 value = %h, rt_value = %h",I16,rt_value);
                 end
             
             IMMEDIATE_LOAD_ADDRESS:
@@ -1152,7 +1154,7 @@ module evenpipe(
                     for(int i=0; i < 4; i++) 
                     begin
 					    
-					    t_4_real = (($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD]))) -($bitstoshortreal(rc[i*WORD +: WORD]));
+					    t_4_real = (($bitstoshortreal(ra[i*WORD +: WORD])) * ($bitstoshortreal(rb[i*WORD +: WORD]))) - ($bitstoshortreal(rc[i*WORD +: WORD]));
 
                         if (t_4_real < -SMAX)
                         begin
@@ -1162,7 +1164,7 @@ module evenpipe(
                         begin
                             rt_value[i*WORD +: WORD] = $shortrealtobits(SMAX);   
                         end
-                        else if (t_4_real > -SMIN && t_4_real < SMIN)
+                        else if ((t_4_real > -SMIN) && (t_4_real < SMIN))
                         begin
                             rt_value[i*WORD +: WORD] = 0;
                         end
@@ -1247,7 +1249,7 @@ module evenpipe(
                     unit_id = 3'd3;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
-                    $display("ra value = %h, rb value = %h,rt_value = %h",ra,rb,rt_value);
+                    $display("ra value = %h, rb value = %h,rc value = %h, rt_value = %h",ra,rb,rc,rt_value);
                 end
             
             MULTIPLY_HIGH: 

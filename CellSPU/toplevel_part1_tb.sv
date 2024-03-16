@@ -60,307 +60,327 @@ module toplevel_part1_tb();
 
     initial begin 
         @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd2;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 1 into register 1
+        I16_ep = 16'd2;
         rt_ep_address = 7'd1;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd4;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 4 into register 2
+        I16_ep = 16'd4;
         rt_ep_address = 7'd2;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd6;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 6 into register 3
+        I16_ep = 16'd6;
         rt_ep_address = 7'd3;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd1;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 1 into register 4
+        I16_ep = 16'd1;
         rt_ep_address = 7'd4;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd8;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 8 into register 5
+        I16_ep = 16'd8;
         rt_ep_address = 7'd5;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = AND_HALFWORD_IMMEDIATE;
-        ra_ep_address = 7'd1;
-        I10_ep = 10'd16;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 10 into register 6
+        I16_ep = 16'd10;
         rt_ep_address = 7'd6;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = AND_WITH_COMPLEMENT;
-        ra_ep_address = 7'd2;
-        rb_ep_address = 7'd1;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 1 into register 7
+        I16_ep = 16'd1;
         rt_ep_address = 7'd7;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = AND_HALFWORD_IMMEDIATE;
-        ra_ep_address = 7'd6;
-        I10_ep = 10'd8;
-        rt_ep_address = 7'd10;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd8;
-        rt_ep_address = 7'd3;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd16;
-        rt_ep_address = 7'd4;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd32;
-        rt_ep_address = 7'd5;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd10;
-        rt_ep_address = 7'd6;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd24;
-        rt_ep_address = 7'd7;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd64;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 5 into register 8
+        I16_ep = 16'd5;
         rt_ep_address = 7'd8;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-        
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd130;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 12 into register 9
+        I16_ep = 16'd12;
         rt_ep_address = 7'd9;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
-
-        @(posedge clock)
-        ep_op_code = IMMEDIATE_LOAD_WORD;
-        I10_ep = 10'd256;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 16 into register 10
+        I16_ep = 16'd16;
         rt_ep_address = 7'd10;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 15 into register 11
+        I16_ep = 16'd15;
+        rt_ep_address = 7'd11;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 8 into register 12
+        I16_ep = 16'd8;
+        rt_ep_address = 7'd12;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 7 into register 13
+        I16_ep = 16'd7;
+        rt_ep_address = 7'd13;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 9 into register 14
+        I16_ep = 16'd9;
+        rt_ep_address = 7'd14;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //il rt,symbol
+        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 18 into register 15
+        I16_ep = 16'd18;
+        rt_ep_address = 7'd15;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
+        //a rt,ra,rb
+        ep_op_code = ADD_WORD; // ra, rb are fetched from reg file
+        ra_ep_address = 7'd1;
+        rb_ep_address = 7'd3;
+        rt_ep_address = 7'd16;
+        //shlqbii rt,ra,value
+        op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE; // ra is fetched from reg file
+        ra_op_address = 7'd2;
+        I7_op = 7'd5;
+        rt_op_address = 7'd17;
+
+        @(posedge clock)
+        //andhi rt,ra,value
+        ep_op_code = AND_HALFWORD_IMMEDIATE; //ra is fetched from the register file
+        ra_ep_address = 7'd1;
+        I10_ep = 10'd5;
+        rt_ep_address = 7'd18;
+        //rotqby rt,ra,rb
+        op_op_code = ROTATE_QUADWORD_BY_BYTES; // ra, rb are fetched from register file
+        ra_op_address = 7'd3;
+        rb_op_address = 7'd5;
+        rt_op_address = 7'd19;
+
+        @(posedge clock)
+        //nop
         ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nor rt,ra,rb
+        ep_op_code = NOR; // ra, rb are fetched from the register file
+        ra_ep_address = 7'd6;
+        rb_ep_address = 7'd10;
+        rt_ep_address = 7'd2;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //clz rt,ra
+        ep_op_code = COUNT_LEADING_ZEROS; // ra is fetched from reg file
+        ra_ep_address = 7'd11;
+        rt_ep_address = 7'd21;
+        //gbb rt,ra
+        op_op_code = GATHER_BITS_FROM_BYTES; // ra is fetched from register file
+        ra_op_address = 7'd1;
+        rt_op_address = 7'd20;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //shlhi rt,ra,value
+        ep_op_code = SHIFT_LEFT_HALFWORD_IMMEDIATE; // checking even to even forward
+        ra_ep_address = 7'd16; // value should be forwarded from the add word instruction in even pipe
+        I7_ep = 7'd5;
+        rt_ep_address = 7'd26;
+        //rotqbyi rt,ra,value
+        op_op_code = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE; // checking even to odd forward
+        ra_op_address = 7'd18; // value should be forwarded from the add word immediate in even pipe
+        I7_op = 7'd4;
+        rt_op_address = 7'd23;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //mpy rt,ra,rb
+        ep_op_code = MULTIPLY;
+        ra_ep_address = 7'd4;
+        rb_ep_address = 7'd7;
+        rt_ep_address = 7'd5;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //shlqbi rt,ra,rb
+        op_op_code =SHIFT_LEFT_QUADWORD_BY_BITS; // checking odd to odd forwarding
+        ra_op_address = 7'd19; // value should be forwarde from rotate quadword by bytes
+        rb_op_address = 7'd17; // value should be forwarde from shift left quadword by bits immediate
+        rt_op_address = 7'd23;
+
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+         @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //mpya rt,ra,rb,rc
+        ep_op_code = MULTIPLY_AND_ADD; // checking odd to even forwarding
+        ra_ep_address = 7'd23; // should be forwarded from rotate quadwords by  byte immediate
+        rb_ep_address = 7'd7;
+        rc_ep_address =7'd6;
+        rt_ep_address = 7'd5;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //avgb rt,ra,rb
+        ep_op_code = AVERAGE_BYTES; // checking even to even forwarding
+        ra_ep_address = 7'd5; // should be forwarded from multiply 
+        rb_ep_address = 7'd7;
+        rt_ep_address = 7'd15;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        reset = 1;
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+        
     // int even_q[$], odd_q[$];
 
     // initial begin
@@ -548,7 +568,7 @@ module toplevel_part1_tb();
     //         @(posedge clk);
     //     end
 
-    //     //load random values to registerfile
+    //     //load random values to registerrfile
     //     for(int i = 0; i < 128; i++) begin
     //         unit_id = 1;
     //         opcode_even = ADD_WORD_IMMEDIATE;
