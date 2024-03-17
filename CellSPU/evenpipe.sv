@@ -1342,6 +1342,7 @@ module evenpipe(
             
             NO_OPERATION_EXECUTE:
                 begin
+                    $display("No Operation execute starts...");
                     rt_value = 128'd0;
                     unit_latency = 4'd0;
                     unit_id = 3'd0;
