@@ -41,7 +41,7 @@ module registerFile(
 
         if(wrt_back_arr_op[131])
         begin
-            reg_file[wrt_back_arr_ep[132:138]] <= wrt_back_arr_op[3:130];
+            reg_file[wrt_back_arr_op[132:138]] <= wrt_back_arr_op[3:130];
         end
         // What if wrt_en_ep and wrt_en_op are both 1 and they write to same RT address? Which value from either of the pipes should RT store? Stall odd pipe 
     end

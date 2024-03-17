@@ -247,12 +247,6 @@ module toplevel_part1_tb();
         rt_op_address = 7'd23;
 
         @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
         //mpy rt,ra,rb
         ep_op_code = MULTIPLY;
         ra_ep_address = 7'd4;
@@ -292,7 +286,7 @@ module toplevel_part1_tb();
         @(posedge clock)
         //mpya rt,ra,rb,rc
         ep_op_code = MULTIPLY_AND_ADD; // checking odd to even forwarding
-        ra_ep_address = 7'd23; // should be forwarded from rotate quadwords by  byte immediate
+        ra_ep_address = 7'd23; // should be forwarded from shift left quadwords by bits
         rb_ep_address = 7'd7;
         rc_ep_address =7'd6;
         rt_ep_address = 7'd5;

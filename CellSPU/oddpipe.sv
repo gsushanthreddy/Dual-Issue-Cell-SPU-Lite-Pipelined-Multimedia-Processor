@@ -385,6 +385,8 @@ module oddpipe(
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
 
+                    LS_wrt_en = 1'b0;
+
                     wrt_en_op = 1'd1;
                     $display("ra value = %h, I10 value = %h,LS address = %h, LS value = %h, rt loaded value = %h",ra,I10,LS_address,LS_data_output,rt_value);
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
@@ -398,6 +400,8 @@ module oddpipe(
 
                     unit_latency = 4'd7;
                     unit_id = 3'd6;
+
+                    LS_wrt_en = 1'b0;
 
                     wrt_en_op = 1'd1;
                     $display("I10 value = %h,LS address = %h, LS value = %h, rt loaded value = %h",I10,LS_address,LS_data_output,rt_value);
