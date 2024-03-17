@@ -26,7 +26,7 @@ module toplevel_part1_tb();
         .I16_ep(I16_ep),
         .I18_ep(I18_ep),
         .ep_opcode(ep_op_code),
-        .ra_op_address(ra_ep_address), 
+        .ra_op_address(ra_op_address), 
         .rb_op_address(rb_op_address), 
         .rt_op_address(rt_op_address),
         .I7_op(I7_op),
@@ -242,7 +242,7 @@ module toplevel_part1_tb();
         rt_ep_address = 7'd26;
         //rotqbyi rt,ra,value
         op_op_code = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE; // checking even to odd forward
-        ra_op_address = 7'd18; // value should be forwarded from the add word immediate in even pipe
+        ra_op_address = 7'd18; // value should be forwarded from the and halfword immediate in even pipe
         I7_op = 7'd4;
         rt_op_address = 7'd23;
 
@@ -266,8 +266,8 @@ module toplevel_part1_tb();
         ep_op_code = NO_OPERATION_EXECUTE;
         //shlqbi rt,ra,rb
         op_op_code =SHIFT_LEFT_QUADWORD_BY_BITS; // checking odd to odd forwarding
-        ra_op_address = 7'd19; // value should be forwarde from rotate quadword by bytes
-        rb_op_address = 7'd17; // value should be forwarde from shift left quadword by bits immediate
+        ra_op_address = 7'd19; // value should be forwarded from rotate quadword by bytes
+        rb_op_address = 7'd17; // value should be forwarded from shift left quadword by bits immediate
         rt_op_address = 7'd23;
 
 
@@ -338,7 +338,7 @@ module toplevel_part1_tb();
         @(posedge clock)
         //avgb rt,ra,rb
         ep_op_code = AVERAGE_BYTES; // checking even to even forwarding
-        ra_ep_address = 7'd5; // should be forwarded from multiply 
+        ra_ep_address = 7'd5; // should be forwarded from multiply and add 
         rb_ep_address = 7'd7;
         rt_ep_address = 7'd15;
         //lnop
