@@ -74,34 +74,29 @@ module testbench_op();
 
         @(posedge clock)
 
-        
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS;
         rb = 128'd10;
         ra = 128'd20;
 
         @(posedge clock)
 
-        
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE;
         I7 = 7'd5;
         ra = 128'd15;
 
         @(posedge clock)
 
-        
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BYTES;
         rb = 128'd110;
         ra = 128'd25;
 
         @(posedge clock)
 
-        
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BYTE_IMMEDIATE;
         I7 = 7'd15;
         ra = 128'd33;
 
         @(posedge clock)
-        
         
         op_op_code = SHIFT_LEFT_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT;
         rb = 128'd45;
@@ -109,13 +104,11 @@ module testbench_op();
 
         @(posedge clock)
         
-        
         op_op_code = ROTATE_QUADWORD_BY_BYTES;
         rb = 128'd34;
         ra = 128'd77;
  
         @(posedge clock)
-        
         
         op_op_code = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE;
         I7 = 7'd7;
@@ -123,13 +116,11 @@ module testbench_op();
    
         @(posedge clock)
         
-        
         op_op_code = ROTATE_QUADWORD_BY_BYTES_FROM_BIT_SHIFT_COUNT;
         rb = 128'd46;
         ra = 128'd71;
 
         @(posedge clock)
-        
         
         op_op_code = ROTATE_QUADWORD_BY_BITS;
         rb = 128'd61;
@@ -137,28 +128,97 @@ module testbench_op();
 
         @(posedge clock)
         
-        
         op_op_code = ROTATE_QUADWORD_BY_BITS_IMMEDIATE;
         I7 = 7'd5;
         ra = 128'd65;
 
         @(posedge clock)
         
-        
         op_op_code = GATHER_BITS_FROM_BYTES;
         ra = 128'd15;
         
         @(posedge clock)
-        
         
         op_op_code = GATHER_BITS_FROM_HALFWORDS;
         ra = 128'd95;
 
         @(posedge clock)
         
-        
         op_op_code = GATHER_BITS_FROM_WORDS;
         ra = 128'd45;
+
+        // Load and store
+        @(posedge clock)
+        
+        op_op_code = LOAD_QUADFORM_DFORM;
+        ra = 128'd5;
+        I10 = 10'd5;
+
+        @(posedge clock)
+        
+        op_op_code = LOAD_QUADWORD_AFORM;
+        I16 = 16'd9;
+        
+        @(posedge clock)
+        
+        op_op_code = STORE_QUADFORM_DFORM;
+        ra = 128'd6;
+        I10 = 10'd9;
+        
+        @(posedge clock)
+        
+        op_op_code = LOAD_QUADWORD_AFORM;
+        I16 = 16'd18;
+
+        //Branch
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_RELATIVE;
+        pc_input = 32'd162;
+        I16 = 16'd3;
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_ABSOLUTE;
+        I16 = 16'd18;
+        
+        @(posedge clock)
+        
+        op_op_code = BRANCH_RELATIVE_AND_SET_LINK;
+        pc_input = 32'd62;
+        I16 = 16'd23;
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_ABSOLUTE_AND_SET_LINK;
+        pc_input = 32'd12;
+        I16 = 16'd28;
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_IF_NOT_ZERO_WORD;
+        pc_input = 32'd32;
+        I16 = 16'd8;
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_IF_ZERO_WORD;
+        pc_input = 32'd21;
+        I16 = 16'd38;
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_IF_NOT_ZERO_HALFWORD;
+        pc_input = 32'd22;
+        I16 = 16'd2;
+
+
+        @(posedge clock)
+        
+        op_op_code = BRANCH_IF_ZERO_HALFWORD;
+        pc_input = 32'd72;
+        I16 = 16'd31;
 
         #10;
 
