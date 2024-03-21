@@ -366,8 +366,8 @@ module testbench_ep();
         @(posedge clock)
 
         ep_op_code =  FLOATING_MULTIPLY;
-        ra = 128'd467;
-        rb = 128'd876;
+        ra = 128'd16;
+        rb = 128'h62;
 
         @(posedge clock)
 

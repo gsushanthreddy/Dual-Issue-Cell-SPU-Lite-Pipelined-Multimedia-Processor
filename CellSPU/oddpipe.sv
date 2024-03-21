@@ -511,11 +511,11 @@ module oddpipe(
                     $display("Branch if not zero word instruction starts...");
                     if (rt_value[0:31] != 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
-
                         branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (pc_input + 4) & LSLR;
+                        branch_taken = 1'd0;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -530,11 +530,11 @@ module oddpipe(
                     $display("Branch if zero word instruction starts...");
                     if (rt_value[0:31] == 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
-
                         branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (pc_input + 4) & LSLR;
+                        branch_taken = 1'd0;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -549,11 +549,11 @@ module oddpipe(
                     $display("Branch if not zero halfword instruction starts...");
                     if (rt_value[16:31] != 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
-
                         branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (pc_input + 4) & LSLR;
+                        branch_taken = 1'd0;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
@@ -568,11 +568,11 @@ module oddpipe(
                     $display("Branch if zero halfword instruction starts...");
                     if (rt_value[16:31] == 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & LSLR & 32'hFFFFFFFC;
-
                         branch_taken = 1'd1;
                     end 
                     else begin
                         PC_output = (pc_input + 4) & LSLR;
+                        branch_taken = 1'd0;
                     end
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
