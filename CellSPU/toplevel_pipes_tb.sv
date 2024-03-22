@@ -388,7 +388,7 @@ module toplevel_pipes_tb();
         op_op_code = STORE_QUADFORM_DFORM;
         ra_op_address = 7'd7;
         I10_op = 10'd9;
-        rt_op_address = 7'd50;
+        rb_op_address = 7'd50;
 
         @(posedge clock)
         ep_op_code = OR;
@@ -398,7 +398,7 @@ module toplevel_pipes_tb();
 
         op_op_code = STORE_QUADFORM_AFORM;
         I16_op = 16'd18;
-        rt_op_address = 7'd52;
+        rb_op_address = 7'd52;
         
         @(posedge clock)
         ep_op_code = OR_COMPLEMENT;
