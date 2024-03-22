@@ -100,170 +100,92 @@ module toplevel_part1_tb();
         op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 10 into register 6
-        I16_ep = 16'd10;
+        //a rt,ra,rb
+        ep_op_code = ADD_WORD; // checking even to even forwarding
+        ra_ep_address = 7'd1; // should be forwarded from immediate load word (1)
+        rb_ep_address = 7'd2; // should be forwarded from immediate load word (2)
+        rt_ep_address = 7'd4;
+        //shlqbii rt,ra,value
+        op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE; //checking even to odd forwarding 
+        ra_op_address = 7'd1; // should be forwarded from immediate load (1)
+        I7_op = 7'd5;
+        rt_op_address = 7'd5;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        //andhi rt,ra,value
+        ep_op_code = AND_HALFWORD_IMMEDIATE; // checking for the latest value forwarding
+        ra_ep_address = 7'd4; // should be fetched from ADD word not from immediate load word (4)
+        I10_ep = 10'd5; 
         rt_ep_address = 7'd6;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
+        //rotqby rt,ra,rb
+        op_op_code = ROTATE_QUADWORD_BY_BYTES; // checking for latest value forwarding from even pipe and also from odd pipe
+        ra_op_address = 7'd4; //should be fetched from ADD word not from immediate load word (4)
+        rb_op_address = 7'd5; // should be fetced from shift left quadwords by bits immediate not from immediate load word (5)
+        rt_op_address = 7'd7;
 
         @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 1 into register 7
-        I16_ep = 16'd1;
-        rt_ep_address = 7'd7;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 5 into register 8
-        I16_ep = 16'd5;
+        //nor rt,ra,rb
+        ep_op_code = NOR; // ra, rb are fetched from the register file
+        ra_ep_address = 7'd1;
+        rb_ep_address = 7'd2;
         rt_ep_address = 7'd8;
         //lnop
         op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 12 into register 9
-        I16_ep = 16'd12;
-        rt_ep_address = 7'd9;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 16 into register 10
-        I16_ep = 16'd16;
-        rt_ep_address = 7'd10;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 15 into register 11
-        I16_ep = 16'd15;
-        rt_ep_address = 7'd11;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 8 into register 12
-        I16_ep = 16'd8;
-        rt_ep_address = 7'd12;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 7 into register 13
-        I16_ep = 16'd7;
-        rt_ep_address = 7'd13;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 9 into register 14
-        I16_ep = 16'd9;
-        rt_ep_address = 7'd14;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //il rt,symbol
-        ep_op_code = IMMEDIATE_LOAD_WORD; // loading 18 into register 15
-        I16_ep = 16'd18;
-        rt_ep_address = 7'd15;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //a rt,ra,rb
-        ep_op_code = ADD_WORD; // ra, rb are fetched from reg file
-        ra_ep_address = 7'd1;
-        rb_ep_address = 7'd3;
-        rt_ep_address = 7'd16;
-        //shlqbii rt,ra,value
-        op_op_code = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE; // ra is fetched from reg file
-        ra_op_address = 7'd2;
-        I7_op = 7'd5;
-        rt_op_address = 7'd17;
-
-        @(posedge clock)
-        //andhi rt,ra,value
-        ep_op_code = AND_HALFWORD_IMMEDIATE; //ra is fetched from the register file
-        ra_ep_address = 7'd1;
-        I10_ep = 10'd5;
-        rt_ep_address = 7'd18;
-        //rotqby rt,ra,rb
-        op_op_code = ROTATE_QUADWORD_BY_BYTES; // ra, rb are fetched from register file
-        ra_op_address = 7'd3;
-        rb_op_address = 7'd5;
-        rt_op_address = 7'd19;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //nor rt,ra,rb
-        ep_op_code = NOR; // ra, rb are fetched from the register file
-        ra_ep_address = 7'd6;
-        rb_ep_address = 7'd10;
-        rt_ep_address = 7'd2;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-       /* @(posedge clock)
         //clz rt,ra
         ep_op_code = COUNT_LEADING_ZEROS; // ra is fetched from reg file
-        ra_ep_address = 7'd11;
-        rt_ep_address = 7'd21;
+        ra_ep_address = 7'd3;
+        rt_ep_address = 7'd9;
         //gbb rt,ra
-        op_op_code = GATHER_BITS_FROM_BYTES; // ra is fetched from register file
-        ra_op_address = 7'd1;
-        rt_op_address = 7'd20;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;'*/
+        op_op_code = GATHER_BITS_FROM_BYTES; // ra is fetched from reg file
+        ra_op_address = 7'd3; 
+        rt_op_address = 7'd10;
 
         @(posedge clock)
         //shlhi rt,ra,value
-        ep_op_code = SHIFT_LEFT_HALFWORD_IMMEDIATE; // checking even to even forward
-        ra_ep_address = 7'd16; // value should be forwarded from the add word instruction in even pipe
-        I7_ep = 7'd5;
-        rt_ep_address = 7'd26;
+        ep_op_code = SHIFT_LEFT_HALFWORD_IMMEDIATE; // ra is fetched from reg file
+        ra_ep_address = 7'd1;
+        I7_ep = 7'd1;
+        rt_ep_address = 7'd9;
         //rotqbyi rt,ra,value
-        op_op_code = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE; // checking even to odd forward
-        ra_op_address = 7'd18; // value should be forwarded from the and halfword immediate in even pipe
+        op_op_code = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE; // ra is fetched from reg file
+        ra_op_address = 7'd2; 
         I7_op = 7'd4;
-        rt_op_address = 7'd23;
-
-        @(posedge clock)
-        //mpy rt,ra,rb
-        ep_op_code = MULTIPLY;
-        ra_ep_address = 7'd4;
-        rb_ep_address = 7'd7;
-        rt_ep_address = 7'd5;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
+        rt_op_address = 7'd10;
 
         @(posedge clock)
         //nop
         ep_op_code = NO_OPERATION_EXECUTE;
-        //shlqbi rt,ra,rb
-        op_op_code =SHIFT_LEFT_QUADWORD_BY_BITS; // checking odd to odd forwarding
-        ra_op_address = 7'd19; // value should be forwarded from rotate quadword by bytes
-        rb_op_address = 7'd17; // value should be forwarded from shift left quadword by bits immediate
-        rt_op_address = 7'd23;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
+        @(posedge clock)
+        //mpy rt,ra,rb
+        ep_op_code = MULTIPLY; // checking odd to even and even to even forwarding
+        ra_ep_address = 7'd7; // should be forwarded from rotate quadword by bytes
+        rb_ep_address = 7'd8; // should be forwarded from Nor
+        rt_ep_address = 7'd13;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
         //nop
@@ -285,17 +207,11 @@ module toplevel_part1_tb();
 
         @(posedge clock)
         //mpya rt,ra,rb,rc
-        ep_op_code = MULTIPLY_AND_ADD; // checking odd to even forwarding
-        ra_ep_address = 7'd23; // should be forwarded from shift left quadwords by bits
-        rb_ep_address = 7'd7;
-        rc_ep_address =7'd6;
-        rt_ep_address = 7'd5;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
+        ep_op_code = MULTIPLY_AND_ADD; // checking latest value from even to even and odd to even
+        ra_ep_address = 7'd8; // should be forwarded from nor
+        rb_ep_address = 7'd9; // should be forwarded from shift left halfword immediate not from count leading zeroes
+        rc_ep_address = 7'd10; // should be forwarded from rotate quadword by bytes immediate not from gather bits from bytes
+        rt_ep_address = 7'd14;
         //lnop
         op_op_code = NO_OPERATION_LOAD;
 
@@ -331,34 +247,10 @@ module toplevel_part1_tb();
 
         @(posedge clock)
         //avgb rt,ra,rb
-        ep_op_code = AVERAGE_BYTES; // checking even to even forwarding
-        ra_ep_address = 7'd5; // should be forwarded from multiply and add 
+        ep_op_code = AVERAGE_BYTES; // ra, rb are fetched from reg file
+        ra_ep_address = 7'd5; 
         rb_ep_address = 7'd7;
         rt_ep_address = 7'd15;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
-        //lnop
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
-        //nop
-        ep_op_code = NO_OPERATION_EXECUTE;
         //lnop
         op_op_code = NO_OPERATION_LOAD;
 
@@ -374,7 +266,24 @@ module toplevel_part1_tb();
         ep_op_code = NO_OPERATION_EXECUTE;
         //lnop
         op_op_code = NO_OPERATION_LOAD;
-        
+
+         @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+         @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
+         @(posedge clock)
+        //nop
+        ep_op_code = NO_OPERATION_EXECUTE;
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
     #20;
     $finish;
     end
