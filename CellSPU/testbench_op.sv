@@ -164,13 +164,13 @@ module testbench_op();
         op_op_code = STORE_QUADFORM_DFORM;
         ra = 128'd6;
         I10 = 10'd9;
-        rb = 128'15;
+        rb = 128'd5;
         
         @(posedge clock)
         
-        op_op_code = STORE_QUADWORD_AFORM;
+        op_op_code = STORE_QUADFORM_AFORM;
         I16 = 16'd18;
-        rb = 128'13;
+        rb = 128'd3;
 
         //Branch
 

@@ -2,6 +2,7 @@ import descriptions::*;
 
 module LocalStore(
     input clock,
+    input reset,
     input localstore_wrt_en,
     input [0:14] LS_address,
     input [0:127] LS_data_input,
@@ -10,6 +11,13 @@ module LocalStore(
     output logic [0:7] ls [0:32767]
 );
 
+always_ff @(posedge clock) begin
+    if(reset) begin
+        for(int i=0;i<32768;i++) begin
+            ls[i] = 8'd0;
+        end
+    end
+end
 always_comb 
 begin
     for (int i=0; i<16 ; i++)

@@ -57,8 +57,16 @@ module toplevel_pipes_tb();
 
     initial clock = 1;
     always #5 clock = ~clock;
+    initial reset = 0;
+
 
     initial begin 
+        @(posedge clock)
+        //il rt,symbol
+        ep_op_code = NO_OPERATION_EXECUTE; // loading 1 into register 1
+        //lnop
+        op_op_code = NO_OPERATION_LOAD;
+
         @(posedge clock)
         //il rt,symbol
         ep_op_code = IMMEDIATE_LOAD_WORD; // loading 1 into register 1
@@ -314,96 +322,100 @@ module toplevel_pipes_tb();
         rt_ep_address = 7'd8;
 
         op_op_code = ROTATE_QUADWORD_BY_BITS;
-        ra_op_address = 7'd8;
-        rb_op_address = 7'd9;
+        ra_op_address = 7'd9;
+        rb_op_address = 7'd10;
         rt_op_address = 7'd37;
         
         @(posedge clock)
         ep_op_code = SUBTRACT_FROM_EXTENDED;
-        ra_ep_address = 7'd10;
-        rb_ep_address = 7'd11;
+        ra_ep_address = 7'd11;
+        rb_ep_address = 7'd12;
         rt_ep_address = 7'd3;
 
         op_op_code = ROTATE_QUADWORD_BY_BITS_IMMEDIATE;
-        ra_op_address = 7'd12;
+        ra_op_address = 7'd13;
         I7_op = 7'd4;
         rt_op_address = 7'd38;
 
         @(posedge clock)
         ep_op_code = CARRY_GENERATE;
-        ra_ep_address = 7'd13;
-        rb_ep_address = 7'd14;
+        ra_ep_address = 7'd14;
+        rb_ep_address = 7'd15;
         rt_ep_address = 7'd39;
 
         op_op_code = GATHER_BITS_FROM_BYTES;
-        ra_op_address = 7'd15;
+        ra_op_address = 7'd16;
         rt_op_address = 7'd40;
 
         @(posedge clock)
         ep_op_code = BORROW_GENERATE;
-        ra_ep_address = 7'd16;
-        rb_ep_address = 7'd17;
+        ra_ep_address = 7'd17;
+        rb_ep_address = 7'd18;
         rt_ep_address = 7'd41;
 
         op_op_code = GATHER_BITS_FROM_HALFWORDS;
-        ra_op_address = 7'd18;
+        ra_op_address = 7'd19;
         rt_op_address = 7'd42;
 
         @(posedge clock)
         ep_op_code = AND;
-        ra_ep_address = 7'd19;
-        rb_ep_address = 7'd20;
+        ra_ep_address = 7'd20;
+        rb_ep_address = 7'd1;
         rt_ep_address = 7'd43;
 
         op_op_code = GATHER_BITS_FROM_WORDS;
-        ra_op_address = 7'd1;
+        ra_op_address = 7'd2;
         rt_op_address = 7'd44;
 
         @(posedge clock)
+        ep_op_code = NO_OPERATION_EXECUTE;
+        op_op_code = NO_OPERATION_LOAD;
+
+        @(posedge clock)
+        ep_op_code = AND_WORD_IMMEDIATE;
+        ra_ep_address = 7'd7;
+        rt_ep_address = 7'd49;
+
+        op_op_code = STORE_QUADFORM_DFORM;
+        ra_op_address = 7'd8;
+        I10_op = 10'd9;
+        rb_op_address = 7'd2;
+
+        @(posedge clock)
+        ep_op_code = OR;
+        ra_ep_address = 7'd9;
+        rb_ep_address = 7'd10;
+        rt_ep_address = 7'd51;
+
+        op_op_code = STORE_QUADFORM_AFORM;
+        I16_op = 16'd18;
+        rb_op_address = 7'd3;
+
+        @(posedge clock)
         ep_op_code = AND_WITH_COMPLEMENT;
-        ra_ep_address = 7'd2;
-        rb_ep_address = 7'd3;
+        ra_ep_address = 7'd3;
+        rb_ep_address = 7'd4;
         rt_ep_address = 7'd45;
 
         op_op_code = LOAD_QUADFORM_DFORM;
-        ra_op_address = 7'd4;
+        ra_op_address = 7'd5;
         I10_op = 10'd5;
         rt_op_address = 7'd46;
 
         @(posedge clock)
         ep_op_code = AND_HALFWORD_IMMEDIATE;
-        ra_ep_address = 7'd5;
+        ra_ep_address = 7'd6;
         I10_ep = 10'd16;
         rt_ep_address = 7'd47;
 
         op_op_code = LOAD_QUADWORD_AFORM;
         I16_op = 16'd9;
         rt_op_address = 7'd48;
-
-        @(posedge clock)
-        ep_op_code = AND_WORD_IMMEDIATE;
-        ra_ep_address = 7'd6;
-        rt_ep_address = 7'd49;
-
-        op_op_code = STORE_QUADFORM_DFORM;
-        ra_op_address = 7'd7;
-        I10_op = 10'd9;
-        rb_op_address = 7'd50;
-
-        @(posedge clock)
-        ep_op_code = OR;
-        ra_ep_address = 7'd8;
-        rb_ep_address = 7'd9;
-        rt_ep_address = 7'd51;
-
-        op_op_code = STORE_QUADFORM_AFORM;
-        I16_op = 16'd18;
-        rb_op_address = 7'd52;
         
         @(posedge clock)
         ep_op_code = OR_COMPLEMENT;
-        ra_ep_address = 7'd10;
-        rb_ep_address = 7'd11;
+        ra_ep_address = 7'd11;
+        rb_ep_address = 7'd12;
         rt_ep_address = 7'd53;
 
         op_op_code = BRANCH_RELATIVE;
@@ -413,7 +425,7 @@ module toplevel_pipes_tb();
 
         @(posedge clock)
         ep_op_code = OR_HALFWORD_IMMEDIATE;
-        ra_ep_address = 7'd12;
+        ra_ep_address = 7'd13;
         rt_ep_address = 7'd55;
 
         op_op_code = BRANCH_ABSOLUTE;
@@ -422,7 +434,7 @@ module toplevel_pipes_tb();
 
         @(posedge clock)
         ep_op_code = OR_WORD_IMMEDIATE;
-        ra_ep_address = 7'd13;
+        ra_ep_address = 7'd14;
         I10_ep = 10'd64;
         rt_ep_address = 7'd57;
 

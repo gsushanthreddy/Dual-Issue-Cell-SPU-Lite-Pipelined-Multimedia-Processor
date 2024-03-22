@@ -222,6 +222,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, rb value = %h, rt_value = %h",ra,rb,rt_value);
                 end
             
             SUBTRACT_FROM_EXTENDED:
@@ -235,6 +236,7 @@ module evenpipe(
                     unit_id = 3'd1;
                     wrt_en_ep = 1;
                     //fw_ep_st_1 = {unit_id, rt_value, wrt_en_ep, rt_address, unit_latency};
+                    $display("ra value = %h, rb value = %h, rt_value = %h",ra,rb,rt_value);
                 end
 
             CARRY_GENERATE:
