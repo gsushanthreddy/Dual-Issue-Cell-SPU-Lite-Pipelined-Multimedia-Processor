@@ -794,7 +794,7 @@ module toplevel_pipes_tb();
         rt_ep_address = 7'd107;
 
         op_op_code = NO_OPERATION_LOAD;
-    #20;
+    #500;
     $finish;
     end
 endmodule
