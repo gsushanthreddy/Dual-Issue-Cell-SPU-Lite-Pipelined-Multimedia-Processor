@@ -63,11 +63,13 @@ module toplevel_pipes_tb();
     initial begin 
         @(posedge clock)
         //il rt,symbol
+        reset=1;
         ep_op_code = NO_OPERATION_EXECUTE; // loading 1 into register 1
         //lnop
         op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
+        reset=0;
         //il rt,symbol
         ep_op_code = IMMEDIATE_LOAD_WORD; // loading 1 into register 1
         I16_ep = 16'd2;
