@@ -222,6 +222,7 @@ module toplevel_part1(
     LocalStore LS (
 
         .clock(clock),
+        .reset(reset),
         .localstore_wrt_en(LS_wrt_en),
         .LS_address(LS_address),
         .LS_data_input(LS_data_input),
