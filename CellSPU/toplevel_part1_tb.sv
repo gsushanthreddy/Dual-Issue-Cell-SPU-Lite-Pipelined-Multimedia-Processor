@@ -261,7 +261,6 @@ module toplevel_part1_tb();
         op_op_code = NO_OPERATION_LOAD;
 
         @(posedge clock)
-        reset = 1;
         //nop
         ep_op_code = NO_OPERATION_EXECUTE;
         //lnop

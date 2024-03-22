@@ -11,7 +11,7 @@ cModel Technology
 Z0 dC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU
 Xdescriptions
 Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
-Z2 !s110 1711132119
+Z2 !s110 1711141600
 !i10b 1
 !s100 2z76hzc@C[b:ReHe_6?^z3
 Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -22,13 +22,13 @@ R0
 Z4 w1711031740
 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/descriptions.sv
 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/descriptions.sv
-!i122 111
+!i122 121
 Z5 L0 1 0
 Z6 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z7 !s108 1711132119.000000
+Z7 !s108 1711141600.000000
 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/descriptions.sv|
 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/descriptions.sv|
 !i113 1
@@ -51,7 +51,7 @@ R0
 Z12 w1710698862
 Z13 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/evenpipe.sv
 Z14 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/evenpipe.sv
-!i122 112
+!i122 122
 L0 12 1348
 R6
 31
@@ -77,7 +77,7 @@ R0
 R12
 R13
 R14
-!i122 112
+!i122 122
 L0 10 0
 R6
 31
@@ -104,7 +104,7 @@ R0
 R4
 Z17 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/forwardunit.sv
 Z18 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/forwardunit.sv
-!i122 113
+!i122 123
 L0 3 355
 R6
 31
@@ -130,7 +130,7 @@ R0
 R4
 R17
 R18
-!i122 113
+!i122 123
 R5
 R6
 31
@@ -157,7 +157,7 @@ R0
 Z21 w1710546470
 Z22 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/Localstore.sv
 Z23 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/Localstore.sv
-!i122 114
+!i122 124
 L0 3 29
 R6
 31
@@ -184,7 +184,7 @@ R0
 R21
 R22
 R23
-!i122 114
+!i122 124
 R5
 R6
 31
@@ -199,7 +199,7 @@ voddpipe
 R1
 R10
 DXx4 work 15 oddpipe_sv_unit 0 22 I?b]7fUdzMBccNFg7fZL21
-Z26 !s110 1711132120
+R2
 R11
 r1
 !s85 0
@@ -209,23 +209,23 @@ IiCLa8I9zB@3XkafI=4KR13
 !s105 oddpipe_sv_unit
 S1
 R0
-Z27 w1711079604
-Z28 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv
-Z29 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv
-!i122 115
+Z26 w1711079604
+Z27 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv
+Z28 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv
+!i122 125
 L0 9 590
 R6
 31
-Z30 !s108 1711132120.000000
-Z31 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv|
-Z32 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv|
+R7
+Z29 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv|
+Z30 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/oddpipe.sv|
 !i113 1
 R8
 R9
 Xoddpipe_sv_unit
 R1
 R10
-R26
+R2
 VI?b]7fUdzMBccNFg7fZL21
 r1
 !s85 0
@@ -235,22 +235,22 @@ II?b]7fUdzMBccNFg7fZL21
 !i103 1
 S1
 R0
+R26
 R27
 R28
-R29
-!i122 115
+!i122 125
 R5
 R6
 31
+R7
+R29
 R30
-R31
-R32
 !i113 1
 R8
 R9
 vregisterFile
 R1
-R26
+Z31 !s110 1711141601
 !i10b 1
 !s100 Mg=SRMQLXzc2^<oXLM3Ii3
 R3
@@ -261,13 +261,13 @@ R0
 w1710712320
 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/registerFile.sv
 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/registerFile.sv
-!i122 116
+!i122 126
 L0 1 49
 R6
 r1
 !s85 0
 31
-R30
+R7
 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/registerFile.sv|
 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/registerFile.sv|
 !i113 1
@@ -278,7 +278,7 @@ vtestbench_ep
 R1
 R10
 DXx4 work 20 testbench_ep_sv_unit 0 22 Za=gKnB20z;>F;<O^1jA[0
-R26
+R31
 R11
 r1
 !s85 0
@@ -289,13 +289,13 @@ IWL_n><`:GT9dAnFChgJ;i2
 S1
 R0
 R4
-Z33 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/testbench_ep.sv
-Z34 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/testbench_ep.sv
-!i122 117
+Z32 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/testbench_ep.sv
+Z33 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/testbench_ep.sv
+!i122 127
 L0 6 451
 R6
 31
-R30
+Z34 !s108 1711141601.000000
 Z35 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/testbench_ep.sv|
 Z36 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/testbench_ep.sv|
 !i113 1
@@ -304,7 +304,7 @@ R9
 Xtestbench_ep_sv_unit
 R1
 R10
-R26
+R31
 VZa=gKnB20z;>F;<O^1jA[0
 r1
 !s85 0
@@ -315,13 +315,13 @@ IZa=gKnB20z;>F;<O^1jA[0
 S1
 R0
 R4
+R32
 R33
-R34
-!i122 117
+!i122 127
 R5
 R6
 31
-R30
+R34
 R35
 R36
 !i113 1
@@ -384,7 +384,7 @@ vtoplevel_part1
 R1
 R10
 DXx4 work 22 toplevel_part1_sv_unit 0 22 `0G[d9D9K^;_Tn4D9GzR^3
-R26
+R31
 R11
 r1
 !s85 0
@@ -397,11 +397,11 @@ R0
 Z45 w1710546614
 Z46 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1.sv
 Z47 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1.sv
-!i122 118
+!i122 128
 L0 5 229
 R6
 31
-R30
+R34
 Z48 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1.sv|
 Z49 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1.sv|
 !i113 1
@@ -410,7 +410,7 @@ R9
 Xtoplevel_part1_sv_unit
 R1
 R10
-R26
+R31
 V`0G[d9D9K^;_Tn4D9GzR^3
 r1
 !s85 0
@@ -423,11 +423,11 @@ R0
 R45
 R46
 R47
-!i122 118
+!i122 128
 R5
 R6
 31
-R30
+R34
 R48
 R49
 !i113 1
@@ -437,7 +437,7 @@ vtoplevel_part1_tb
 R1
 R10
 DXx4 work 25 toplevel_part1_tb_sv_unit 0 22 6=o5cQoSEQfUOlZLI6WBQ2
-R26
+R31
 R11
 r1
 !s85 0
@@ -447,14 +447,14 @@ I8PZjkRQSca@8045fP=8HB1
 !s105 toplevel_part1_tb_sv_unit
 S1
 R0
-Z50 w1711132080
+Z50 w1711133007
 Z51 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1_tb.sv
 Z52 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1_tb.sv
-!i122 119
+!i122 129
 L0 3 288
 R6
 31
-R30
+R34
 Z53 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1_tb.sv|
 Z54 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_part1_tb.sv|
 !i113 1
@@ -463,7 +463,7 @@ R9
 Xtoplevel_part1_tb_sv_unit
 R1
 R10
-R26
+R31
 V6=o5cQoSEQfUOlZLI6WBQ2
 r1
 !s85 0
@@ -476,11 +476,11 @@ R0
 R50
 R51
 R52
-!i122 119
+!i122 129
 R5
 R6
 31
-R30
+R34
 R53
 R54
 !i113 1
@@ -490,7 +490,7 @@ vtoplevel_pipes_tb
 R1
 R10
 DXx4 work 25 toplevel_pipes_tb_sv_unit 0 22 fFN1l;lo92PmGT59AMndC1
-R26
+R31
 R11
 r1
 !s85 0
@@ -503,11 +503,11 @@ R0
 Z55 w1711079789
 Z56 8C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_pipes_tb.sv
 Z57 FC:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_pipes_tb.sv
-!i122 120
+!i122 130
 L0 3 798
 R6
 31
-R30
+R34
 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_pipes_tb.sv|
 Z58 !s90 -reportprogress|300|-work|work|C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_pipes_tb.sv|
 !i113 1
@@ -516,7 +516,7 @@ R9
 Xtoplevel_pipes_tb_sv_unit
 R1
 R10
-R26
+R31
 VfFN1l;lo92PmGT59AMndC1
 r1
 !s85 0
@@ -529,11 +529,11 @@ R0
 R55
 R56
 R57
-!i122 120
+!i122 130
 R5
 R6
 31
-R30
+R34
 Z59 !s107 C:/Users/akars/OneDrive/Desktop/ESE545- Comp arch/Dual-Issue-Cell-SPU-Lite-Pipelined-Multimedia-Processor/CellSPU/toplevel_pipes_tb.sv|
 R58
 !i113 1
