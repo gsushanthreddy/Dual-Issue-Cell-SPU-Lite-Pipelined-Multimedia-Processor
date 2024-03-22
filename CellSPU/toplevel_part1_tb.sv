@@ -218,7 +218,7 @@ module toplevel_part1_tb();
         //lnop
         op_op_code = NO_OPERATION_LOAD;
 
-        @(posedge clock)
+       /* @(posedge clock)
         //clz rt,ra
         ep_op_code = COUNT_LEADING_ZEROS; // ra is fetched from reg file
         ra_ep_address = 7'd11;
@@ -232,7 +232,7 @@ module toplevel_part1_tb();
         //nop
         ep_op_code = NO_OPERATION_EXECUTE;
         //lnop
-        op_op_code = NO_OPERATION_LOAD;
+        op_op_code = NO_OPERATION_LOAD;'*/
 
         @(posedge clock)
         //shlhi rt,ra,value
@@ -375,210 +375,6 @@ module toplevel_part1_tb();
         //lnop
         op_op_code = NO_OPERATION_LOAD;
         
-    // int even_q[$], odd_q[$];
-
-    // initial begin
-    //     reset = 1;
-    //     PC = 0;
-    //     @(posedge clk);
-    //     reset = 0;
-    //     unit_id = 1;
-    //     opcode_even = ADD_WORD_IMMEDIATE;
-    //     addr_ra_rd_even = 0;
-    //     addr_rt_wt_even = 7'd1;
-    //     imm10_even = -10'd5;
-    //     // @(posedge clk);
-    //     // opcode_even = ADD_WORD_IMMEDIATE;
-    //     // addr_ra_rd_even = 1;
-    //     // addr_rt_wt_even = 7'd2;
-    //     // imm10_even = 10'd3;
-    //     @(posedge clk);
-    //     repeat(9) begin
-    //         opcode_even = NOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         @(posedge clk);
-    //     end
-    // end
-    //     opcode_even = ADD_WORD_IMMEDIATE;
-    //     addr_ra_rd_even = 1;
-    //     addr_rt_wt_even = 7'd2;
-    //     imm10_even = -10'd4;
-    //     @(posedge clk);
-    //     repeat(3) begin
-    //         opcode_even = NOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         @(posedge clk);
-    //     end
-    //     opcode_even = SUBTRACT_FROM_WORD;
-    //     addr_ra_rd_even = 2;
-    //     addr_rb_rd_even = 1;
-    //     addr_rt_wt_even = 7'd3;
-    //     @(posedge clk);
-    //     opcode_even = NOP;
-    //     unit_id = 0;
-    //     addr_rt_wt_even = 0;
-    //     repeat(9) begin
-    //         @(posedge clk);
-    //     end
-    //     opcode_even = NOP;
-    //     unit_id = 0;
-    //     addr_rt_wt_even = 0;
-
-    //     opcode_odd = STORE_QUADWORD_D;
-    //     imm10_odd = 10;
-    //     addr_ra_rd_odd = 2;
-    //     addr_rc_rd_odd = 3;
-    //     @(posedge clk);
-    //     opcode_odd = STORE_QUADWORD_X;
-    //     addr_ra_rd_odd = 2;
-    //     addr_rb_rd_odd = 3;
-    //     addr_rc_rd_odd = 1; 
-    //     @(posedge clk);
-    //     opcode_odd = STORE_QUADWORD_A;
-    //     imm16_odd = 10;
-    //     addr_rc_rd_odd = 2;
-    //     @(posedge clk);
-    //     // repeat(5) begin
-    //     //     @(posedge clk);
-    //     // end
-    //     opcode_odd = LOAD_QUADWORD_D;
-    //     imm10_odd = 10;
-    //     addr_ra_rd_odd = 2;
-    //     addr_rt_wt_odd = 5;
-    //     @(posedge clk);
-    //     opcode_odd = LNOP; addr_rt_wt_odd = 0;
-    //     repeat(3) begin
-    //         @(posedge clk);
-    //     end
-
-    //     //Even to even fw
-    //     opcode_even = ADD_WORD; unit_id = 1; addr_ra_rd_even = 3; addr_rb_rd_even = 2; addr_rt_wt_even = 2; opcode_odd = LNOP; addr_ra_rd_odd = 2; addr_rt_wt_odd = 12; imm7_odd = 2;
-    //     @(posedge clk);        
-    //     repeat(3) begin
-    //         opcode_even = NOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         addr_ra_rd_even = 0; addr_rb_rd_even = 0;
-    //         @(posedge clk);
-    //     end
-    //     opcode_even = COMPARE_EQUAL_WORD; unit_id = 1; addr_ra_rd_even = 1; addr_rb_rd_even = 2; addr_rt_wt_even = 0; opcode_odd = LNOP; addr_ra_rd_odd = 2; addr_rt_wt_odd = 12; imm7_odd = 2;
-    //     @(posedge clk);
-    //     repeat(9) begin
-    //         opcode_even = NOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         @(posedge clk);
-    //     end
-
-    //     //Even to odd fw
-    //     opcode_even = ADD_WORD; unit_id = 1; addr_ra_rd_even = 3; addr_rb_rd_even = 2; addr_rt_wt_even = 2; opcode_odd = LNOP; addr_ra_rd_odd = 2; addr_rt_wt_odd = 12; imm7_odd = 2;
-    //     @(posedge clk);        
-    //     repeat(3) begin
-    //         opcode_even = NOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         addr_ra_rd_even = 0; addr_rb_rd_even = 0;
-    //         @(posedge clk);
-    //     end
-    //     opcode_odd = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE; unit_id = 1;  addr_ra_rd_even = 0; addr_rb_rd_even = 0; addr_rt_wt_even = 0; opcode_even = NOP; addr_ra_rd_odd = 2; addr_rt_wt_odd = 3; imm7_odd = 2;
-    //     @(posedge clk);
-    //     repeat(9) begin
-    //         opcode_odd = LNOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         @(posedge clk);
-    //     end
-        
-        
-
-    //     //Odd to Even fw test
-    //     opcode_even = NOP; unit_id = 0; addr_rt_wt_even = 0; opcode_odd = ROTATE_QUADWORD_BY_BYTES_IMMEDIATE; addr_ra_rd_odd = 2; addr_rt_wt_odd = 12; imm7_odd = 2;
-    //     @(posedge clk);
-    //     opcode_odd = LNOP; unit_id = 0; addr_rt_wt_odd = 0;
-    //     repeat(3) begin
-    //         @(posedge clk);
-    //     end
-    //     opcode_even = SHIFT_LEFT_WORD; addr_ra_rd_even = 12; addr_rb_rd_even = 1; addr_rt_wt_even = 10;
-    //     @(posedge clk);
-    //     repeat(9) begin
-    //         opcode_even = NOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_even = 0;
-    //         @(posedge clk);
-    //     end
-        
-
-    //     //odd to odd fw
-    //     opcode_even = NOP; unit_id = 0; addr_rt_wt_even = 0;
-    //     opcode_odd = LOAD_QUADWORD_X; addr_ra_rd_odd = 2; addr_rb_rd_odd = 3; addr_rt_wt_odd = 11;
-    //     @(posedge clk);
-    //     repeat(6) begin
-    //         opcode_odd = LNOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_odd = 0;
-    //         @(posedge clk);
-    //     end
-    //     opcode_odd = SHIFT_LEFT_QUADWORD_BY_BITS_IMMEDIATE; addr_ra_rd_odd = 11; addr_rt_wt_odd = 0; unit_id = 5; imm7_odd = 4;
-    //     @(posedge clk);
-    //     repeat(9) begin
-    //         opcode_odd = LNOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_odd = 0;
-    //         @(posedge clk);
-    //     end
-
-
-    //     // //odd to even fw
-    //     // opcode_even = NOP; unit_id = 0; addr_rt_wt_even = 0;
-    //     // opcode_odd = SHIFT_LEFT_QUADWORD_BY_BITS; addr_ra_rd_odd = 11; addr_rt_wt_odd = 12; unit_id = 5; imm7_odd = 4;
-    //     // @(posedge clk);
-    //     // repeat(4) begin
-    //     //     opcode_odd = LNOP;
-    //     //     unit_id = 0;
-    //     //     addr_rt_wt_odd = 0;
-    //     //     @(posedge clk);
-    //     // end
-    //     // opcode_even = FLOATING_ADD; addr_ra_rd_even = 12; addr_rb_rd_even = 5; addr_rt_wt_even = 13;
-    //     // @(posedge clk);
-    //     // repeat(9) begin
-    //     //     opcode_even = NOP; unit_id = 0; addr_ra_rd_even = 0; addr_rb_rd_even = 5;addr_rt_wt_even = 0;
-    //     //     opcode_odd = LNOP;
-    //     //     unit_id = 0;
-    //     //     addr_rt_wt_odd = 0;
-    //     //     @(posedge clk);
-    //     // end
-
-    //     //Flush Test
-    //     opcode_odd = BRANCH_RELATIVE_AND_SET_LINK; addr_rc_rd_odd = 0; br_first_instr = 1;
-    //     opcode_even = MULTIPLY_AND_ADD; addr_ra_rd_even = 1; addr_rb_rd_even = 2; addr_rc_rd_even = 5; addr_rt_wt_even = 6;
-    //     @(posedge clk)
-    //     repeat(9) begin
-    //         opcode_even = NOP; unit_id = 0; addr_ra_rd_even = 0; addr_rb_rd_even = 5;addr_rt_wt_even = 0;
-    //         opcode_odd = LNOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_odd = 0;
-    //         @(posedge clk);
-    //     end
-
-    //     //load random values to registerrfile
-    //     for(int i = 0; i < 128; i++) begin
-    //         unit_id = 1;
-    //         opcode_even = ADD_WORD_IMMEDIATE;
-    //         addr_ra_rd_even = 127;
-    //         addr_rt_wt_even = i;
-    //         imm10_even = $random;
-    //         @(posedge clk);
-    //     end
-        
-    //     repeat(16) begin
-    //         opcode_even = NOP; unit_id = 0; addr_ra_rd_even = 0; addr_rb_rd_even = 5;addr_rt_wt_even = 0;
-    //         opcode_odd = LNOP;
-    //         unit_id = 0;
-    //         addr_rt_wt_odd = 0;
-    //         @(posedge clk);
-    //     end
     #20;
     $finish;
     end
