@@ -318,7 +318,7 @@ module evenpipe(
             
             AND_WORD_IMMEDIATE:
                 begin
-                    $display("And halfword Immediate instruction starts...");
+                    $display("And Word Immediate instruction starts...");
                     for(int i=0;i<4;i++) 
                         begin
                             rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] & rep_left_bit_I10_32;
