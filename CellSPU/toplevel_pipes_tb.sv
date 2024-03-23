@@ -370,10 +370,6 @@ module toplevel_pipes_tb();
         rt_op_address = 7'd44;
 
         @(posedge clock)
-        ep_op_code = NO_OPERATION_EXECUTE;
-        op_op_code = NO_OPERATION_LOAD;
-
-        @(posedge clock)
         ep_op_code = AND_WORD_IMMEDIATE;
         ra_ep_address = 7'd7;
         rt_ep_address = 7'd49;
