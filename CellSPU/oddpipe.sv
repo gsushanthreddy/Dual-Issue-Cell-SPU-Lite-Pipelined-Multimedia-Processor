@@ -513,10 +513,7 @@ module oddpipe(
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
-                    else begin
-                        PC_output = (pc_input + 4);
-                        branch_taken = 1'd0;
-                    end
+
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
@@ -532,10 +529,7 @@ module oddpipe(
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
-                    else begin
-                        PC_output = (pc_input + 4);
-                        branch_taken = 1'd0;
-                    end
+                    
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
@@ -551,10 +545,7 @@ module oddpipe(
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
-                    else begin
-                        PC_output = (pc_input + 4);
-                        branch_taken = 1'd0;
-                    end
+                    
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
@@ -570,10 +561,7 @@ module oddpipe(
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
-                    else begin
-                        PC_output = (pc_input + 4);
-                        branch_taken = 1'd0;
-                    end
+                    
                     unit_latency = 4'd1;
                     unit_id = 3'd7;
 
