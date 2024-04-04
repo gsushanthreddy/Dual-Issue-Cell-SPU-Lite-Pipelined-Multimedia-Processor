@@ -509,7 +509,7 @@ module oddpipe(
             BRANCH_IF_NOT_ZERO_WORD:
                 begin
                     $display("Branch if not zero word instruction starts...");
-                    if (rt_value[0:31] != 0) begin
+                    if (rb[0:31] != 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
@@ -525,7 +525,7 @@ module oddpipe(
             BRANCH_IF_ZERO_WORD:
                 begin
                     $display("Branch if zero word instruction starts...");
-                    if (rt_value[0:31] == 0) begin
+                    if (rb[0:31] == 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
@@ -541,7 +541,7 @@ module oddpipe(
             BRANCH_IF_NOT_ZERO_HALFWORD:
                 begin
                     $display("Branch if not zero halfword instruction starts...");
-                    if (rt_value[16:31] != 0) begin
+                    if (rb[16:31] != 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 
@@ -557,7 +557,7 @@ module oddpipe(
             BRANCH_IF_ZERO_HALFWORD:
                 begin
                     $display("Branch if zero halfword instruction starts...");
-                    if (rt_value[16:31] == 0) begin
+                    if (rb[16:31] == 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
                     end 

@@ -240,7 +240,7 @@ module decode_stage(
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
             op_rt_1_address = first_inst[25:31];
-            case(first_inst_9)
+            case(first_inst_9) ///// have to think of new way of writing this logic as we are not using rt for the store and brach instruction except set and link branch instructions
                 9'b001100001:
                     begin
                         op_opcode_1 = LOAD_QUADWORD_AFORM;
@@ -726,7 +726,7 @@ module decode_stage(
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
             op_rt_2_address = second_inst[25:31];
-            case(second_inst_9)
+            case(second_inst_9)  ///// have to think of new way of writing this logic as we are not using rt for the store and brach instruction except set and link branch instructions
                 9'b001100001:
                     begin
                         op_opcode_2 = LOAD_QUADWORD_AFORM;
