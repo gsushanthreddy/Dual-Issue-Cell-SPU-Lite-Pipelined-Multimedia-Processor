@@ -213,22 +213,25 @@ module decode_stage(
             endcase
         end
 
-        else if(first_inst_8 == 8'b00110100 || first_inst_8 == 8'b00100100) begin
+        else if(first_inst_8 == 8'b00110100) begin
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I10_1 = first_inst[8:17];
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
-            case(first_inst_8)
-                8'b00110100:
-                    begin
-                        op_opcode_1 = LOAD_QUADFORM_DFORM;
-                    end
-                8'b00100100:
-                    begin
-                        op_opcode_1 = STORE_QUADFORM_DFORM;
-                    end
-            endcase
+            
+            op_opcode_1 = LOAD_QUADFORM_DFORM;
+              
+        end
+
+        else if(first_inst_8 == 8'b00100100) begin
+            ep_inst1_flag = 0;
+            op_inst1_flag = 1;
+            op_I10_1 = first_inst[8:17];
+            ra_1_address = first_inst[18:24];
+            rb_1_address = first_inst[25:31];
+                       
+            op_opcode_1 = STORE_QUADFORM_DFORM;
         end
 
         else if(first_inst_9 == 9'b010000011 || first_inst_9 == 9'b010000010 || first_inst_9 == 9'b010000001) begin
@@ -252,19 +255,15 @@ module decode_stage(
             endcase
         end
 
-        else if(first_inst_9 == 9'b001100001 || first_inst_9 == 9'b001000001 || first_inst_9 == 9'b001100110 || first_inst_9 == 9'b001100010 || first_inst_9 == 9'b001000010 || first_inst_9 == 9'b001000000 || first_inst_9 == 9'b001000110 || first_inst_9 == 9'b001000100) begin
+        else if(first_inst_9 == 9'b001100001 || first_inst_9 == 9'b001100110 || first_inst_9 == 9'b001100010) begin
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
             rt_1_address = first_inst[25:31];
-            case(first_inst_9)
+            case(first_inst_9) ///// have to think of new way of writing this logic as we are not using rt for the store and brach instruction except set and link branch instructions
                 9'b001100001:
                     begin
                         op_opcode_1 = LOAD_QUADWORD_AFORM;
-                    end
-                9'b001000001:
-                    begin
-                        op_opcode_1 = STORE_QUADFORM_AFORM;
                     end
                 9'b001100110:
                     begin
@@ -273,6 +272,19 @@ module decode_stage(
                 9'b001100010:
                     begin
                         op_opcode_1 = BRANCH_ABSOLUTE_AND_SET_LINK;
+                    end
+            endcase
+        end
+
+        else if(first_inst_9 == 9'b001000001 || first_inst_9 == 9'b001000010 || first_inst_9 == 9'b001000000 || first_inst_9 == 9'b001000110 || first_inst_9 == 9'b001000100) begin
+            ep_inst1_flag = 0;
+            op_inst1_flag = 1;
+            op_I16_1 = first_inst[9:24];
+            rb_1_address = first_inst[25:31];
+            case(first_inst_9) 
+                9'b001000001:
+                    begin
+                        op_opcode_1 = STORE_QUADFORM_AFORM;
                     end
                 9'b001000010:
                     begin
@@ -698,22 +710,25 @@ module decode_stage(
             endcase
         end
 
-        else if(second_inst_8 == 8'b00110100 || second_inst_8 == 8'b00100100) begin
+        else if(second_inst_8 == 8'b00110100) begin
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I10_2 = second_inst[8:17];
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
-            case(second_inst_8)
-                8'b00110100:
-                    begin
-                        op_opcode_2 = LOAD_QUADFORM_DFORM;
-                    end
-                8'b00100100:
-                    begin
-                        op_opcode_2 = STORE_QUADFORM_DFORM;
-                    end
-            endcase
+
+            op_opcode_2 = LOAD_QUADFORM_DFORM;
+                        
+        end
+
+        else if(second_inst_8 == 8'b00100100) begin
+            ep_inst2_flag = 0;
+            op_inst2_flag = 1;
+            op_I10_2 = second_inst[8:17];
+            ra_2_address = second_inst[18:24];
+            rb_2_address = second_inst[25:31];
+            
+            op_opcode_2 = STORE_QUADFORM_DFORM;
         end
 
         else if(second_inst_9 == 9'b010000011 || second_inst_9 == 9'b010000010 || second_inst_9 == 9'b010000001) begin
@@ -737,19 +752,15 @@ module decode_stage(
             endcase
         end
 
-        else if(second_inst_9 == 9'b001100001 || second_inst_9 == 9'b001000001 || second_inst_9 == 9'b001100110 || second_inst_9 == 9'b001100010 || second_inst_9 == 9'b001000010 || second_inst_9 == 9'b001000000 || second_inst_9 == 9'b001000110 || second_inst_9 == 9'b001000100) begin
+        else if(second_inst_9 == 9'b001100001 || second_inst_9 == 9'b001100110 || second_inst_9 == 9'b001100010) begin
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
             rt_2_address = second_inst[25:31];
-            case(second_inst_9)
+            case(second_inst_9)  
                 9'b001100001:
                     begin
                         op_opcode_2 = LOAD_QUADWORD_AFORM;
-                    end
-                9'b001000001:
-                    begin
-                        op_opcode_2 = STORE_QUADFORM_AFORM;
                     end
                 9'b001100110:
                     begin
@@ -758,6 +769,19 @@ module decode_stage(
                 9'b001100010:
                     begin
                         op_opcode_2 = BRANCH_ABSOLUTE_AND_SET_LINK;
+                    end
+            endcase
+        end
+
+        else if(second_inst_9 == 9'b001000001 || second_inst_9 == 9'b001000010 || second_inst_9 == 9'b001000000 || second_inst_9 == 9'b001000110 || second_inst_9 == 9'b001000100) begin
+            ep_inst2_flag = 0;
+            op_inst2_flag = 1;
+            op_I16_2 = second_inst[9:24];
+            rb_2_address = second_inst[25:31];
+            case(second_inst_9)  ///// have to think of new way of writing this logic as we are not using rt for the store and brach instruction except set and link branch instructions
+                9'b001000001:
+                    begin
+                        op_opcode_2 = STORE_QUADFORM_AFORM;
                     end
                 9'b001000010:
                     begin
