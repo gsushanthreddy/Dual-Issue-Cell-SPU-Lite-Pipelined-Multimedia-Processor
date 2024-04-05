@@ -4,7 +4,21 @@ module decode_stage(
     input clock,
     input reset,
     input [0:31] first_inst,
-    input [0:31] second_inst
+    input [0:31] second_inst,
+    input logic [0:142] fw_ep_st_1,
+    input logic [0:142] fw_ep_st_2,
+    input logic [0:142] fw_ep_st_3,
+    input logic [0:142] fw_ep_st_4,
+    input logic [0:142] fw_ep_st_5,
+    input logic [0:142] fw_ep_st_6,
+    input logic [0:142] fw_ep_st_7,
+    input logic [0:142] fw_op_st_1,
+    input logic [0:142] fw_op_st_2,
+    input logic [0:142] fw_op_st_3,
+    input logic [0:142] fw_op_st_4,
+    input logic [0:142] fw_op_st_5,
+    input logic [0:142] fw_op_st_6,
+    input logic [0:142] fw_op_st_7
 );
     logic [0:3] first_inst_4;
     logic [0:6] first_inst_7;
@@ -40,21 +54,15 @@ module decode_stage(
     opcode op_opcode_1;
     opcode op_opcode_2;
 
-    logic [0:6] ep_rt_1_address;
-    logic [0:6] ep_ra_1_address;
-    logic [0:6] ep_rc_1_address;
-    logic [0:6] ep_rb_1_address;
-    logic [0:6] ep_rt_2_address;
-    logic [0:6] ep_ra_2_address;
-    logic [0:6] ep_rb_2_address;
-    logic [0:6] ep_rc_2_address;
+    logic [0:6] rt_1_address;
+    logic [0:6] ra_1_address;
+    logic [0:6] rc_1_address;
+    logic [0:6] rb_1_address;
 
-    logic [0:6] op_rt_1_address;
-    logic [0:6] op_ra_1_address;
-    logic [0:6] op_rb_1_address;
-    logic [0:6] op_rt_2_address;
-    logic [0:6] op_ra_2_address;
-    logic [0:6] op_rb_2_address;
+    logic [0:6] rt_2_address;
+    logic [0:6] ra_2_address;
+    logic [0:6] rb_2_address;
+    logic [0:6] rc_2_address;
 
     logic [0:17] ep_I18_1;
     logic [0:15] ep_I16_1;
@@ -74,15 +82,26 @@ module decode_stage(
     logic [0:9] op_I10_2;
     logic [0:6] op_I7_2;
     
-
+    logic structural_hazard_warning;
+    logic waw_hazard_warning;
+    
     always_comb begin
+        
+        if((ep_inst1_flag == 1 && ep_inst2_flag == 1) || (op_inst1_flag == 1 && op_inst2_flag == 1)) begin // Structural Hazard
+            structural_hazard_warning = 1;
+        end
+
+        if(rt_1_address == rt_2_address) begin // WAW Hazard
+            waw_hazard_warning = 1;
+        end
+        
         if(first_inst_4 == 4'b1110 || first_inst_4 == 4'b1101 || first_inst_4 == 4'b1111 || first_inst_4 == 4'b1100) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
-            ep_rt_1_address = first_inst[4:10];
-            ep_rb_1_address = first_inst[11:17];
-            ep_ra_1_address = first_inst[18:24];
-            ep_rc_1_address = first_inst[25:31];
+            rt_1_address = first_inst[4:10];
+            rb_1_address = first_inst[11:17];
+            ra_1_address = first_inst[18:24];
+            rc_1_address = first_inst[25:31];
             case(first_inst_4)
                 4'b1110:
                     begin
@@ -107,18 +126,16 @@ module decode_stage(
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
             ep_I18_1 = first_inst[7:24]
-            ep_rt_1_address = first_inst[25:31];
-
+            rt_1_address = first_inst[25:31];
             ep_opcode_1 = IMMEDIATE_LOAD_ADDRESS;
-    
         end
 
         else if(first_inst_8 == 8'b00011101 || first_inst_8 == 8'b00011100 || first_inst_8 == 8'b00001101 || first_inst_8 == 8'b00001100 || first_inst_8 == 8'b00010101 || first_inst_8 == 8'b00010100 || first_inst_8 == 8'b00000101 || first_inst_8 == 8'b00000100 || first_inst_8 == 8'b01000101 || first_inst_8 == 8'b01000100 || first_inst_8 == 8'b01111101 || first_inst_8 = 8'b01111100 || first_inst_8 == 8'b01001101 || first_inst_8 == 8'b01001100 || first_inst_8 == 8'b01011101 || first_inst_8 == 8'b01011100 || first_inst_8 == 8'b01110100 || first_inst_8 == 8'b01110101) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
             ep_I10_1 = first_inst[8:17];
-            ep_ra_1_address = first_inst[18:24];
-            ep_rt_1_address = first_inst[25:31];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             
             case(first_inst_8)
                 8'b00011101:
@@ -200,8 +217,8 @@ module decode_stage(
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I10_1 = first_inst[8:17];
-            op_ra_1_address = first_inst[18:24];
-            op_rt_1_address = first_inst[25:31];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             case(first_inst_8)
                 8'b00110100:
                     begin
@@ -218,7 +235,7 @@ module decode_stage(
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
             ep_I16_1 = first_inst[9:24];
-            ep_rt_1_address = first_inst[25:31];
+            rt_1_address = first_inst[25:31];
             case(first_inst_9)
                 9'b010000011:
                     begin
@@ -239,7 +256,7 @@ module decode_stage(
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
-            op_rt_1_address = first_inst[25:31];
+            rt_1_address = first_inst[25:31];
             case(first_inst_9)
                 9'b001100001:
                     begin
@@ -295,9 +312,9 @@ module decode_stage(
         else if(first_inst_11 == 11'b00011000000 || first_inst_11 == 11'b00011001000 || first_inst_11 == 11'b00001000000 || first_inst_11 == 11'b00001001000 || first_inst_11 == 11'b01101000000 || first_inst_11 == 11'b01101000001 || first_inst_11 == 11'b00011000010 || first_inst_11 == 11'b00001000010 || first_inst_11 == 11'b00011000001 || first_inst_11 == 11'b01011000001 || first_inst_11 == 11'b00001000001 || first_inst_11 = 11'b01011001001 || first_inst_11 == 11'b01001000001 || first_inst_11 == 11'b00011001001 || first_inst_11 == 11'b00001001001 || first_inst_11 == 11'b01111001000 || first_inst_11 == 11'b01111000000 || first_inst_11 == 11'b01001001000 || first_inst_11 == 11'b01001000000 || first_inst_11 == 11'b01011001000 || first_inst_11 == 11'b01011000000 || first_inst_11 == 11'b00001011111 || first_inst_11 == 11'b00001011011 || first_inst_11 == 11'b00001011100 || first_inst_11 == 11'b00001011000 || first_inst_11 == 11'b01011000110 || first_inst_11 = 11'b01111000100 || first_inst_11 == 11'b01111001100 || first_inst_11 == 11'b01111000101 || first_inst_11 == 11'b00001010011 || first_inst_11 == 11'b00011010011 || first_inst_11 == 11'b01001010011) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
-            ep_rb_1_address = first_inst[11:17];
-            ep_ra_1_address = first_inst[18:24];
-            ep_rt_1_address = first_inst[25:31];
+            rb_1_address = first_inst[11:17];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             
             case(first_inst_11)
                 11'b00011000000:
@@ -435,7 +452,7 @@ module decode_stage(
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
-            op_rt_1_address = first_inst[25:31];
+            rt_1_address = first_inst[25:31];
             case(first_inst_11)
                 11'b00111011011:
                     begin
@@ -467,8 +484,8 @@ module decode_stage(
         else if(first_inst_11 == 11'b01010100101 || first_inst_11 == 11'b00110110101 || first_inst_11 == 11'b00110110100 || first_inst_11 == 11'b01010110100) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
-            ep_ra_1_address = first_inst[18:24];
-            ep_rt_1_address = first_inst[25:31];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             case(first_inst_11)
                 11'b01010100101:
                     begin
@@ -493,8 +510,8 @@ module decode_stage(
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I7_1 = first_inst[11:17];
-            op_ra_1_address = first_inst[18:24];
-            op_rt_1_address = first_inst[25:31];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             case(first_inst_11)
                 11'b00111111011:
                     begin
@@ -519,8 +536,8 @@ module decode_stage(
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
             ep_I7_1 = first_inst[11:17];
-            ep_ra_1_address = first_inst[18:24];
-            ep_rt_1_address = first_inst[25:31];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             case(first_inst_11)
                 11'b00001111111:
                     begin
@@ -544,8 +561,8 @@ module decode_stage(
         else if(first_inst_11 == 11'b00110110010 || first_inst_11 == 11'b00110110001 || first_inst_11 == 11'b00110110000) begin
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
-            op_ra_1_address = first_inst[18:24];
-            op_rt_1_address = first_inst[25:31];
+            ra_1_address = first_inst[18:24];
+            rt_1_address = first_inst[25:31];
             case(first_inst_11)
                 11'b00110110010:
                     begin
@@ -565,10 +582,10 @@ module decode_stage(
         if(second_inst_4 == 4'b1110 || second_inst_4 == 4'b1101 || second_inst_4 == 4'b1111 || second_inst_4 == 4'b1100) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
-            ep_rt_2_address = second_inst[4:10];
-            ep_rb_2_address = second_inst[11:17];
-            ep_ra_2_address = second_inst[18:24];
-            ep_rc_2_address = second_inst[25:31];
+            rt_2_address = second_inst[4:10];
+            rb_2_address = second_inst[11:17];
+            ra_2_address = second_inst[18:24];
+            rc_2_address = second_inst[25:31];
             case(second_inst_4)
                 4'b1110:
                     begin
@@ -593,8 +610,7 @@ module decode_stage(
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
             ep_I18_2 = second_inst[7:24]
-            ep_rt_2_address = second_inst[25:31];
-
+            rt_2_address = second_inst[25:31];
             ep_opcode_2 = IMMEDIATE_LOAD_ADDRESS;
     
         end
@@ -603,8 +619,8 @@ module decode_stage(
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
             ep_I10_2 = second_inst[8:17];
-            ep_ra_2_address = second_inst[18:24];
-            ep_rt_2_address = second_inst[25:31];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             
             case(second_inst_8)
                 8'b00011101:
@@ -686,8 +702,8 @@ module decode_stage(
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I10_2 = second_inst[8:17];
-            op_ra_2_address = second_inst[18:24];
-            op_rt_2_address = second_inst[25:31];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             case(second_inst_8)
                 8'b00110100:
                     begin
@@ -704,7 +720,7 @@ module decode_stage(
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
             ep_I16_2 = second_inst[9:24];
-            ep_rt_2_address = second_inst[25:31];
+            rt_2_address = second_inst[25:31];
             case(first_inst_9)
                 9'b010000011:
                     begin
@@ -725,7 +741,7 @@ module decode_stage(
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
-            op_rt_2_address = second_inst[25:31];
+            rt_2_address = second_inst[25:31];
             case(second_inst_9)
                 9'b001100001:
                     begin
@@ -781,9 +797,9 @@ module decode_stage(
         else if(second_inst_11 == 11'b00011000000 || second_inst_11 == 11'b00011001000 || second_inst_11 == 11'b00001000000 || second_inst_11 == 11'b00001001000 || second_inst_11 == 11'b01101000000 || second_inst_11 == 11'b01101000001 || second_inst_11 == 11'b00011000010 || second_inst_11 == 11'b00001000010 || second_inst_11 == 11'b00011000001 || second_inst_11 == 11'b01011000001 || second_inst_11 == 11'b00001000001 || second_inst_11 = 11'b01011001001 || second_inst_11 == 11'b01001000001 || second_inst_11 == 11'b00011001001 || second_inst_11 == 11'b00001001001 || second_inst_11 == 11'b01111001000 || second_inst_11 == 11'b01111000000 || second_inst_11 == 11'b01001001000 || second_inst_11 == 11'b01001000000 || second_inst_11 == 11'b01011001000 || second_inst_11 == 11'b01011000000 || second_inst_11 == 11'b00001011111 || second_inst_11 == 11'b00001011011 || second_inst_11 == 11'b00001011100 || second_inst_11 == 11'b00001011000 || second_inst_11 == 11'b01011000110 || second_inst_11 = 11'b01111000100 || second_inst_11 == 11'b01111001100 || second_inst_11 == 11'b01111000101 || second_inst_11 == 11'b00001010011 || second_inst_11 == 11'b00011010011 || second_inst_11 == 11'b01001010011) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
-            ep_rb_2_address = second_inst[11:17];
-            ep_ra_2_address = second_inst[18:24];
-            ep_rt_2_address = second_inst[25:31];
+            rb_2_address = second_inst[11:17];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             
             case(second_inst_11)
                 11'b00011000000:
@@ -920,8 +936,8 @@ module decode_stage(
         else if(second_inst_11 == 11'b01010100101 || second_inst_11 == 11'b00110110101 || second_inst_11 == 11'b00110110100 || second_inst_11 == 11'b01010110100) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
-            ep_ra_2_address = second_inst[18:24];
-            ep_rt_2_address = second_inst[25:31];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             case(second_inst_11)
                 11'b01010100101:
                     begin
@@ -946,8 +962,8 @@ module decode_stage(
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
             ep_I7_2 = second_inst[11:17];
-            ep_ra_2_address = second_inst[18:24];
-            ep_rt_2_address = second_inst[25:31];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             case(second_inst_11)
                 11'b00001111111:
                     begin
@@ -972,7 +988,7 @@ module decode_stage(
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
-            op_rt_2_address = second_inst[25:31];
+            rt_2_address = second_inst[25:31];
             case(second_inst_11)
                 11'b00111011011:
                     begin
@@ -1005,8 +1021,8 @@ module decode_stage(
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I7_2 = second_inst[11:17];
-            op_ra_2_address = second_inst[18:24];
-            op_rt_2_address = second_inst[25:31];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             case(second_inst_11)
                 11'b00111111011:
                     begin
@@ -1030,8 +1046,8 @@ module decode_stage(
         else if(second_inst_11 == 11'b00110110010 || second_inst_11 == 11'b00110110001 || second_inst_11 == 11'b00110110000) begin
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
-            op_ra_2_address = second_inst[18:24];
-            op_rt_2_address = second_inst[25:31];
+            ra_2_address = second_inst[18:24];
+            rt_2_address = second_inst[25:31];
             case(second_inst_11)
                 11'b00110110010:
                     begin
