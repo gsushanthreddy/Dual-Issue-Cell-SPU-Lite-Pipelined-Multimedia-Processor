@@ -348,10 +348,12 @@ module decode_stage(
                 11'b01101000000:
                     begin
                         ep_opcode_1 = ADD_EXTENDED;
+                        rc_1_address = rt_1_address;
                     end
                 11'b01101000001:
                     begin
                         ep_opcode_1 = SUBTRACT_FROM_EXTENDED;
+                        rc_1_address = rt_1_address;
                     end
                 11'b00011000010:
                     begin
@@ -845,10 +847,12 @@ module decode_stage(
                 11'b01101000000:
                     begin
                         ep_opcode_2 = ADD_EXTENDED;
+                        rc_2_address = rt_2_address;
                     end
                 11'b01101000001:
                     begin
                         ep_opcode_2 = SUBTRACT_FROM_EXTENDED;
+                        rc_2_address = rt_2_address;
                     end
                 11'b00011000010:
                     begin

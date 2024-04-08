@@ -216,7 +216,7 @@ module evenpipe(
                     $display("Add Extended instruction starts...");
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] + rb[i*WORD +: WORD] + rt_value[31 + i*WORD]; 
+                            rt_value[i*WORD +: WORD] = ra[i*WORD +: WORD] + rb[i*WORD +: WORD] + {31'b0,rc[(i+1)*WORD-1]}; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
@@ -230,7 +230,7 @@ module evenpipe(
                     $display("Subtract from extended instruction starts...");
                     for(int i=0;i<4;i++) 
                         begin
-                            rt_value[i*WORD +: WORD] = rb[i*WORD +: WORD] + ~(ra[i*WORD +: WORD]) + rt_value[31 + i*WORD]; 
+                            rt_value[i*WORD +: WORD] = rb[i*WORD +: WORD] + ~(ra[i*WORD +: WORD]) + rc[(i+1)*WORD-1]; 
                         end
                     unit_latency = 4'd3;
                     unit_id = 3'd1;
