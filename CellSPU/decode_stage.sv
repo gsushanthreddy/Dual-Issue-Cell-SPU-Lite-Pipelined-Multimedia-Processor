@@ -84,7 +84,196 @@ module decode_stage(
     
     logic structural_hazard_warning;
     logic waw_hazard_warning;
+    logic raw_hazard_warning_instr_1;
+    logic raw_hazard_warning_instr_2;
     
+    logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid;
+    logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value;
+    logic fw_ep_st_1_wrt_en_ep, fw_ep_st_2_wrt_en_ep, fw_ep_st_3_wrt_en_ep, fw_ep_st_4_wrt_en_ep, fw_ep_st_5_wrt_en_ep, fw_ep_st_6_wrt_en_ep, fw_ep_st_7_wrt_en_ep;
+    logic [0:6] fw_ep_st_1_rt_address, fw_ep_st_2_rt_address, fw_ep_st_3_rt_address, fw_ep_st_4_rt_address, fw_ep_st_5_rt_address, fw_ep_st_6_rt_address, fw_ep_st_7_rt_address;
+    logic [0:3] fw_ep_st_1_unit_latency, fw_ep_st_2_unit_latency, fw_ep_st_3_unit_latency, fw_ep_st_4_unit_latency, fw_ep_st_5_unit_latency, fw_ep_st_6_unit_latency, fw_ep_st_7_unit_latency;
+
+    logic [0:2] fw_op_st_1_unitid, fw_op_st_2_unitid, fw_op_st_3_unitid, fw_op_st_4_unitid, fw_op_st_5_unitid, fw_op_st_6_unitid, fw_op_st_7_unitid;
+    logic [0:127] fw_op_st_1_rt_value, fw_op_st_2_rt_value, fw_op_st_3_rt_value, fw_op_st_4_rt_value, fw_op_st_5_rt_value, fw_op_st_6_rt_value, fw_op_st_7_rt_value;
+    logic fw_op_st_1_wrt_en_op, fw_op_st_2_wrt_en_op, fw_op_st_3_wrt_en_op, fw_op_st_4_wrt_en_op, fw_op_st_5_wrt_en_op, fw_op_st_6_wrt_en_op, fw_op_st_7_wrt_en_op;
+    logic [0:6] fw_op_st_1_rt_address, fw_op_st_2_rt_address, fw_op_st_3_rt_address, fw_op_st_4_rt_address, fw_op_st_5_rt_address, fw_op_st_6_rt_address, fw_op_st_7_rt_address;
+    logic [0:3] fw_op_st_1_unit_latency, fw_op_st_2_unit_latency, fw_op_st_3_unit_latency, fw_op_st_4_unit_latency, fw_op_st_5_unit_latency, fw_op_st_6_unit_latency, fw_op_st_7_unit_latency;
+    
+    assign fw_ep_st_1_unitid       = fw_ep_st_1[0:2];
+    assign fw_ep_st_1_rt_value     = fw_ep_st_1[3:130];
+    assign fw_ep_st_1_wrt_en_ep    = fw_ep_st_1[131];
+    assign fw_ep_st_1_rt_address   = fw_ep_st_1[132:138];
+    assign fw_ep_st_1_unit_latency = fw_ep_st_1[139:142];
+
+    assign fw_ep_st_2_unitid       = fw_ep_st_2[0:2];
+    assign fw_ep_st_2_rt_value     = fw_ep_st_2[3:130];
+    assign fw_ep_st_2_wrt_en_ep    = fw_ep_st_2[131];
+    assign fw_ep_st_2_rt_address   = fw_ep_st_2[132:138];
+    assign fw_ep_st_2_unit_latency = fw_ep_st_2[139:142];
+
+    assign fw_ep_st_3_unitid       = fw_ep_st_3[0:2];
+    assign fw_ep_st_3_rt_value     = fw_ep_st_3[3:130];
+    assign fw_ep_st_3_wrt_en_ep    = fw_ep_st_3[131];
+    assign fw_ep_st_3_rt_address   = fw_ep_st_3[132:138];
+    assign fw_ep_st_3_unit_latency = fw_ep_st_3[139:142];
+
+    assign fw_ep_st_4_unitid       = fw_ep_st_4[0:2];
+    assign fw_ep_st_4_rt_value     = fw_ep_st_4[3:130];
+    assign fw_ep_st_4_wrt_en_ep    = fw_ep_st_4[131];
+    assign fw_ep_st_4_rt_address   = fw_ep_st_4[132:138];
+    assign fw_ep_st_4_unit_latency = fw_ep_st_4[139:142];
+
+    assign fw_ep_st_5_unitid       = fw_ep_st_5[0:2];
+    assign fw_ep_st_5_rt_value     = fw_ep_st_5[3:130];
+    assign fw_ep_st_5_wrt_en_ep    = fw_ep_st_5[131];
+    assign fw_ep_st_5_rt_address   = fw_ep_st_5[132:138];
+    assign fw_ep_st_5_unit_latency = fw_ep_st_5[139:142];
+
+    assign fw_ep_st_6_unitid       = fw_ep_st_6[0:2];
+    assign fw_ep_st_6_rt_value     = fw_ep_st_6[3:130];
+    assign fw_ep_st_6_wrt_en_ep    = fw_ep_st_6[131];
+    assign fw_ep_st_6_rt_address   = fw_ep_st_6[132:138];
+    assign fw_ep_st_6_unit_latency = fw_ep_st_6[139:142];
+
+    assign fw_ep_st_7_unitid       = fw_ep_st_7[0:2];
+    assign fw_ep_st_7_rt_value     = fw_ep_st_7[3:130];
+    assign fw_ep_st_7_wrt_en_ep    = fw_ep_st_7[131];
+    assign fw_ep_st_7_rt_address   = fw_ep_st_7[132:138];
+    assign fw_ep_st_7_unit_latency = fw_ep_st_7[139:142]; 
+
+    assign fw_op_st_1_unitid       = fw_op_st_1[0:2];
+    assign fw_op_st_1_rt_value     = fw_op_st_1[3:130];
+    assign fw_op_st_1_wrt_en_op    = fw_op_st_1[131];
+    assign fw_op_st_1_rt_address   = fw_op_st_1[132:138];
+    assign fw_op_st_1_unit_latency = fw_op_st_1[139:142];
+
+    assign fw_op_st_2_unitid       = fw_op_st_2[0:2];
+    assign fw_op_st_2_rt_value     = fw_op_st_2[3:130];
+    assign fw_op_st_2_wrt_en_op    = fw_op_st_2[131];
+    assign fw_op_st_2_rt_address   = fw_op_st_2[132:138];
+    assign fw_op_st_2_unit_latency = fw_op_st_2[139:142];
+
+    assign fw_op_st_3_unitid       = fw_op_st_3[0:2];
+    assign fw_op_st_3_rt_value     = fw_op_st_3[3:130];
+    assign fw_op_st_3_wrt_en_op    = fw_op_st_3[131];
+    assign fw_op_st_3_rt_address   = fw_op_st_3[132:138];
+    assign fw_op_st_3_unit_latency = fw_op_st_3[139:142];
+
+    assign fw_op_st_4_unitid       = fw_op_st_4[0:2];
+    assign fw_op_st_4_rt_value     = fw_op_st_4[3:130];
+    assign fw_op_st_4_wrt_en_op    = fw_op_st_4[131];
+    assign fw_op_st_4_rt_address   = fw_op_st_4[132:138];
+    assign fw_op_st_4_unit_latency = fw_op_st_4[139:142];
+
+    assign fw_op_st_5_unitid       = fw_op_st_5[0:2];
+    assign fw_op_st_5_rt_value     = fw_op_st_5[3:130];
+    assign fw_op_st_5_wrt_en_op    = fw_op_st_5[131];
+    assign fw_op_st_5_rt_address   = fw_op_st_5[132:138];
+    assign fw_op_st_5_unit_latency = fw_op_st_5[139:142];
+
+    assign fw_op_st_6_unitid       = fw_op_st_6[0:2];
+    assign fw_op_st_6_rt_value     = fw_op_st_6[3:130];
+    assign fw_op_st_6_wrt_en_op    = fw_op_st_6[131];
+    assign fw_op_st_6_rt_address   = fw_op_st_6[132:138];
+    assign fw_op_st_6_unit_latency = fw_op_st_6[139:142];
+
+    assign fw_op_st_7_unitid       = fw_op_st_7[0:2];
+    assign fw_op_st_7_rt_value     = fw_op_st_7[3:130];
+    assign fw_op_st_7_wrt_en_op    = fw_op_st_7[131];
+    assign fw_op_st_7_rt_address   = fw_op_st_7[132:138];
+    assign fw_op_st_7_unit_latency = fw_op_st_7[139:142];
+    
+    always_comb begin // Combinational Logic for RAW hazard
+        if( // RAW hazard check for instruction 1
+            (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((ra_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((ra_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((ra_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((ra_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rb_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rb_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rb_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rb_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rb_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rb_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rc_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rc_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rc_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rc_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rc_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rc_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) || 
+            (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+                ((ra_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((ra_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((ra_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((ra_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            ) ||
+            (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+                ((rb_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rb_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rb_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rb_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            ) ||
+            (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+                ((rc_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rc_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rc_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rc_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            )
+            ) begin
+                raw_hazard_warning_instr_1 = 1;
+        end
+
+        if( // RAW hazard check for instruction 2
+            (   ((ra_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((ra_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((ra_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((ra_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((ra_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((ra_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rb_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rb_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rb_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rb_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rb_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rb_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rc_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rc_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rc_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rc_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rc_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rc_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) || 
+            (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+                ((ra_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((ra_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((ra_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((ra_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            ) ||
+            (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+                ((rb_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rb_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rb_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rb_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            ) ||
+            (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+                ((rc_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rc_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rc_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rc_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            )
+            ) begin
+                raw_hazard_warning_instr_2 = 1;
+
+        end
+    end
+
     always_comb begin
         
         if((ep_inst1_flag == 1 && ep_inst2_flag == 1) || (op_inst1_flag == 1 && op_inst2_flag == 1)) begin // Structural Hazard
