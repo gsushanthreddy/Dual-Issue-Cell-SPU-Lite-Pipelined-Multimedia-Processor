@@ -782,6 +782,28 @@ module decode_stage(
             endcase
         end
 
+        else if (first_inst_11 == 11'b01000000001) begin
+            ep_inst1_flag = 1;
+            op_inst1_flag = 0;
+            case(first_inst_11)
+                11'b01000000001:
+                    begin
+                        ep_opcode_1 = NO_OPERATION_EXECUTE;
+                    end
+            endcase
+        end
+
+        else if (first_inst_11 == 11'b00000000001) begin
+            ep_inst1_flag = 0;
+            op_inst1_flag = 1;
+            case(first_inst_11)
+                11'b00000000001:
+                    begin
+                        op_opcode_1 = NO_OPERATION_LOAD;
+                    end
+            endcase
+        end
+
         if(second_inst_4 == 4'b1110 || second_inst_4 == 4'b1101 || second_inst_4 == 4'b1111 || second_inst_4 == 4'b1100) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
@@ -1277,6 +1299,28 @@ module decode_stage(
                 11'b00110110000:
                     begin
                         op_opcode_2 = GATHER_BITS_FROM_WORDS;
+                    end
+            endcase
+        end
+
+        else if (second_inst_11 == 11'b01000000001) begin
+            ep_inst2_flag = 1;
+            op_inst2_flag = 0;
+            case(second_inst_11)
+                11'b01000000001:
+                    begin
+                        ep_opcode_2 = NO_OPERATION_EXECUTE;
+                    end
+            endcase
+        end
+
+        else if (second_inst_11 == 11'b00000000001) begin
+            ep_inst2_flag = 0;
+            op_inst2_flag = 1;
+            case(second_inst_11)
+                11'b00000000001:
+                    begin
+                        op_opcode_2 = NO_OPERATION_LOAD;
                     end
             endcase
         end
