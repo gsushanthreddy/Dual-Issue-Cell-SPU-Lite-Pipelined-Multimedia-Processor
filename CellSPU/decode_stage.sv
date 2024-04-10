@@ -206,19 +206,19 @@ module decode_stage(
                 ((rc_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
                 ((rc_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
             ) || 
-            (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+            (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
                 ((ra_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
                 ((ra_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
                 ((ra_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
                 ((ra_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
             ) ||
-            (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+            (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
                 ((rb_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
                 ((rb_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
                 ((rb_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
                 ((rb_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
             ) ||
-            (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+            (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
                 ((rc_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
                 ((rc_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
                 ((rc_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
@@ -250,19 +250,19 @@ module decode_stage(
                 ((rc_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
                 ((rc_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
             ) || 
-            (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+            (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
                 ((ra_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
                 ((ra_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
                 ((ra_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
                 ((ra_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
             ) ||
-            (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+            (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
                 ((rb_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
                 ((rb_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
                 ((rb_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
                 ((rb_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
             ) ||
-            (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1)) ||
+            (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
                 ((rc_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
                 ((rc_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
                 ((rc_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
@@ -449,7 +449,7 @@ module decode_stage(
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
             rt_1_address = first_inst[25:31];
-            case(first_inst_9) ///// have to think of new way of writing this logic as we are not using rt for the store and brach instruction except set and link branch instructions
+            case(first_inst_9) 
                 9'b001100001:
                     begin
                         op_opcode_1 = LOAD_QUADWORD_AFORM;
@@ -969,7 +969,7 @@ module decode_stage(
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
             rb_2_address = second_inst[25:31];
-            case(second_inst_9)  ///// have to think of new way of writing this logic as we are not using rt for the store and brach instruction except set and link branch instructions
+            case(second_inst_9)  
                 9'b001000001:
                     begin
                         op_opcode_2 = STORE_QUADFORM_AFORM;
