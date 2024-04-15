@@ -29,13 +29,18 @@ module fetch_stage(
         end
     end
     
-    always_comb begin 
+    always_comb begin // Change this to always_ff
         if(stall==0) begin
-            pc = pc_output;
-            first_inst = instruction_memory[pc];
-            second_inst = instruction_memory[pc+1];
-            $display("first_inst = %b",first_inst);
-            $display("second_inst = %b",second_inst); 
+            if(branch==1) begin
+                
+            end
+            else begin 
+                pc = pc_output;
+                first_inst = instruction_memory[pc];
+                second_inst = instruction_memory[pc+1];
+                $display("first_inst = %b",first_inst);
+                $display("second_inst = %b",second_inst); 
+            end
         end
     end
 endmodule

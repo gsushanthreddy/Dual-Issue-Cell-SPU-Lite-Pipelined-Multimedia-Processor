@@ -3,8 +3,8 @@ import descriptions::*;
 module decode_stage(
     input clock,
     input reset,
-    input [0:31] first_inst,
-    input [0:31] second_inst,
+    input [0:31] first_inst_input,
+    input [0:31] second_inst_input,
     input logic [0:142] fw_ep_st_1,
     input logic [0:142] fw_ep_st_2,
     input logic [0:142] fw_ep_st_3,
@@ -20,27 +20,30 @@ module decode_stage(
     input logic [0:142] fw_op_st_6,
     input logic [0:142] fw_op_st_7,
 
-    output logic opcode_instruction_even,
-    output logic ra_even_address,
-    output logic rb_even_address,
-    output logic rc_even_address,
-    output logic rt_even_address,
-    output logic I7_even,
-    output logic I10_even,
-    output logic I16_even,
-    output logic I18_even,
+    output opcode opcode_instruction_even, // Check bus length
+    output logic [0:6] ra_even_address,
+    output logic [0:6] rb_even_address,
+    output logic [0:6] rc_even_address,
+    output logic [0:6] rt_even_address,
+    output logic [0:6] I7_even,
+    output logic [0:9] I10_even,
+    output logic [0:15] I16_even,
+    output logic [0:17] I18_even,
 
-    output logic opcode_instruction_odd,
-    output logic ra_odd_address,
-    output logic rb_odd_address,
-    output logic rt_odd_address,
-    output logic I7_odd,
-    output logic I10_odd,
-    output logic I16_odd,
-    output logic I18_odd,
+    output opcode opcode_instruction_odd,
+    output logic [0:6] ra_odd_address,
+    output logic [0:6] rb_odd_address,
+    output logic [0:6] rt_odd_address,
+    output logic [0:6] I7_odd,
+    output logic [0:9] I10_odd,
+    output logic [0:15] I16_odd,
+    output logic [0:17] I18_odd,
 
     output logic stall
 );
+    logic [0:31] first_inst;
+    logic [0:31] second_inst;
+
     logic [0:3] first_inst_4;
     logic [0:6] first_inst_7;
     logic [0:7] first_inst_8;
@@ -53,26 +56,10 @@ module decode_stage(
     logic [0:8] second_inst_9;
     logic [0:10] second_inst_11;
 
-    assign first_inst_4 = first_inst[0:3];
-    assign first_inst_7 = first_inst[0:6];
-    assign first_inst_8 = first_inst[0:7];
-    assign first_inst_9 = first_inst[0:8];
-    assign first_inst_11 = first_inst[0:10];
-
-    assign second_inst_4 = second_inst[0:3];
-    assign second_inst_7 = second_inst[0:6];
-    assign second_inst_8 = second_inst[0:7];
-    assign second_inst_9 = second_inst[0:8];
-    assign second_inst_11 = second_inst[0:10];
-
     logic ep_inst1_flag;
     logic op_inst1_flag;
     logic ep_inst2_flag;
     logic op_inst2_flag;
-
-    logic previous_even_structural_hazard_flag;
-    logic previous_odd_structural_hazard_flag;
-    logic previous_waw_hazard_flag;
 
     opcode ep_opcode_1;
     opcode ep_opcode_2;
@@ -114,24 +101,30 @@ module decode_stage(
     logic raw_hazard_warning_instr_1;
     logic raw_hazard_warning_instr_2;
 
-    logic opcode_instruction_even_temporary;
-    logic ra_even_address_temporary;
-    logic rb_even_address_temporary;
-    logic rc_even_address_temporary;
-    logic rt_even_address_temporary;
-    logic I7_even_temporary;
-    logic I10_even_temporary;
-    logic I16_even_temporary;
-    logic I18_even_temporary;
+    logic previous_even_structural_hazard_flag;
+    logic previous_odd_structural_hazard_flag;
+    logic previous_waw_hazard_flag;
+    logic previous_raw_instr_1_flag;
+    logic previous_raw_instr_2_flag;
 
-    logic opcode_instruction_odd_temporary;
-    logic ra_odd_address_temporary;
-    logic rb_odd_address_temporary;
-    logic rt_odd_address_temporary;
-    logic I7_odd_temporary;
-    logic I10_odd_temporary;
-    logic I16_odd_temporary;
-    logic I18_odd_temporary;
+    opcode opcode_instruction_even_temporary; // Check Bus length 
+    logic [0:6] ra_even_address_temporary;
+    logic [0:6] rb_even_address_temporary;
+    logic [0:6] rc_even_address_temporary;
+    logic [0:6] rt_even_address_temporary;
+    logic [0:6] I7_even_temporary;
+    logic [0:9] I10_even_temporary;
+    logic [0:15] I16_even_temporary;
+    logic [0:17] I18_even_temporary;
+
+    opcode opcode_instruction_odd_temporary;
+    logic [0:6] ra_odd_address_temporary;
+    logic [0:6] rb_odd_address_temporary;
+    logic [0:6] rt_odd_address_temporary;
+    logic [0:6] I7_odd_temporary;
+    logic [0:9] I10_odd_temporary;
+    logic [0:15] I16_odd_temporary;
+    logic [0:17] I18_odd_temporary;
 
     logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid;
     logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value;
@@ -228,8 +221,39 @@ module decode_stage(
     assign fw_op_st_7_wrt_en_op    = fw_op_st_7[131];
     assign fw_op_st_7_rt_address   = fw_op_st_7[132:138];
     assign fw_op_st_7_unit_latency = fw_op_st_7[139:142];
-    
+
+    always_ff @(posedge clock) begin
+        if(reset==0) begin
+            first_inst <= 32'b0;
+            second_inst <= 32'b0;
+        end
+        else begin 
+            first_inst <= first_inst_input;
+            second_inst <= second_inst_input;
+        end
+    end
+
+    always_comb begin
+        first_inst_4 = first_inst[0:3];
+        first_inst_7 = first_inst[0:6];
+        first_inst_8 = first_inst[0:7];
+        first_inst_9 = first_inst[0:8];
+        first_inst_11 = first_inst[0:10];
+
+        second_inst_4 = second_inst[0:3];
+        second_inst_7 = second_inst[0:6];
+        second_inst_8 = second_inst[0:7];
+        second_inst_9 = second_inst[0:8];
+        second_inst_11 = second_inst[0:10];
+    end
+
     always_comb begin // Combinational Logic for RAW hazard
+        previous_even_structural_hazard_flag = 0;
+        previous_odd_structural_hazard_flag = 0;
+        previous_waw_hazard_flag = 0;
+        previous_raw_instr_1_flag = 0;
+        previous_raw_instr_2_flag = 0;
+
         if( // RAW hazard check for instruction 1
             (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                 ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
@@ -252,23 +276,23 @@ module decode_stage(
                 ((rc_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
                 ((rc_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
             ) || 
-            (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                ((ra_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                ((ra_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                ((ra_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                ((ra_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((ra_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((ra_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((ra_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((ra_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
             ) ||
-            (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                ((rb_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                ((rb_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                ((rb_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                ((rb_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rb_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rb_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rb_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rb_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
             ) ||
-            (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                ((rc_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                ((rc_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                ((rc_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                ((rc_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rc_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rc_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rc_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rc_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
             )
             ) begin
                 raw_hazard_warning_instr_1 = 1;
@@ -300,23 +324,23 @@ module decode_stage(
                 ((rc_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
                 ((rc_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
             ) || 
-            (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                ((ra_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                ((ra_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                ((ra_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                ((ra_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((ra_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((ra_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((ra_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((ra_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
             ) ||
-            (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                ((rb_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                ((rb_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                ((rb_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                ((rb_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rb_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rb_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rb_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rb_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
             ) ||
-            (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                ((rc_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_ep == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                ((rc_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_ep == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                ((rc_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_ep == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                ((rc_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_ep == 1) && (fw_op_st_5_unit_latency > 4'd6)) ||
+            (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rc_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rc_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rc_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rc_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
             )
             ) begin
                 raw_hazard_warning_instr_2 = 1;
@@ -329,19 +353,16 @@ module decode_stage(
         if((ep_inst1_flag == 1 && ep_inst2_flag == 1)) begin // Structural Hazard for even instructions
             structural_hazard_warning_even = 1;
             structural_hazard_warning_odd = 0;
-            no_structural_hazard = 0;
         end
 
         else if((op_inst1_flag == 1 && op_inst2_flag == 1)) begin // Structural Hazard for odd instructions
             structural_hazard_warning_odd = 1;
             structural_hazard_warning_even = 0;
-            no_structural_hazard = 0;
         end
 
         else begin
             structural_hazard_warning_even = 0;
             structural_hazard_warning_odd = 0;
-            no_structural_hazard = 1;
         end
 
         if(rt_1_address == rt_2_address) begin // WAW Hazard
@@ -351,21 +372,19 @@ module decode_stage(
         else begin 
             waw_hazard_warning = 0;
         end
-    end
 
-    always_comb begin
-        if(structural_hazard_warning_even && previous_even_structural_hazard_flag==0 && raw_hazard_warning_instr_1==0) begin
-            opcode_instruction_even_temporary = ep_opcode_1;
-            ra_even_address_temporary = ra_1_address;
-            rb_even_address_temporary = rb_1_address;
-            rc_even_address_temporary = rc_1_address
-            rt_even_address_temporary = rt_1_address;
-            I7_even_temporary = ep_I7_1;
-            I10_even_temporary = ep_I10_1;
-            I16_even_temporary = ep_I16_1;
-            I18_even_temporary = ep_I18_1;
+        if(raw_hazard_warning_instr_1 || (raw_hazard_warning_instr_2==1 && previous_raw_instr_2_flag==1)) begin
+            opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
+            ra_even_address_temporary = 7'd0;
+            rb_even_address_temporary = 7'd0;
+            rc_even_address_temporary = 7'd0;
+            rt_even_address_temporary = 7'd0;
+            I7_even_temporary = 7'd0;
+            I10_even_temporary = 10'd0;
+            I16_even_temporary = 16'd0;
+            I18_even_temporary = 18'd0; 
 
-            opcode_instruction_odd_temporary = 11'b00000000001;
+            opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
             ra_odd_address_temporary = 7'd0;
             rb_odd_address_temporary = 7'd0;
             rt_odd_address_temporary = 7'd0;
@@ -375,40 +394,19 @@ module decode_stage(
             I18_odd_temporary = 18'd0;
         end
 
-        else if(structural_hazard_warning_odd && previous_odd_structural_hazard_flag==0 && raw_hazard_warning_instr_1==0) begin
-            opcode_instruction_odd_temporary = op_opcode_1;
-            ra_odd_address_temporary = ra_1_address;
-            rb_odd_address_temporary = rb_1_address;
-            rt_odd_address_temporary = rt_1_address;
-            I7_odd_temporary = op_I7_1;
-            I10_odd_temporary = op_I10_1;
-            I16_odd_temporary = op_I16_1;
-            I18_odd_temporary = op_I18_1;
-
-            opcode_instruction_even_temporary = 11'b01000000001;
-            ra_even_address_temporary = 7'd0;
-            rb_even_address_temporary = 7'd0;
-            rc_even_address_temporary = 7'd0;
-            rt_even_address_temporary = 7'd0;
-            I7_even_temporary = 7'd0;
-            I10_even_temporary = 10'd0;
-            I16_even_temporary = 16'd0;
-            I18_even_temporary = 18'd0;
-        end
-
-        else if(waw_hazard_warning && previous_waw_hazard_flag==0 && raw_hazard_warning_instr_1==0) begin
+        else if(raw_hazard_warning_instr_2 && previous_raw_instr_2_flag==0) begin
             if (ep_inst1_flag == 1) begin
                 opcode_instruction_even_temporary = ep_opcode_1;
                 ra_even_address_temporary = ra_1_address;
                 rb_even_address_temporary = rb_1_address;
-                rc_even_address_temporary = rc_1_address
+                rc_even_address_temporary = rc_1_address;
                 rt_even_address_temporary = rt_1_address;
                 I7_even_temporary = ep_I7_1;
                 I10_even_temporary = ep_I10_1;
                 I16_even_temporary = ep_I16_1;
                 I18_even_temporary = ep_I18_1;
 
-                opcode_instruction_odd_temporary = 11'b00000000001;
+                opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
                 ra_odd_address_temporary = 7'd0;
                 rb_odd_address_temporary = 7'd0;
                 rt_odd_address_temporary = 7'd0;
@@ -428,7 +426,103 @@ module decode_stage(
                 I16_odd_temporary = op_I16_1;
                 I18_odd_temporary = op_I18_1;
 
-                opcode_instruction_even_temporary = 11'b01000000001;
+                opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
+                ra_even_address_temporary = 7'd0;
+                rb_even_address_temporary = 7'd0;
+                rc_even_address_temporary = 7'd0;
+                rt_even_address_temporary = 7'd0;
+                I7_even_temporary = 7'd0;
+                I10_even_temporary = 10'd0;
+                I16_even_temporary = 16'd0;
+                I18_even_temporary = 18'd0;  
+            end 
+            structural_hazard_warning_even = 0; // Resolving RAW will automatically resolve Structural Hazards and WAW
+            structural_hazard_warning_odd = 0;
+            waw_hazard_warning = 0;
+            previous_raw_instr_2_flag = 1;
+        end
+
+        else if(structural_hazard_warning_even && previous_even_structural_hazard_flag==0) begin
+            opcode_instruction_even_temporary = ep_opcode_1;
+            ra_even_address_temporary = ra_1_address;
+            rb_even_address_temporary = rb_1_address;
+            rc_even_address_temporary = rc_1_address;
+            rt_even_address_temporary = rt_1_address;
+            I7_even_temporary = ep_I7_1;
+            I10_even_temporary = ep_I10_1;
+            I16_even_temporary = ep_I16_1;
+            I18_even_temporary = ep_I18_1;
+
+            opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
+            ra_odd_address_temporary = 7'd0;
+            rb_odd_address_temporary = 7'd0;
+            rt_odd_address_temporary = 7'd0;
+            I7_odd_temporary = 7'd0;
+            I10_odd_temporary = 10'd0;
+            I16_odd_temporary = 16'd0;
+            I18_odd_temporary = 18'd0;
+            structural_hazard_warning_even = 0;
+            waw_hazard_warning = 0; // Resolving Structural Hazard will automatically resolve WAW
+            previous_even_structural_hazard_flag = 1;
+        end
+
+        else if(structural_hazard_warning_odd && previous_odd_structural_hazard_flag==0) begin
+            opcode_instruction_odd_temporary = op_opcode_1;
+            ra_odd_address_temporary = ra_1_address;
+            rb_odd_address_temporary = rb_1_address;
+            rt_odd_address_temporary = rt_1_address;
+            I7_odd_temporary = op_I7_1;
+            I10_odd_temporary = op_I10_1;
+            I16_odd_temporary = op_I16_1;
+            I18_odd_temporary = op_I18_1;
+
+            opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
+            ra_even_address_temporary = 7'd0;
+            rb_even_address_temporary = 7'd0;
+            rc_even_address_temporary = 7'd0;
+            rt_even_address_temporary = 7'd0;
+            I7_even_temporary = 7'd0;
+            I10_even_temporary = 10'd0;
+            I16_even_temporary = 16'd0;
+            I18_even_temporary = 18'd0;
+            structural_hazard_warning_odd = 0;
+            waw_hazard_warning = 0; // Resolving Structural Hazard will automatically resolve WAW
+            previous_odd_structural_hazard_flag = 1;
+        end
+
+        else if(waw_hazard_warning && previous_waw_hazard_flag==0) begin
+            if (ep_inst1_flag == 1) begin
+                opcode_instruction_even_temporary = ep_opcode_1;
+                ra_even_address_temporary = ra_1_address;
+                rb_even_address_temporary = rb_1_address;
+                rc_even_address_temporary = rc_1_address;
+                rt_even_address_temporary = rt_1_address;
+                I7_even_temporary = ep_I7_1;
+                I10_even_temporary = ep_I10_1;
+                I16_even_temporary = ep_I16_1;
+                I18_even_temporary = ep_I18_1;
+
+                opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
+                ra_odd_address_temporary = 7'd0;
+                rb_odd_address_temporary = 7'd0;
+                rt_odd_address_temporary = 7'd0;
+                I7_odd_temporary = 7'd0;
+                I10_odd_temporary = 10'd0;
+                I16_odd_temporary = 16'd0;
+                I18_odd_temporary = 18'd0;
+            end
+
+            else if (op_inst1_flag == 1) begin
+                opcode_instruction_odd_temporary = op_opcode_1;
+                ra_odd_address_temporary = ra_1_address;
+                rb_odd_address_temporary = rb_1_address;
+                rt_odd_address_temporary = rt_1_address;
+                I7_odd_temporary = op_I7_1;
+                I10_odd_temporary = op_I10_1;
+                I16_odd_temporary = op_I16_1;
+                I18_odd_temporary = op_I18_1;
+
+                opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
                 ra_even_address_temporary = 7'd0;
                 rb_even_address_temporary = 7'd0;
                 rc_even_address_temporary = 7'd0;
@@ -438,42 +532,69 @@ module decode_stage(
                 I16_even_temporary = 16'd0;
                 I18_even_temporary = 18'd0;  
             end
+            waw_hazard_warning = 0;
+            previous_waw_hazard_flag = 1;
         end
 
-        else if(structural_hazard_warning_even==0 && previous_even_structural_hazard_flag==0 && raw_hazard_warning_instr_1==1) begin
-            opcode_instruction_even_temporary = 11'b01000000001;
-            ra_even_address_temporary = 7'd0;
-            rb_even_address_temporary = 7'd0;
-            rc_even_address_temporary = 7'd0;
-            rt_even_address_temporary = 7'd0;
-            I7_even_temporary = 7'd0;
-            I10_even_temporary = 10'd0;
-            I16_even_temporary = 16'd0;
-            I18_even_temporary = 18'd0; 
+        else begin
+            if(previous_raw_instr_2_flag==0 && previous_even_structural_hazard_flag==0 && previous_odd_structural_hazard_flag==0 && previous_waw_hazard_flag==0) begin
+                if((op_inst1_flag == 1) && (op_inst2_flag == 0)) begin
+                    opcode_instruction_odd_temporary = op_opcode_1;
+                    ra_odd_address_temporary = ra_1_address;
+                    rb_odd_address_temporary = rb_1_address;
+                    rt_odd_address_temporary = rt_1_address;
+                    I7_odd_temporary = op_I7_1;
+                    I10_odd_temporary = op_I10_1;
+                    I16_odd_temporary = op_I16_1;
+                    I18_odd_temporary = op_I18_1;
 
-            opcode_instruction_odd_temporary = 11'b00000000001;
-            ra_odd_address_temporary = 7'd0;
-            rb_odd_address_temporary = 7'd0;
-            rt_odd_address_temporary = 7'd0;
-            I7_odd_temporary = 7'd0;
-            I10_odd_temporary = 10'd0;
-            I16_odd_temporary = 16'd0;
-            I18_odd_temporary = 18'd0;
+                    opcode_instruction_even_temporary = ep_opcode_2;
+                    ra_even_address_temporary = ra_2_address;
+                    rb_even_address_temporary = rb_2_address;
+                    rc_even_address_temporary = rc_2_address;
+                    rt_even_address_temporary = rt_2_address;
+                    I7_even_temporary = ep_I7_2;
+                    I10_even_temporary = ep_I10_2;
+                    I16_even_temporary = ep_I16_2;
+                    I18_even_temporary = ep_I18_2;
+                end
+
+                else if ((op_inst1_flag == 0) && (op_inst2_flag == 1)) begin  
+                    opcode_instruction_even_temporary = ep_opcode_1;
+                    ra_even_address_temporary = ra_1_address;
+                    rb_even_address_temporary = rb_1_address;
+                    rc_even_address_temporary = rc_1_address;
+                    rt_even_address_temporary = rt_1_address;
+                    I7_even_temporary = ep_I7_1;
+                    I10_even_temporary = ep_I10_1;
+                    I16_even_temporary = ep_I16_1;
+                    I18_even_temporary = ep_I18_1;
+
+                    opcode_instruction_odd_temporary = op_opcode_2;
+                    ra_odd_address_temporary = ra_2_address;
+                    rb_odd_address_temporary = rb_2_address;
+                    rt_odd_address_temporary = rt_2_address;
+                    I7_odd_temporary = op_I7_2;
+                    I10_odd_temporary = op_I10_2;
+                    I16_odd_temporary = op_I16_2;
+                    I18_odd_temporary = op_I18_2;
+                end
+            end
         end
 
-        else if(structural_hazard_warning_even==0 && previous_even_structural_hazard_flag==0 && raw_hazard_warning_instr_2==1) begin 
+        if(raw_hazard_warning_instr_2==0 && previous_raw_instr_2_flag) begin
             if (ep_inst2_flag == 1) begin
                 opcode_instruction_even_temporary = ep_opcode_2;
                 ra_even_address_temporary = ra_2_address;
                 rb_even_address_temporary = rb_2_address;
-                rc_even_address_temporary = rc_2_address
+                rc_even_address_temporary = rc_2_address;
                 rt_even_address_temporary = rt_2_address;
                 I7_even_temporary = ep_I7_2;
                 I10_even_temporary = ep_I10_2;
                 I16_even_temporary = ep_I16_2;
                 I18_even_temporary = ep_I18_2;
 
-                opcode_instruction_odd_temporary = 11'b00000000001;
+                opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
                 ra_odd_address_temporary = 7'd0;
                 rb_odd_address_temporary = 7'd0;
                 rt_odd_address_temporary = 7'd0;
@@ -493,7 +614,7 @@ module decode_stage(
                 I16_odd_temporary = op_I16_2;
                 I18_odd_temporary = op_I18_2;
 
-                opcode_instruction_even_temporary = 11'b01000000001;
+                opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
                 ra_even_address_temporary = 7'd0;
                 rb_even_address_temporary = 7'd0;
                 rc_even_address_temporary = 7'd0;
@@ -503,88 +624,21 @@ module decode_stage(
                 I16_even_temporary = 16'd0;
                 I18_even_temporary = 18'd0;  
             end
+            previous_raw_instr_2_flag = 0;
         end
-
-        else begin
-            if((op_inst1_flag == 1) && (op_inst2_flag == 0)) begin
-                opcode_instruction_odd_temporary = op_opcode_1;
-                ra_odd_address_temporary = ra_1_address;
-                rb_odd_address_temporary = rb_1_address;
-                rt_odd_address_temporary = rt_1_address;
-                I7_odd_temporary = op_I7_1;
-                I10_odd_temporary = op_I10_1;
-                I16_odd_temporary = op_I16_1;
-                I18_odd_temporary = op_I18_1;
-
-                opcode_instruction_even_temporary = ep_opcode_2;
-                ra_even_address_temporary = ra_2_address;
-                rb_even_address_temporary = rb_2_address;
-                rc_even_address_temporary = rc_2_address
-                rt_even_address_temporary = rt_2_address;
-                I7_even_temporary = ep_I7_2;
-                I10_even_temporary = ep_I10_2;
-                I16_even_temporary = ep_I16_2;
-                I18_even_temporary = ep_I18_2;
-            end
-
-            else if ((op_inst1_flag == 0) && (op_inst2_flag == 1)) begin  
-                opcode_instruction_even_temporary = ep_opcode_1;
-                ra_even_address_temporary = ra_1_address;
-                rb_even_address_temporary = rb_1_address;
-                rc_even_address_temporary = rc_1_address
-                rt_even_address_temporary = rt_1_address;
-                I7_even_temporary = ep_I7_1;
-                I10_even_temporary = ep_I10_1;
-                I16_even_temporary = ep_I16_1;
-                I18_even_temporary = ep_I18_1;
-
-                opcode_instruction_odd_temporary = op_opcode_2;
-                ra_odd_address_temporary = ra_2_address;
-                rb_odd_address_temporary = rb_2_address;
-                rt_odd_address_temporary = rt_2_address;
-                I7_odd_temporary = op_I7_2;
-                I10_odd_temporary = op_I10_2;
-                I16_odd_temporary = op_I16_2;
-                I18_odd_temporary = op_I18_2;
-            end
-        end
-
-    end
-
-    always_ff @(posedge clock) begin
-        if(structural_hazard_warning_even) begin
-            previous_even_structural_hazard_flag <= 1;
-            structural_hazard_warning_even <= 0;
-        end
-
-        if(structural_hazard_warning_odd) begin
-            previous_odd_structural_hazard_flag <= 1;
-            structural_hazard_warning_odd <= 0;
-        end
-
-        if(waw_hazard_warning) begin
-            previous_waw_hazard_flag <= 1;
-            waw_hazard_warning <= 0;
-        end
-
-        if(structural_hazard_warning_even || structural_hazard_warning_odd || waw_hazard_warning || raw_hazard_warning_instr_1 || raw_hazard_warning_instr_2) begin
-            stall <= 1;
-        end
-    end
-
-    always_comb begin
-        if(previous_even_structural_hazard_flag && raw_hazard_warning_instr_2==0) begin
+        
+        else if(raw_hazard_warning_instr_2==0 && previous_even_structural_hazard_flag) begin
             opcode_instruction_even_temporary = ep_opcode_2;
             ra_even_address_temporary = ra_2_address;
             rb_even_address_temporary = rb_2_address;
-            rc_even_address_temporary = rc_2_address
+            rc_even_address_temporary = rc_2_address;
             rt_even_address_temporary = rt_2_address;
             I7_even_temporary = ep_I7_2;
             I10_even_temporary = ep_I10_2;
             I16_even_temporary = ep_I16_2;
             I18_even_temporary = ep_I18_2;
 
-            opcode_instruction_odd_temporary = 11'b00000000001;
+            opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
             ra_odd_address_temporary = 7'd0;
             rb_odd_address_temporary = 7'd0;
             rt_odd_address_temporary = 7'd0;
@@ -595,7 +649,7 @@ module decode_stage(
             previous_even_structural_hazard_flag = 0;
         end
 
-        else if(previous_odd_structural_hazard_flag && raw_hazard_warning_instr_2==0) begin
+        else if(raw_hazard_warning_instr_2==0 && previous_odd_structural_hazard_flag) begin
             opcode_instruction_odd_temporary = op_opcode_2;
             ra_odd_address_temporary = ra_2_address;
             rb_odd_address_temporary = rb_2_address;
@@ -605,7 +659,7 @@ module decode_stage(
             I16_odd_temporary = op_I16_2;
             I18_odd_temporary = op_I18_2;
 
-            opcode_instruction_even_temporary = 11'b01000000001;
+            opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
             ra_even_address_temporary = 7'd0;
             rb_even_address_temporary = 7'd0;
             rc_even_address_temporary = 7'd0;
@@ -617,19 +671,19 @@ module decode_stage(
             previous_odd_structural_hazard_flag = 0;
         end
 
-        else if(previous_waw_hazard_flag && raw_hazard_warning_instr_2==0) begin
+        else if(raw_hazard_warning_instr_2==0 && previous_waw_hazard_flag) begin
             if (ep_inst2_flag == 1) begin
                 opcode_instruction_even_temporary = ep_opcode_2;
                 ra_even_address_temporary = ra_2_address;
                 rb_even_address_temporary = rb_2_address;
-                rc_even_address_temporary = rc_2_address
+                rc_even_address_temporary = rc_2_address;
                 rt_even_address_temporary = rt_2_address;
                 I7_even_temporary = ep_I7_2;
                 I10_even_temporary = ep_I10_2;
                 I16_even_temporary = ep_I16_2;
                 I18_even_temporary = ep_I18_2;
 
-                opcode_instruction_odd_temporary = 11'b00000000001;
+                opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
                 ra_odd_address_temporary = 7'd0;
                 rb_odd_address_temporary = 7'd0;
                 rt_odd_address_temporary = 7'd0;
@@ -649,7 +703,7 @@ module decode_stage(
                 I16_odd_temporary = op_I16_2;
                 I18_odd_temporary = op_I18_2;
 
-                opcode_instruction_even_temporary = 11'b01000000001;
+                opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
                 ra_even_address_temporary = 7'd0;
                 rb_even_address_temporary = 7'd0;
                 rc_even_address_temporary = 7'd0;
@@ -662,7 +716,17 @@ module decode_stage(
             previous_waw_hazard_flag = 0;
         end
     end
-    
+
+    always_ff @(posedge clock) begin // Check Stall signal logic again 
+        if(structural_hazard_warning_even || structural_hazard_warning_odd || waw_hazard_warning || raw_hazard_warning_instr_1 || raw_hazard_warning_instr_2) begin
+            stall <= 1;
+        end
+
+        else begin
+            stall <= 0;
+        end
+    end
+
     always_ff @(posedge clock) begin
         opcode_instruction_even <= opcode_instruction_even_temporary;
         ra_even_address <= ra_even_address_temporary;
@@ -684,8 +748,9 @@ module decode_stage(
         I18_odd <= I18_odd_temporary;
     end
 
-    always_comb begin
 
+    always_comb begin
+        // Add NO OP opcodes checking
         ep_inst1_flag = 0;
         op_inst2_flag = 0;
 
@@ -746,15 +811,15 @@ module decode_stage(
             endcase
         end
 
-        else if(first_inst_7 == 7'b0100001 ) begin
+        else if(first_inst_7 == 7'b0100001) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
-            ep_I18_1 = first_inst[7:24]
+            ep_I18_1 = first_inst[7:24];
             rt_1_address = first_inst[25:31];
             ep_opcode_1 = IMMEDIATE_LOAD_ADDRESS;
         end
 
-        else if(first_inst_8 == 8'b00011101 || first_inst_8 == 8'b00011100 || first_inst_8 == 8'b00001101 || first_inst_8 == 8'b00001100 || first_inst_8 == 8'b00010101 || first_inst_8 == 8'b00010100 || first_inst_8 == 8'b00000101 || first_inst_8 == 8'b00000100 || first_inst_8 == 8'b01000101 || first_inst_8 == 8'b01000100 || first_inst_8 == 8'b01111101 || first_inst_8 = 8'b01111100 || first_inst_8 == 8'b01001101 || first_inst_8 == 8'b01001100 || first_inst_8 == 8'b01011101 || first_inst_8 == 8'b01011100 || first_inst_8 == 8'b01110100 || first_inst_8 == 8'b01110101) begin
+        else if(first_inst_8 == 8'b00011101 || first_inst_8 == 8'b00011100 || first_inst_8 == 8'b00001101 || first_inst_8 == 8'b00001100 || first_inst_8 == 8'b00010101 || first_inst_8 == 8'b00010100 || first_inst_8 == 8'b00000101 || first_inst_8 == 8'b00000100 || first_inst_8 == 8'b01000101 || first_inst_8 == 8'b01000100 || first_inst_8 == 8'b01111101 || first_inst_8 == 8'b01111100 || first_inst_8 == 8'b01001101 || first_inst_8 == 8'b01001100 || first_inst_8 == 8'b01011101 || first_inst_8 == 8'b01011100 || first_inst_8 == 8'b01110100 || first_inst_8 == 8'b01110101) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
             ep_I10_1 = first_inst[8:17];
@@ -945,7 +1010,7 @@ module decode_stage(
             endcase
         end
 
-        else if(first_inst_11 == 11'b00011000000 || first_inst_11 == 11'b00011001000 || first_inst_11 == 11'b00001000000 || first_inst_11 == 11'b00001001000 || first_inst_11 == 11'b01101000000 || first_inst_11 == 11'b01101000001 || first_inst_11 == 11'b00011000010 || first_inst_11 == 11'b00001000010 || first_inst_11 == 11'b00011000001 || first_inst_11 == 11'b01011000001 || first_inst_11 == 11'b00001000001 || first_inst_11 = 11'b01011001001 || first_inst_11 == 11'b01001000001 || first_inst_11 == 11'b00011001001 || first_inst_11 == 11'b00001001001 || first_inst_11 == 11'b01111001000 || first_inst_11 == 11'b01111000000 || first_inst_11 == 11'b01001001000 || first_inst_11 == 11'b01001000000 || first_inst_11 == 11'b01011001000 || first_inst_11 == 11'b01011000000 || first_inst_11 == 11'b00001011111 || first_inst_11 == 11'b00001011011 || first_inst_11 == 11'b00001011100 || first_inst_11 == 11'b00001011000 || first_inst_11 == 11'b01011000110 || first_inst_11 = 11'b01111000100 || first_inst_11 == 11'b01111001100 || first_inst_11 == 11'b01111000101 || first_inst_11 == 11'b00001010011 || first_inst_11 == 11'b00011010011 || first_inst_11 == 11'b01001010011) begin
+        else if(first_inst_11 == 11'b00011000000 || first_inst_11 == 11'b00011001000 || first_inst_11 == 11'b00001000000 || first_inst_11 == 11'b00001001000 || first_inst_11 == 11'b01101000000 || first_inst_11 == 11'b01101000001 || first_inst_11 == 11'b00011000010 || first_inst_11 == 11'b00001000010 || first_inst_11 == 11'b00011000001 || first_inst_11 == 11'b01011000001 || first_inst_11 == 11'b00001000001 || first_inst_11 == 11'b01011001001 || first_inst_11 == 11'b01001000001 || first_inst_11 == 11'b00011001001 || first_inst_11 == 11'b00001001001 || first_inst_11 == 11'b01111001000 || first_inst_11 == 11'b01111000000 || first_inst_11 == 11'b01001001000 || first_inst_11 == 11'b01001000000 || first_inst_11 == 11'b01011001000 || first_inst_11 == 11'b01011000000 || first_inst_11 == 11'b00001011111 || first_inst_11 == 11'b00001011011 || first_inst_11 == 11'b00001011100 || first_inst_11 == 11'b00001011000 || first_inst_11 == 11'b01011000110 || first_inst_11 == 11'b01111000100 || first_inst_11 == 11'b01111001100 || first_inst_11 == 11'b01111000101 || first_inst_11 == 11'b00001010011 || first_inst_11 == 11'b00011010011 || first_inst_11 == 11'b01001010011) begin
             ep_inst1_flag = 1;
             op_inst1_flag = 0;
             rb_1_address = first_inst[11:17];
@@ -1269,13 +1334,13 @@ module decode_stage(
         else if(second_inst_7 == 7'b0100001 ) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
-            ep_I18_2 = second_inst[7:24]
+            ep_I18_2 = second_inst[7:24];
             rt_2_address = second_inst[25:31];
             ep_opcode_2 = IMMEDIATE_LOAD_ADDRESS;
     
         end
 
-        else if(second_inst_8 == 8'b00011101 || second_inst_8 == 8'b00011100 || second_inst_8 == 8'b00001101 || second_inst_8 == 8'b00001100 || second_inst_8 == 8'b00010101 || second_inst_8 == 8'b00010100 || second_inst_8 == 8'b00000101 || second_inst_8 == 8'b00000100 || second_inst_8 == 8'b01000101 || second_inst_8 == 8'b01000100 || second_inst_8 == 8'b01111101 || second_inst_8 = 8'b01111100 || second_inst_8 == 8'b01001101 || second_inst_8 == 8'b01001100 || second_inst_8 == 8'b01011101 || second_inst_8 == 8'b01011100 || second_inst_8 == 8'b01110100 || second_inst_8 == 8'b01110101) begin
+        else if(second_inst_8 == 8'b00011101 || second_inst_8 == 8'b00011100 || second_inst_8 == 8'b00001101 || second_inst_8 == 8'b00001100 || second_inst_8 == 8'b00010101 || second_inst_8 == 8'b00010100 || second_inst_8 == 8'b00000101 || second_inst_8 == 8'b00000100 || second_inst_8 == 8'b01000101 || second_inst_8 == 8'b01000100 || second_inst_8 == 8'b01111101 || second_inst_8 == 8'b01111100 || second_inst_8 == 8'b01001101 || second_inst_8 == 8'b01001100 || second_inst_8 == 8'b01011101 || second_inst_8 == 8'b01011100 || second_inst_8 == 8'b01110100 || second_inst_8 == 8'b01110101) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
             ep_I10_2 = second_inst[8:17];
@@ -1466,7 +1531,7 @@ module decode_stage(
             endcase
         end
 
-        else if(second_inst_11 == 11'b00011000000 || second_inst_11 == 11'b00011001000 || second_inst_11 == 11'b00001000000 || second_inst_11 == 11'b00001001000 || second_inst_11 == 11'b01101000000 || second_inst_11 == 11'b01101000001 || second_inst_11 == 11'b00011000010 || second_inst_11 == 11'b00001000010 || second_inst_11 == 11'b00011000001 || second_inst_11 == 11'b01011000001 || second_inst_11 == 11'b00001000001 || second_inst_11 = 11'b01011001001 || second_inst_11 == 11'b01001000001 || second_inst_11 == 11'b00011001001 || second_inst_11 == 11'b00001001001 || second_inst_11 == 11'b01111001000 || second_inst_11 == 11'b01111000000 || second_inst_11 == 11'b01001001000 || second_inst_11 == 11'b01001000000 || second_inst_11 == 11'b01011001000 || second_inst_11 == 11'b01011000000 || second_inst_11 == 11'b00001011111 || second_inst_11 == 11'b00001011011 || second_inst_11 == 11'b00001011100 || second_inst_11 == 11'b00001011000 || second_inst_11 == 11'b01011000110 || second_inst_11 = 11'b01111000100 || second_inst_11 == 11'b01111001100 || second_inst_11 == 11'b01111000101 || second_inst_11 == 11'b00001010011 || second_inst_11 == 11'b00011010011 || second_inst_11 == 11'b01001010011) begin
+        else if(second_inst_11 == 11'b00011000000 || second_inst_11 == 11'b00011001000 || second_inst_11 == 11'b00001000000 || second_inst_11 == 11'b00001001000 || second_inst_11 == 11'b01101000000 || second_inst_11 == 11'b01101000001 || second_inst_11 == 11'b00011000010 || second_inst_11 == 11'b00001000010 || second_inst_11 == 11'b00011000001 || second_inst_11 == 11'b01011000001 || second_inst_11 == 11'b00001000001 || second_inst_11 == 11'b01011001001 || second_inst_11 == 11'b01001000001 || second_inst_11 == 11'b00011001001 || second_inst_11 == 11'b00001001001 || second_inst_11 == 11'b01111001000 || second_inst_11 == 11'b01111000000 || second_inst_11 == 11'b01001001000 || second_inst_11 == 11'b01001000000 || second_inst_11 == 11'b01011001000 || second_inst_11 == 11'b01011000000 || second_inst_11 == 11'b00001011111 || second_inst_11 == 11'b00001011011 || second_inst_11 == 11'b00001011100 || second_inst_11 == 11'b00001011000 || second_inst_11 == 11'b01011000110 || second_inst_11 == 11'b01111000100 || second_inst_11 == 11'b01111001100 || second_inst_11 == 11'b01111000101 || second_inst_11 == 11'b00001010011 || second_inst_11 == 11'b00011010011 || second_inst_11 == 11'b01001010011) begin
             ep_inst2_flag = 1;
             op_inst2_flag = 0;
             rb_2_address = second_inst[11:17];
