@@ -4,43 +4,41 @@ module fetch_stage(
     input clock,
     input reset,
     input logic stall,
+    input logic branch_taken,
     input logic [0:31] pc_input,
     output logic [0:31] pc_output,
     output logic [0:31] first_inst,
     output logic [0:31] second_inst
 );
     int pc;
-    logic [0:31] instruction_memory[512]; //2KB memory file
+    logic [0:7] instruction_memory[2047]; //2KB memory file
     initial begin 
-    $readmemb("C:/Users/susha/Desktop/Stony Brook/Spring 2024/ESE 545 - Computer Architecture/Project/Parser/InstructionsToBinary.txt", instruction_memory);
+        $readmemb("C:/Users/susha/Desktop/Stony Brook/Spring 2024/ESE 545 - Computer Architecture/Project/Parser/InstructionsToBinary.txt", instruction_memory);
     end
     
-    always_ff @(posedge clock) begin 
-        if(reset) begin
-            pc_output <= 0;
-        end
-
-        else if(stall) begin
-            pc_output <= pc_output;
-        end
-
-        else begin 
-            pc_output <= pc_output+8;
-        end
-    end
-    
-    always_comb begin // Change this to always_ff
+    always_ff @(posedge clock) begin
+        pc <= pc_input;
         if(stall==0) begin
-            if(branch==1) begin
-                
+            if(branch_taken==0) begin
+                first_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
+                second_inst <= {instruction_memory[pc+4],instruction_memory[pc+5],instruction_memory[pc+6],instruction_memory[pc+7]};
             end
-            else begin 
-                pc = pc_output;
-                first_inst = instruction_memory[pc];
-                second_inst = instruction_memory[pc+1];
-                $display("first_inst = %b",first_inst);
-                $display("second_inst = %b",second_inst); 
+            else begin
+                if(pc_input[29]==1) begin
+                    first_inst <= {11'b00000000001,21'b0};
+                    second_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
+                end
+                else begin
+                    first_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
+                    second_inst <= {instruction_memory[pc+4],instruction_memory[pc+5],instruction_memory[pc+6],instruction_memory[pc+7]};
+                end
             end
+            pc<=pc+8;
         end
+
+        else begin
+            pc<=pc;
+        end
+        pc_output <= pc;
     end
 endmodule
