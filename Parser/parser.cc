@@ -23,18 +23,46 @@ vector<string> convertInstructionLine(string instruction_line){
 Function to convert given instruction line to individual strings and storing them in a vector of strings
 */
 string convertDecimalToBinary(string decimal_number, unsigned int bit) {
-    int number;
-    istringstream(decimal_number) >> number;
+    int number = stoi(decimal_number);
+    
     if (number == 0) {
         return string(bit, '0'); // Return a string of '0's if the input is 0
     }
     string binStr;
+    int neg_flag=0;
+    if(number<0){
+        number = -1*number;
+        neg_flag=1;
+    }
     while (number > 0) {
         binStr = char('0' + (number % 2)) + binStr; // Append the least significant bit to the beginning of the string
         number /= 2;
     }
     if (binStr.length() < bit) {
         binStr = string(bit - binStr.length(), '0') + binStr; // Pad with '0's if necessary to achieve the desired bit length
+    }
+    if(neg_flag==1){
+        int carry=1;
+        for(int i=0;i<bit;i++){
+            binStr[i] = binStr[i]=='1' ? '0' : '1';
+        }
+        for(int i=bit-1;i>=0;i--){
+            if(binStr[i]=='0' && carry==1){
+                binStr[i]='1';
+                break;
+            }
+            else if(binStr[i]=='1' && carry==0){
+                binStr[i]='1';
+                break;
+            }
+            else if(binStr[i]=='1' && carry==1){
+                binStr[i]='0';
+                carry=1;
+            }
+            else{
+                break;
+            }
+        }
     }
     return binStr;
 }
