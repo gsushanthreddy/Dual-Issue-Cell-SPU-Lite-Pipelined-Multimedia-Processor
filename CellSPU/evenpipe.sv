@@ -12,6 +12,7 @@ import descriptions::*;
 module evenpipe(
     input clock,
     input reset,
+    input flush,
     input opcode ep_input_op_code,
     input [0:127] ra_input,
     input [0:127] rb_input,
@@ -87,13 +88,23 @@ module evenpipe(
             fw_ep_st_6 <= 143'd0;
             fw_ep_st_7 <= 143'd0;
         end
-        else begin 
-            fw_ep_st_2 <= fw_ep_st_1;
-            fw_ep_st_3 <= fw_ep_st_2;
-            fw_ep_st_4 <= fw_ep_st_3;
-            fw_ep_st_5 <= fw_ep_st_4;
-            fw_ep_st_6 <= fw_ep_st_5;
-            fw_ep_st_7 <= fw_ep_st_6;
+        else begin
+            if(flush==1) begin
+                fw_ep_st_2 <= 143'd0;
+                fw_ep_st_3 <= 143'd0;
+                fw_ep_st_4 <= 143'd0;
+                fw_ep_st_5 <= fw_ep_st_4;
+                fw_ep_st_6 <= fw_ep_st_5;
+                fw_ep_st_7 <= fw_ep_st_6;
+            end 
+            else begin
+                fw_ep_st_2 <= fw_ep_st_1;
+                fw_ep_st_3 <= fw_ep_st_2;
+                fw_ep_st_4 <= fw_ep_st_3;
+                fw_ep_st_5 <= fw_ep_st_4;
+                fw_ep_st_6 <= fw_ep_st_5;
+                fw_ep_st_7 <= fw_ep_st_6;
+            end
         end
     end
 

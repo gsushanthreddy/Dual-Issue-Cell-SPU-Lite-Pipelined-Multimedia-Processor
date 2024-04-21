@@ -15,7 +15,7 @@ module fetch_stage(
     initial begin 
         $readmemb("C:/Users/susha/Desktop/Stony Brook/Spring 2024/ESE 545 - Computer Architecture/Project/Parser/InstructionsToBinary.txt", instruction_memory);
     end
-    
+
     always_ff @(posedge clock) begin
         pc <= pc_input;
         if(stall==0) begin
@@ -25,7 +25,7 @@ module fetch_stage(
             end
             else begin
                 if(pc_input[29]==1) begin
-                    first_inst <= {11'b00000000001,21'b0};
+                    first_inst <= {11'b00000000001,21'bx};
                     second_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
                 end
                 else begin

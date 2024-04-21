@@ -18,6 +18,7 @@ module oddpipe(
     input [0:15] I16_input,
     input [0:17] I18_input,
     
+    output logic flush,
     output logic [0:14] LS_address,
     output logic [0:127] LS_data_input,
     input logic [0:127] LS_data_output,
@@ -82,12 +83,22 @@ module oddpipe(
             fw_op_st_7 <= 143'd0;
         end
         else begin 
-            fw_op_st_2 <= fw_op_st_1;
-            fw_op_st_3 <= fw_op_st_2;
-            fw_op_st_4 <= fw_op_st_3;
-            fw_op_st_5 <= fw_op_st_4;
-            fw_op_st_6 <= fw_op_st_5;
-            fw_op_st_7 <= fw_op_st_6;
+            if(flush==1) begin
+                fw_op_st_2 <= 143'd0;
+                fw_op_st_3 <= 143'd0;
+                fw_op_st_4 <= 143'd0;
+                fw_op_st_5 <= fw_op_st_4;
+                fw_op_st_6 <= fw_op_st_5;
+                fw_op_st_7 <= fw_op_st_6;
+            end
+            else begin 
+                fw_op_st_2 <= fw_op_st_1;
+                fw_op_st_3 <= fw_op_st_2;
+                fw_op_st_4 <= fw_op_st_3;
+                fw_op_st_5 <= fw_op_st_4;
+                fw_op_st_6 <= fw_op_st_5;
+                fw_op_st_7 <= fw_op_st_6;
+            end
         end
     end
     
