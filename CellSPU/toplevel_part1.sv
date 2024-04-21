@@ -62,7 +62,9 @@ module toplevel_part1(
     output logic [0:127] reg_file [128],
 
     // Local store
-    output logic [0:7] ls [0:32767]
+    output logic [0:7] ls [0:32767],
+
+    output logic flush
 
    // CHECK WITH PROFESSOR THAT WE HAVE TO PUT THE LOCAL STORE AND REGISTER MEMORIES AS OUTPUT IN THE TOP FILE
 );
@@ -186,7 +188,8 @@ module toplevel_part1(
         .fw_ep_st_4(fw_ep_st_4),
         .fw_ep_st_5(fw_ep_st_5),
         .fw_ep_st_6(fw_ep_st_6),
-        .fw_ep_st_7(fw_ep_st_7)
+        .fw_ep_st_7(fw_ep_st_7),
+        .flush(flush)
 
     );
 
@@ -215,7 +218,8 @@ module toplevel_part1(
         .fw_op_st_7(fw_op_st_7),
         .branch_taken(branch_taken),
         .PC_input(PC_input),
-        .PC_output(PC_output)
+        .PC_output(PC_output),
+        .flush(flush)
 
     );
 
