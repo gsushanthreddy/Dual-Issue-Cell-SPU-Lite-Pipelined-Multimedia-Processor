@@ -1,14 +1,14 @@
 import descriptions::*;
 
-// this module is the top layer for the part 2 of the project which include 11 stages(fetch,decode,RF and forward, pipes, write back to local store and reg file)
+// this module is the top layer for 10 stages(decode,RF and forward, pipes, write back to local store and reg file)
 
-module toplevel_cellSPU(
+module toplevel_from_decode(
 
     input clock,
     input reset,
 
-    // instructions memory (2KB)
-    input logic [0:7] instruction_memory[2047],
+    input [0:31] first_inst_input,
+    input [0:31] second_inst_input,
 
     // outputs of every propagation state of even pipe
     output logic [0:142] fw_ep_st_1,
@@ -43,9 +43,6 @@ logic stall;
 logic [0:31] pc_input;
 logic [0:31] pc_output;
 
-logic [0:31] first_inst;
-logic [0:31] second_inst;
-
 opcode opcode_even;
 logic [0:6] ra_even_address;
 logic [0:6] rb_even_address;
@@ -65,27 +62,12 @@ logic [0:9] I10_odd;
 logic [0:15] I16_odd;
 logic [0:17] I18_odd;
 
-
-fetch_stage fetch (
-
-    .clock(clock),
-    .reset(reset),
-    .stall(stall),
-    .branch_taken(branch_taken),
-    .pc_input(pc_input),
-    .instruction_memory(instruction_memory),
-    .pc_output(pc_output),
-    .first_inst(first_inst),
-    .second_inst(second_inst)
-
-);
-
 decode_stage decode (
 
     .clock(clock),
     .reset(reset),
-    .first_inst_input(first_inst),
-    .second_inst_input(second_inst),
+    .first_inst_input(first_inst_input),
+    .second_inst_input(second_inst_input),
     .fw_ep_st_1(fw_ep_st_1),
     .fw_ep_st_2(fw_ep_st_2),
     .fw_ep_st_3(fw_ep_st_3),
