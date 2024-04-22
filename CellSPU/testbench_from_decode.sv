@@ -11,7 +11,8 @@ module testbench_dr();
     toplevel_from_decode dut_from_decode(
         .clock(clock),
         .reset(reset),
-        .flush(flush),
+        .first_inst_input(first_inst_input),
+        .second_inst_input(second_inst_input),
         .fw_ep_st_1(fw_ep_st_1),
         .fw_ep_st_2(fw_ep_st_2),
         .fw_ep_st_3(fw_ep_st_3),
@@ -27,6 +28,7 @@ module testbench_dr();
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
         .branch_taken(branch_taken),
+        .flush(flush),
         .reg_file(reg_file),
         .ls(ls)
     );
