@@ -66,8 +66,11 @@ decode_stage decode (
 
     .clock(clock),
     .reset(reset),
+    .flush(flush),
     .first_inst_input(first_inst_input),
     .second_inst_input(second_inst_input),
+    .rt_ep_address(rt_even_address),
+    .rt_op_address(rt_odd_address),
     .fw_ep_st_1(fw_ep_st_1),
     .fw_ep_st_2(fw_ep_st_2),
     .fw_ep_st_3(fw_ep_st_3),
@@ -99,8 +102,7 @@ decode_stage decode (
     .I10_odd(I10_odd),
     .I16_odd(I16_odd),
     .I18_odd(I18_odd),
-    .stall(stall),
-    .flush(flush)
+    .stall(stall)
 
 );
 

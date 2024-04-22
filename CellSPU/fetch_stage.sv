@@ -6,11 +6,12 @@ module fetch_stage(
     input logic stall,
     input logic branch_taken,
     input logic [0:31] pc_input,
-    input logic [0:7] instruction_memory[2047], //2KB memory file
     output logic [0:31] pc_output,
     output logic [0:31] first_inst,
     output logic [0:31] second_inst
 );
+
+    logic [0:7] instruction_memory[2047], //2KB memory file
     int pc;
     initial begin 
         $readmemb("C:/Users/susha/Desktop/Stony Brook/Spring 2024/ESE 545 - Computer Architecture/Project/Parser/InstructionsToBinary.txt", instruction_memory);

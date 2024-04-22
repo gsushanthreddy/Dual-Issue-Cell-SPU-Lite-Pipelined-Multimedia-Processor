@@ -7,9 +7,6 @@ module toplevel_cellSPU(
     input clock,
     input reset,
 
-    // instructions memory (2KB)
-    input logic [0:7] instruction_memory[2047],
-
     // outputs of every propagation state of even pipe
     output logic [0:142] fw_ep_st_1,
     output logic [0:142] fw_ep_st_2,
@@ -73,7 +70,6 @@ fetch_stage fetch (
     .stall(stall),
     .branch_taken(branch_taken),
     .pc_input(pc_input),
-    .instruction_memory(instruction_memory),
     .pc_output(pc_output),
     .first_inst(first_inst),
     .second_inst(second_inst)
@@ -84,8 +80,11 @@ decode_stage decode (
 
     .clock(clock),
     .reset(reset),
+    .flush(flush),
     .first_inst_input(first_inst),
     .second_inst_input(second_inst),
+    .rt_ep_address(rt_even_address),
+    .rt_op_address(rt_odd_address),
     .fw_ep_st_1(fw_ep_st_1),
     .fw_ep_st_2(fw_ep_st_2),
     .fw_ep_st_3(fw_ep_st_3),
@@ -117,8 +116,7 @@ decode_stage decode (
     .I10_odd(I10_odd),
     .I16_odd(I16_odd),
     .I18_odd(I18_odd),
-    .stall(stall),
-    .flush(flush)
+    .stall(stall)
 
 );
 
