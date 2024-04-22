@@ -91,8 +91,8 @@ module evenpipe(
         else begin
             if(flush==1) begin
                 fw_ep_st_2 <= 143'd0;
-                fw_ep_st_3 <= 143'd0;
-                fw_ep_st_4 <= 143'd0;
+                fw_ep_st_3 <= fw_ep_st_1;
+                fw_ep_st_4 <= fw_ep_st_3;
                 fw_ep_st_5 <= fw_ep_st_4;
                 fw_ep_st_6 <= fw_ep_st_5;
                 fw_ep_st_7 <= fw_ep_st_6;

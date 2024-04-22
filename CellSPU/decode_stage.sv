@@ -6,6 +6,8 @@ module decode_stage(
     input flush,
     input [0:31] first_inst_input,
     input [0:31] second_inst_input,
+    input [0:6] rt_ep_address,
+    input [0:6] rt_op_address,
     input logic [0:142] fw_ep_st_1,
     input logic [0:142] fw_ep_st_2,
     input logic [0:142] fw_ep_st_3,
@@ -253,6 +255,13 @@ module decode_stage(
     always_comb begin // Combinational Logic for RAW hazard
         if(ra_1_address != 7'dx && ra_2_address != 7'dx && rb_1_address != 7'dx && rb_2_address != 7'dx && rc_1_address != 7'dx && rc_2_address != 7'dx && rt_1_address != 7'dx && rt_2_address != 7'dx) begin 
             if( // RAW hazard check for instruction 1
+                (   (ra_1_address == rt_ep_address) ||
+                    (rb_1_address == rt_ep_address) ||
+                    (rc_1_address == rt_ep_address) ||
+                    (ra_1_address == rt_op_address) ||
+                    (rb_1_address == rt_op_address) ||
+                    (rc_1_address == rt_op_address)
+                ) ||
                 (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                     ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
                     ((ra_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
@@ -301,6 +310,17 @@ module decode_stage(
             end
 
             if( // RAW hazard check for instruction 2
+                (   (ra_2_address == rt_1_address) ||
+                    (rb_2_address == rt_1_address) ||
+                    (rc_2_address == rt_1_address)  
+                ) ||
+                (   (ra_2_address == rt_ep_address) ||
+                    (rb_2_address == rt_ep_address) ||
+                    (rc_2_address == rt_ep_address) ||
+                    (ra_2_address == rt_op_address) ||
+                    (rb_2_address == rt_op_address) ||
+                    (rc_2_address == rt_op_address) 
+                ) ||
                 (   ((ra_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                     ((ra_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
                     ((ra_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
