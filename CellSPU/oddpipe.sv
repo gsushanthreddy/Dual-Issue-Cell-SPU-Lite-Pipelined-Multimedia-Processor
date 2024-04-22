@@ -60,16 +60,40 @@ module oddpipe(
 
     int s;
 
-    always_ff @(posedge clock) begin
-        ra <= ra_input;
-        rb <= rb_input;
-        rt_address <= rt_address_input;
-        op_op_code <= op_input_op_code;
-        I7 <= I7_input;
-        I10 <= I10_input;
-        I16 <= I16_input;
-        I18 <= I18_input;
-        pc_input <= PC_input;
+    always_ff @(posedge clock) begin// do we have to add reset and flush logic constarint in triggering this register
+        if(reset = 1)begin
+            ra <= 127'd0;
+            rb <= 127'd0;
+            rt_address <= 7'dx;
+            op_op_code <= NO_OPERATION_LOAD;
+            I7 <= 7'd0;
+            I10 <= 10'd0;
+            I16 <= 16'd0;
+            I18 <= 18'd0;
+            //pc_input <= PC_input;// check this
+        end
+        else if (flush ==1) begin
+            ra <= 127'd0;
+            rb <= 127'd0;
+            rt_address <= 7'dx;
+            op_op_code <= NO_OPERATION_LOAD;
+            I7 <= 7'd0;
+            I10 <= 10'd0;
+            I16 <= 16'd0;
+            I18 <= 18'd0;
+            //pc_input <= PC_input;// check this
+        end
+        else begin
+            ra <= ra_input;
+            rb <= rb_input;
+            rt_address <= rt_address_input;
+            op_op_code <= op_input_op_code;
+            I7 <= I7_input;
+            I10 <= I10_input;
+            I16 <= I16_input;
+            I18 <= I18_input;
+            pc_input <= PC_input;
+        end
 
     end
 
@@ -102,7 +126,9 @@ module oddpipe(
         end
     end
     
-    always_comb begin 
+    always_comb begin
+        branch_taken = 1'd0;
+        flush = 1'd0; 
         case(op_op_code)
 
             // permute block
@@ -463,6 +489,7 @@ module oddpipe(
                     wrt_en_op = 1'd0;
 
                     branch_taken = 1'd1;
+                    flush = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                     $display("PC output = %h,PC input = %h,Branch taken = %b",PC_output,pc_input,branch_taken);
 
@@ -479,6 +506,7 @@ module oddpipe(
                     wrt_en_op = 1'd0;
 
                     branch_taken = 1'd1;
+                    flush = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                     $display("PC output = %h,Branch taken = %b",PC_output,branch_taken);
                 end
@@ -496,6 +524,7 @@ module oddpipe(
                     wrt_en_op = 1'd1;
 
                     branch_taken = 1'd1;
+                    flush = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                     $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,pc_input,branch_taken,rt_value);
                 end
@@ -513,6 +542,7 @@ module oddpipe(
                     wrt_en_op = 1'd1;
 
                     branch_taken = 1'd1;
+                    flush = 1'd1;
                     //fw_op_st_1 = {unit_id, rt_value, wrt_en_op, rt_address, unit_latency};
                     $display("PC output = %h,PC input = %h,Branch taken = %b,rt value = %h",PC_output,pc_input,branch_taken,rt_value);
                 end
@@ -523,6 +553,7 @@ module oddpipe(
                     if (rb[0:31] != 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
+                        flush = 1'd1;
                     end 
 
                     unit_latency = 4'd1;
@@ -539,6 +570,7 @@ module oddpipe(
                     if (rb[0:31] == 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
+                        flush = 1'd1;
                     end 
                     
                     unit_latency = 4'd1;
@@ -555,6 +587,7 @@ module oddpipe(
                     if (rb[16:31] != 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
+                        flush = 1'd1;
                     end 
                     
                     unit_latency = 4'd1;
@@ -571,6 +604,7 @@ module oddpipe(
                     if (rb[16:31] == 0) begin
                         PC_output = (pc_input + $signed({{14{I16[0]}}, I16, 2'b0})) & 32'hFFFFFFFC;
                         branch_taken = 1'd1;
+                        flush = 1'd1;
                     end 
                     
                     unit_latency = 4'd1;

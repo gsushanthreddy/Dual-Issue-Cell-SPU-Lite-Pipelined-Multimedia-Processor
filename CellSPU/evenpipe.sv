@@ -68,15 +68,39 @@ module evenpipe(
     assign rep_left_bit_I16_32 = {{16{I16[0]}}, I16};
     
     always_ff @(posedge clock) begin
-        ra <= ra_input;
-        rb <= rb_input;
-        rc <= rc_input;
-        rt_address <= rt_address_input;
-        ep_op_code <= ep_input_op_code;
-        I7 <= I7_input;
-        I10 <= I10_input;
-        I16 <= I16_input;
-        I18 <= I18_input;
+        if(reset = 1)begin
+            ra <= 127'd0;
+            rb <= 127'd0;
+            rc <= 127'd0;
+            rt_address <= 7'dx;
+            ep_op_code <= NO_OPERATION_EXECUTE;
+            I7 <= 7'd0;
+            I10 <= 10'd0;
+            I16 <= 16'd0;
+            I18 <= 18'd0;
+        end
+        else if (flush ==1) begin
+            ra <= 127'd0;
+            rb <= 127'd0;
+            rc <= 127'd0;
+            rt_address <= 7'dx;
+            ep_op_code <= NO_OPERATION_EXECUTE;
+            I7 <= 7'd0;
+            I10 <= 10'd0;
+            I16 <= 16'd0;
+            I18 <= 18'd0;
+        end
+        else begin
+            ra <= ra_input;
+            rb <= rb_input;
+            rc <= rc_input;
+            rt_address <= rt_address_input;
+            ep_op_code <= ep_input_op_code;
+            I7 <= I7_input;
+            I10 <= I10_input;
+            I16 <= I16_input;
+            I18 <= I18_input;
+        end
     end
 
     always_ff @(posedge clock) begin
