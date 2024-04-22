@@ -85,8 +85,8 @@ module oddpipe(
         else begin 
             if(flush==1) begin
                 fw_op_st_2 <= 143'd0;
-                fw_op_st_3 <= 143'd0;
-                fw_op_st_4 <= 143'd0;
+                fw_op_st_3 <= fw_ep_st_2;
+                fw_op_st_4 <= fw_ep_st_3;
                 fw_op_st_5 <= fw_op_st_4;
                 fw_op_st_6 <= fw_op_st_5;
                 fw_op_st_7 <= fw_op_st_6;
