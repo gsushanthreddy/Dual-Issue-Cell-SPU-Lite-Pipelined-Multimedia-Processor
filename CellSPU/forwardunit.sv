@@ -145,7 +145,6 @@ module forwardunit(
     assign fw_op_st_7_rt_address   = fw_op_st_7[132:138];
     assign fw_op_st_7_unit_latency = fw_op_st_7[139:142];
 
-    // What happens for reset operation in forwarding unit? 
     always_comb begin 
         /* Forwarding logic to forward ra in even pipe */
             if((fw_op_st_1_rt_address == ra_address_ep) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_1_unit_latency==4'd1)) begin

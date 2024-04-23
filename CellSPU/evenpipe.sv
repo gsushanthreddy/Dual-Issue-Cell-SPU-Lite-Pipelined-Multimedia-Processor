@@ -30,7 +30,6 @@ module evenpipe(
     output logic [0:142] fw_ep_st_6,
     output logic [0:142] fw_ep_st_7
 );
-    // input opcode ep_input_op_code;
     opcode ep_op_code;
     logic [0:127] ra, rb, rc, rt_value;
     logic [0:6] rt_address;
@@ -44,7 +43,7 @@ module evenpipe(
     logic [0:3] unit_latency;
     logic [0:2] unit_id; 
 
-    shortreal t_4_real; // for bits to short real value of result
+    shortreal t_4_real;
 
     int s;
 
