@@ -1,15 +1,30 @@
 import descriptions::*;
 `timescale  1ns/1ns
-module testbench_dr();
+module testbench_cell_SPU();
     logic           clock;
     logic           reset, branch_taken,flush;
     logic [0 : 142] fw_ep_st_1, fw_op_st_1, fw_ep_st_2, fw_op_st_2, fw_ep_st_3, fw_op_st_3, fw_ep_st_4, fw_op_st_4, fw_ep_st_5, fw_op_st_5, fw_ep_st_6, fw_op_st_6, fw_ep_st_7, fw_op_st_7;
     logic [0:127]   reg_file[128];
     logic [0:7]     ls [0:32767];
+    logic [0:31]    first_inst,second_inst;
+    logic           stall,dependency_stall_1,dependency_stall_2,previous_stall;
+    logic [0:31]    pc_input,pc_output;
+    opcode          opcode_even,opcode_odd;
+
 
     toplevel_cellSPU dut_cell_SPU(
         .clock(clock),
         .reset(reset),
+        .first_inst(first_inst),
+        .second_inst(second_inst),
+        .stall(stall),
+        .pc_input(pc_input),
+        .pc_output(pc_output),
+        .opcode_even(opcode_even),
+        .opcode_odd(opcode_odd),
+        .dependency_stall_1(dependency_stall_1),
+        .dependency_stall_2(dependency_stall_2),
+        .previous_stall(previous_stall),
         .fw_ep_st_1(fw_ep_st_1),
         .fw_ep_st_2(fw_ep_st_2),
         .fw_ep_st_3(fw_ep_st_3),

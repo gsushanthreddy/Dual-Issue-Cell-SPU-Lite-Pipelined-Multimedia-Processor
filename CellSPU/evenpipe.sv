@@ -67,7 +67,7 @@ module evenpipe(
     assign rep_left_bit_I16_32 = {{16{I16[0]}}, I16};
     
     always_ff @(posedge clock) begin
-        if(reset = 1)begin
+        if(reset == 1)begin
             ra <= 127'd0;
             rb <= 127'd0;
             rc <= 127'd0;
@@ -78,7 +78,7 @@ module evenpipe(
             I16 <= 16'd0;
             I18 <= 18'd0;
         end
-        else if (flush ==1) begin
+        else if (flush==1) begin
             ra <= 127'd0;
             rb <= 127'd0;
             rc <= 127'd0;
