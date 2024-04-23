@@ -33,5 +33,13 @@ module testbench_dr();
     initial clock = 1;
     always #5 clock = ~clock;
 
-    ///complete this test bench
+    initial begin 
+        reset = 1;
+        @(posedge clock);
+        reset = 0;
+        @(posedge clock);
+
+        repeat(1000) @(posedge clock);
+        $finish;
+    end
 endmodule
