@@ -23,7 +23,7 @@ module decode_stage(
     input logic [0:142] fw_op_st_6,
     input logic [0:142] fw_op_st_7,
 
-    output opcode opcode_instruction_even, // Check bus length
+    output opcode opcode_instruction_even,
     output logic [0:6] ra_even_address,
     output logic [0:6] rb_even_address,
     output logic [0:6] rc_even_address,
@@ -101,7 +101,7 @@ module decode_stage(
     logic dependency_stall_2;
     logic previous_stall;
 
-    opcode opcode_instruction_even_temporary; // Check Bus length 
+    opcode opcode_instruction_even_temporary;
     logic [0:6] ra_even_address_temporary;
     logic [0:6] rb_even_address_temporary;
     logic [0:6] rc_even_address_temporary;
@@ -218,7 +218,7 @@ module decode_stage(
 
     always_comb  begin
         if(reset==0) begin
-            first_inst = 32'b0;
+            first_inst = 32'b0; // WAW will arise becaue rt_1_address == rt_2_address == 0
             second_inst = 32'b0;
         end
         else begin
