@@ -61,7 +61,7 @@ module oddpipe(
     int s;
 
     always_ff @(posedge clock) begin// do we have to add reset and flush logic constarint in triggering this register
-        if(reset = 1)begin
+        if(reset == 1) begin
             ra <= 127'd0;
             rb <= 127'd0;
             rt_address <= 7'dx;
@@ -72,7 +72,7 @@ module oddpipe(
             I18 <= 18'd0;
             //pc_input <= PC_input;// check this
         end
-        else if (flush ==1) begin
+        else if (flush==1) begin
             ra <= 127'd0;
             rb <= 127'd0;
             rt_address <= 7'dx;

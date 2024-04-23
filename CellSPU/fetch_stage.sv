@@ -11,7 +11,7 @@ module fetch_stage(
     output logic [0:31] second_inst
 );
 
-    logic [0:7] instruction_memory[2047], //2KB memory file
+    logic [0:31] instruction_memory[512]; //2KB memory file
     logic last_instruction; // last instruction flag
     int pc;
     initial begin 
@@ -29,18 +29,18 @@ module fetch_stage(
             end
             else if(branch_taken==0) begin
                 pc <= pc_output;
-                if({instruction_memory[pc],instruction_memory[pc+1][0:2]} != 11'b0 && {instruction_memory[pc+4],instruction_memory[pc+5][0:2]} != 11'b0) begin
-                    first_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
-                    second_inst <= {instruction_memory[pc+4],instruction_memory[pc+5],instruction_memory[pc+6],instruction_memory[pc+7]};
+                if(instruction_memory[pc][0:10] != 11'b0 && instruction_memory[pc+1][0:10] != 11'b0) begin
+                    first_inst <= instruction_memory[pc];
+                    second_inst <= instruction_memory[pc+1];
                     pc <= pc+8;
                 end
-                else if({instruction_memory[pc],instruction_memory[pc+1][0:2]} != 11'b0 && {instruction_memory[pc+4],instruction_memory[pc+5][0:2]} == 11'b0) begin
+                else if(instruction_memory[pc][0:10] != 11'b0 && instruction_memory[pc+1][0:10] == 11'b0) begin
                     last_instruction <= 1;
                     first_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
                     second_inst <= {11'b01000000001,21'bx};
                     pc <= pc;
                 end
-                else if({instruction_memory[pc],instruction_memory[pc+1][0:2]} == 11'b0) begin
+                else if(instruction_memory[pc][0:10] == 11'b0) begin
                     last_instruction <= 1;
                     first_inst <= {11'b00000000001,21'bx};
                     second_inst <= {11'b01000000001, 21'bx};
@@ -51,12 +51,12 @@ module fetch_stage(
                 pc <= pc_input;
                 if(pc_input[29]==1) begin
                     first_inst <= {11'b00000000001,21'bx}; // This hazard should not reflect in the decode stage if the second instruction is odd -> It wont enter hazard checking logic since if condtion blocks '7dx adrresses
-                    second_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
+                    second_inst <= instruction_memory[pc];
                     pc<=pc+4;
                 end
                 else begin
-                    first_inst <= {instruction_memory[pc],instruction_memory[pc+1],instruction_memory[pc+2],instruction_memory[pc+3]};
-                    second_inst <= {instruction_memory[pc+4],instruction_memory[pc+5],instruction_memory[pc+6],instruction_memory[pc+7]};
+                    first_inst <= instruction_memory[pc];
+                    second_inst <= instruction_memory[pc+1];
                     pc<=pc+8;
                 end
             end
@@ -66,5 +66,7 @@ module fetch_stage(
             pc<=pc;
         end
         pc_output <= pc;
+        $display("first instr = %b",first_inst);
+        $display("second instr = %b",second_inst);
     end
 endmodule

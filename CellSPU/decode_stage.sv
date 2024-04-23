@@ -42,7 +42,10 @@ module decode_stage(
     output logic [0:15] I16_odd,
     output logic [0:17] I18_odd,
 
-    output logic stall
+    output logic stall,
+    output logic dependency_stall_1,
+    output logic dependency_stall_2,
+    output logic previous_stall
 );
     logic [0:31] first_inst;
     logic [0:31] second_inst;
@@ -96,10 +99,6 @@ module decode_stage(
     logic [0:15] op_I16_2;
     logic [0:9] op_I10_2;
     logic [0:6] op_I7_2;
-    
-    logic dependency_stall_1;
-    logic dependency_stall_2;
-    logic previous_stall;
 
     opcode opcode_instruction_even_temporary;
     logic [0:6] ra_even_address_temporary;
@@ -218,8 +217,8 @@ module decode_stage(
 
     always_comb  begin
         if(reset==0) begin
-            first_inst = 32'b0; // WAW will arise becaue rt_1_address == rt_2_address == 0
-            second_inst = 32'b0;
+            first_inst = 32'bx; 
+            second_inst = 32'bx;
         end
         else begin
             if(previous_stall==1) begin

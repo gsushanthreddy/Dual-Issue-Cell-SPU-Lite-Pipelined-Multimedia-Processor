@@ -56,7 +56,7 @@ logic [0:17] I18_even;
 opcode opcode_odd;
 logic [0:6] ra_odd_address;
 logic [0:6] rb_odd_address;
-logic [0:6] rt_odd_address,
+logic [0:6] rt_odd_address;
 logic [0:6] I7_odd;
 logic [0:9] I10_odd;
 logic [0:15] I16_odd;

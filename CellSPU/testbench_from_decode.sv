@@ -1,6 +1,6 @@
 import descriptions::*;
 `timescale  1ns/1ns
-module testbench_dr();
+module testbench_from_decode();
     logic           clock;
     logic           reset, branch_taken,flush;
     logic [0:31]    first_inst_input,second_inst_input;
