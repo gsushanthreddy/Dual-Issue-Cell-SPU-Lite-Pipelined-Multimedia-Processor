@@ -64,7 +64,11 @@ module toplevel_part1(
     // Local store
     output logic [0:7] ls [0:32767],
 
-    output logic flush
+    output logic flush,
+
+    // RT addresses taken from register fetch stage
+    output logic [0:6] rt_rf_ep_address,
+    output logic [0:6] rt_rf_op_address
 
    // CHECK WITH PROFESSOR THAT WE HAVE TO PUT THE LOCAL STORE AND REGISTER MEMORIES AS OUTPUT IN THE TOP FILE
 );
@@ -108,6 +112,8 @@ module toplevel_part1(
         .ra_ep_address(ra_ep_address),
         .rb_ep_address(rb_ep_address),
         .rc_ep_address(rc_ep_address),
+        .rt_ep_address(rt_ep_address),
+        .rt_op_address(rt_op_address),
         .wrt_back_arr_ep(fw_ep_st_7),
         .ra_op_address(ra_op_address),
         .rb_op_address(rb_op_address),
@@ -117,7 +123,9 @@ module toplevel_part1(
         .rc_ep_value(rc_ep_value),
         .ra_op_value(ra_op_value),
         .rb_op_value(rb_op_value),
-        .reg_file(reg_file)
+        .reg_file(reg_file),
+        .rt_rf_ep_address(rt_rf_ep_address),
+        .rt_rf_op_address(rt_rf_op_address)
     );
 
     forwardunit FW (
@@ -177,7 +185,7 @@ module toplevel_part1(
         .ra_input(ra_value_fw_ep), // this input is coming from the forwading unit
         .rb_input(rb_value_fw_ep),
         .rc_input(rc_value_fw_ep),
-        .rt_address_input(rt_ep_address),
+        .rt_address_input(rt_rf_ep_address),
         .I7_input(I7_ep),
         .I10_input(I10_ep),
         .I16_input(I16_ep),
@@ -200,7 +208,7 @@ module toplevel_part1(
         .op_input_op_code(op_opcode), // check whether this connection is legit
         .ra_input(ra_value_fw_op), // This value is direct connection from the forwarding block 
         .rb_input(rb_value_fw_op),
-        .rt_address_input(rt_op_address),
+        .rt_address_input(rt_rf_op_address),
         .I7_input(I7_op),
         .I10_input(I10_op),
         .I16_input(I16_op),

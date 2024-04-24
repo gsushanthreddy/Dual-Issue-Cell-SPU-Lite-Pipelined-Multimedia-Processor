@@ -8,14 +8,13 @@ il 4,40
 il 5,50
 il 6,60
 lnop
-il 7,-10
-lnop
 a 8,4,5
-shlqbi 9,8,3
-il 10,70
+lqd 9,8,20
+a 10,8,9
 lnop
 il 11,80
 lnop 
 il 12,90
 lqd 12,1,10
-
+il 7,-10
+lnop

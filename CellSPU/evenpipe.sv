@@ -71,7 +71,7 @@ module evenpipe(
             ra <= 127'd0;
             rb <= 127'd0;
             rc <= 127'd0;
-            rt_address <= 7'dx;
+            rt_address <= 7'd0;
             ep_op_code <= NO_OPERATION_EXECUTE;
             I7 <= 7'd0;
             I10 <= 10'd0;
@@ -82,7 +82,7 @@ module evenpipe(
             ra <= 127'd0;
             rb <= 127'd0;
             rc <= 127'd0;
-            rt_address <= 7'dx;
+            rt_address <= 7'd0;
             ep_op_code <= NO_OPERATION_EXECUTE;
             I7 <= 7'd0;
             I10 <= 10'd0;
