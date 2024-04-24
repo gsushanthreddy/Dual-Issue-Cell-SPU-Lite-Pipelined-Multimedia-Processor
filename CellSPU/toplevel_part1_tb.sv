@@ -13,7 +13,9 @@ module toplevel_part1_tb();
     logic [0 : 31]  PC_input, PC_output;
     logic [0:127]   reg_file[128];
     logic [0:7]     ls [0:32767];
-
+    logic [0:6] rt_rf_ep_address;
+    logic [0:6] rt_rf_op_address;
+    
     toplevel_part1 dut(
         .clock(clock),
         .reset(reset),
@@ -52,7 +54,9 @@ module toplevel_part1_tb();
         .PC_input(PC_input),
         .PC_output(PC_output),
         .reg_file(reg_file),
-        .ls(ls)
+        .ls(ls),
+        .rf_rt_ep_address(rf_rt_ep_address),
+        .rf_rt_op_address(rf_rt_op_address)
     );
 
     initial clock = 1;

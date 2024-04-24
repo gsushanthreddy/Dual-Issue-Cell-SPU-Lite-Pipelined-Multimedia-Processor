@@ -64,7 +64,7 @@ module oddpipe(
         if(reset == 1) begin
             ra <= 127'd0;
             rb <= 127'd0;
-            rt_address <= 7'dx;
+            rt_address <= 7'd0;
             op_op_code <= NO_OPERATION_LOAD;
             I7 <= 7'd0;
             I10 <= 10'd0;
@@ -75,7 +75,7 @@ module oddpipe(
         else if (flush==1) begin
             ra <= 127'd0;
             rb <= 127'd0;
-            rt_address <= 7'dx;
+            rt_address <= 7'd0;
             op_op_code <= NO_OPERATION_LOAD;
             I7 <= 7'd0;
             I10 <= 10'd0;

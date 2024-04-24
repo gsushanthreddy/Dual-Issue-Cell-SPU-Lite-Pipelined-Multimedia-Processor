@@ -4,12 +4,12 @@ module registerFile(
     input logic [0:6] ra_ep_address,
     input logic [0:6] rb_ep_address, 
     input logic [0:6] rc_ep_address,
-    //input logic [0:6] rt_ep_address,
+    input logic [0:6] rt_ep_address,
     input logic [0:142] wrt_back_arr_ep,
     //input wrt_en_ep, 
     input logic [0:6] ra_op_address, 
     input logic [0:6] rb_op_address, 
-    //input logic [0:6] rt_op_address,
+    input logic [0:6] rt_op_address,
     input logic [0:142] wrt_back_arr_op,
     //input wrt_en_op,
     output logic [0:127] ra_ep_value,
@@ -17,8 +17,11 @@ module registerFile(
     output logic [0:127] rc_ep_value,
     output logic [0:127] ra_op_value,
     output logic [0:127] rb_op_value,
-    output logic [0:127] reg_file[128]
+    output logic [0:127] reg_file[128],
+    output logic [0:6] rt_rf_ep_address,
+    output logic [0:6] rt_rf_op_address
 );
+    
     always_comb
     begin
         ra_ep_value = reg_file[ra_ep_address];
@@ -26,6 +29,8 @@ module registerFile(
         rc_ep_value = reg_file[rc_ep_address];
         ra_op_value = reg_file[ra_op_address];
         rb_op_value = reg_file[rb_op_address];
+        rt_rf_ep_address = rt_ep_address;
+        rt_rf_op_address = rt_op_address;
     end
 
     always_ff @(posedge clock) begin

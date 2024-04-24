@@ -21,8 +21,28 @@ module toplevel_cellSPU(
     output logic dependency_stall_1,
     output logic dependency_stall_2,
     output logic previous_stall,
+    output logic [0:6] ra_even_address,
+    output logic [0:6] rb_even_address,
+    output logic [0:6] rc_even_address,
+    output logic [0:6] rt_even_address,
+    output logic [0:6] I7_even,
+    output logic [0:9] I10_even,
+    output logic [0:15] I16_even,
+    output logic [0:17] I18_even,
 
+    output logic [0:6] ra_odd_address,
+    output logic [0:6] rb_odd_address,
+    output logic [0:6] rt_odd_address,
+    output logic [0:6] I7_odd,
+    output logic [0:9] I10_odd,
+    output logic [0:15] I16_odd,
+    output logic [0:17] I18_odd,
 
+    // Outputs from Register fetch Stage 
+
+    output logic [0:6] rt_rf_ep_address,
+    output logic [0:6] rt_rf_op_address,
+    
     // outputs of every propagation state of even pipe
     output logic [0:142] fw_ep_st_1,
     output logic [0:142] fw_ep_st_2,
@@ -52,23 +72,6 @@ module toplevel_cellSPU(
     output logic [0:7] ls [0:32767]
 );
 
-logic [0:6] ra_even_address;
-logic [0:6] rb_even_address;
-logic [0:6] rc_even_address;
-logic [0:6] rt_even_address;
-logic [0:6] I7_even;
-logic [0:9] I10_even;
-logic [0:15] I16_even;
-logic [0:17] I18_even;
-
-logic [0:6] ra_odd_address;
-logic [0:6] rb_odd_address;
-logic [0:6] rt_odd_address;
-logic [0:6] I7_odd;
-logic [0:9] I10_odd;
-logic [0:15] I16_odd;
-logic [0:17] I18_odd;
-
 
 fetch_stage fetch (
 
@@ -90,8 +93,8 @@ decode_stage decode (
     .flush(flush),
     .first_inst_input(first_inst),
     .second_inst_input(second_inst),
-    .rt_ep_address(rt_even_address),
-    .rt_op_address(rt_odd_address),
+    .rt_ep_address(rt_rf_ep_address),
+    .rt_op_address(rt_rf_op_address),
     .fw_ep_st_1(fw_ep_st_1),
     .fw_ep_st_2(fw_ep_st_2),
     .fw_ep_st_3(fw_ep_st_3),
@@ -170,8 +173,9 @@ toplevel_part1 register_pipes_localstore(
     .PC_output(pc_input),
     .reg_file(reg_file),
     .ls(ls),
-    .flush(flush)
-
+    .flush(flush),
+    .rt_rf_ep_address(rt_rf_ep_address),
+    .rt_rf_op_address(rt_rf_op_address)
 );
 
 endmodule

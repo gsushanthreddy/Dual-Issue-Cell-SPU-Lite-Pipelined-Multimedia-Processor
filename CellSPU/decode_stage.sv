@@ -118,7 +118,16 @@ module decode_stage(
     logic [0:9] I10_odd_temporary;
     logic [0:15] I16_odd_temporary;
     logic [0:17] I18_odd_temporary;
+    logic wrt_en_decode_1;
+    logic wrt_en_decode_2;
 
+
+    /* wrt enables are not there for 
+        -store
+        -all branches except set links 
+        -no operations 
+
+    */      
     logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid;
     logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value;
     logic fw_ep_st_1_wrt_en_ep, fw_ep_st_2_wrt_en_ep, fw_ep_st_3_wrt_en_ep, fw_ep_st_4_wrt_en_ep, fw_ep_st_5_wrt_en_ep, fw_ep_st_6_wrt_en_ep, fw_ep_st_7_wrt_en_ep;
@@ -216,17 +225,17 @@ module decode_stage(
     assign fw_op_st_7_unit_latency = fw_op_st_7[139:142];
 
     always_comb  begin
-        if(reset==0) begin
-            first_inst = 32'bx; 
-            second_inst = 32'bx;
+        if(reset==1) begin 
+            first_inst = {11'b01000000001,21'd0}; 
+            second_inst = {11'b00000000001,21'd0};
         end
         else begin
             if(previous_stall==1) begin
                 if(ep_inst1_flag==1) begin
-                    first_inst = {11'b01000000001,21'dx};
+                    first_inst = {11'b01000000001,21'd0};
                 end
                 else if(op_inst1_flag) begin
-                    first_inst = {11'b00000000001,21'dx};
+                    first_inst = {11'b00000000001,21'd0};
                 end
             end
             
@@ -252,245 +261,142 @@ module decode_stage(
     end
 
     always_comb begin // Combinational Logic for RAW hazard
-        if(ra_1_address != 7'dx && ra_2_address != 7'dx && rb_1_address != 7'dx && rb_2_address != 7'dx && rc_1_address != 7'dx && rc_2_address != 7'dx && rt_1_address != 7'dx && rt_2_address != 7'dx) begin 
-            if( // RAW hazard check for instruction 1
-                (   (ra_1_address == rt_ep_address) ||
-                    (rb_1_address == rt_ep_address) ||
-                    (rc_1_address == rt_ep_address) ||
-                    (ra_1_address == rt_op_address) ||
-                    (rb_1_address == rt_op_address) ||
-                    (rc_1_address == rt_op_address)
-                ) ||
-                (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
-                    ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
-                    ((ra_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
-                    ((ra_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
-                    ((ra_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
-                    ((ra_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
-                ) ||
-                (   ((rb_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
-                    ((rb_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
-                    ((rb_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
-                    ((rb_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
-                    ((rb_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
-                    ((rb_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
-                ) ||
-                (   ((rc_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
-                    ((rc_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
-                    ((rc_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
-                    ((rc_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
-                    ((rc_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
-                    ((rc_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
-                ) || 
-                (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                    ((ra_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                    ((ra_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                    ((ra_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                    ((ra_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
-                ) ||
-                (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                    ((rb_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                    ((rb_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                    ((rb_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                    ((rb_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
-                ) ||
-                (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                    ((rc_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                    ((rc_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                    ((rc_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                    ((rc_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
-                )
-                ) begin
-                    dependency_stall_1 = 1;
-            end
-            
-            else begin
-                dependency_stall_1 = 0;
-            end
+        dependency_stall_1 = 0;
+        dependency_stall_2 = 0;
+        stall = 0;
+        if( // RAW hazard check for instruction 1
+            (   (ra_1_address == rt_ep_address) ||
+                (rb_1_address == rt_ep_address) ||
+                (rc_1_address == rt_ep_address) ||
+                (ra_1_address == rt_op_address) ||
+                (rb_1_address == rt_op_address) ||
+                (rc_1_address == rt_op_address)
+            ) ||
+            (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((ra_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((ra_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((ra_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((ra_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rb_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rb_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rb_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rb_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rb_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rb_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rc_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rc_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rc_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rc_1_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rc_1_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rc_1_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) || 
+            (   ((ra_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((ra_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((ra_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((ra_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((ra_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
+            ) ||
+            (   ((rb_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rb_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rb_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rb_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rb_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
+            ) ||
+            (   ((rc_1_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rc_1_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rc_1_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rc_1_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rc_1_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6)) 
+            )
+            ) begin
+                dependency_stall_1 = 1;
+                $display("hello dep stall 1");
+        end
+        
+        else begin
+            dependency_stall_1 = 0;
+        end
 
-            if( // RAW hazard check for instruction 2
-                (   (ra_2_address == rt_1_address) ||
-                    (rb_2_address == rt_1_address) ||
-                    (rc_2_address == rt_1_address)  
-                ) ||
-                (   (ra_2_address == rt_ep_address) ||
-                    (rb_2_address == rt_ep_address) ||
-                    (rc_2_address == rt_ep_address) ||
-                    (ra_2_address == rt_op_address) ||
-                    (rb_2_address == rt_op_address) ||
-                    (rc_2_address == rt_op_address) 
-                ) ||
-                (   ((ra_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
-                    ((ra_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
-                    ((ra_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
-                    ((ra_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
-                    ((ra_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
-                    ((ra_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
-                ) ||
-                (   ((rb_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
-                    ((rb_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
-                    ((rb_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
-                    ((rb_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
-                    ((rb_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
-                    ((rb_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
-                ) ||
-                (   ((rc_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
-                    ((rc_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
-                    ((rc_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
-                    ((rc_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
-                    ((rc_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
-                    ((rc_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
-                ) || 
-                (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                    ((ra_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                    ((ra_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                    ((ra_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                    ((ra_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
-                ) ||
-                (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                    ((rb_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                    ((rb_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                    ((rb_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                    ((rb_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
-                ) ||
-                (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
-                    ((rc_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
-                    ((rc_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
-                    ((rc_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
-                    ((rc_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
-                )
-                ) begin
-                    dependency_stall_2 = 1;
-            end
-
-            else if((ep_inst1_flag == 1 && ep_inst2_flag == 1) || (op_inst1_flag == 1 && op_inst2_flag == 1)) begin // Structural Hazard 
+        if( // RAW hazard check for instruction 2
+            (   (wrt_en_decode_1 == 1 && (ra_2_address == rt_1_address)) ||
+                (wrt_en_decode_1 == 1 && (rb_2_address == rt_1_address)) || // Not working -> remove 7'dx and use write enable bit to handle 'dx cases for each
+                (wrt_en_decode_1 == 1 && (rc_2_address == rt_1_address))  
+            ) ||
+            (   (wrt_en_decode_1 == 1 && (ra_2_address == rt_ep_address)) ||
+                (wrt_en_decode_1 == 1 && (rb_2_address == rt_ep_address)) ||
+                (wrt_en_decode_1 == 1 && (rc_2_address == rt_ep_address)) ||
+                (wrt_en_decode_1 == 1 && (ra_2_address == rt_op_address)) ||
+                (wrt_en_decode_1 == 1 && (rb_2_address == rt_op_address)) ||
+                (wrt_en_decode_1 == 1 && (rc_2_address == rt_op_address)) 
+            ) ||
+            (   ((ra_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((ra_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((ra_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((ra_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((ra_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((ra_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rb_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rb_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rb_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rb_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rb_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rb_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) ||
+            (   ((rc_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
+                ((rc_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
+                ((rc_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
+                ((rc_2_address == fw_ep_st_4_rt_address) && (fw_ep_st_4_wrt_en_ep == 1) && (fw_ep_st_4_unit_latency > 4'd5)) || 
+                ((rc_2_address == fw_ep_st_5_rt_address) && (fw_ep_st_5_wrt_en_ep == 1) && (fw_ep_st_5_unit_latency > 4'd6)) ||
+                ((rc_2_address == fw_ep_st_6_rt_address) && (fw_ep_st_6_wrt_en_ep == 1) && (fw_ep_st_6_unit_latency > 4'd7))
+            ) || 
+            (   ((ra_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((ra_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((ra_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((ra_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((ra_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
+            ) ||
+            (   ((rb_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rb_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rb_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rb_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rb_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
+            ) ||
+            (   ((rc_2_address == fw_op_st_1_rt_address) && (fw_op_st_1_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd2)) ||
+                ((rc_2_address == fw_op_st_2_rt_address) && (fw_op_st_2_wrt_en_op == 1) && (fw_op_st_2_unit_latency > 4'd3)) ||
+                ((rc_2_address == fw_op_st_3_rt_address) && (fw_op_st_3_wrt_en_op == 1) && (fw_op_st_3_unit_latency > 4'd4)) || 
+                ((rc_2_address == fw_op_st_4_rt_address) && (fw_op_st_4_wrt_en_op == 1) && (fw_op_st_4_unit_latency > 4'd5)) || 
+                ((rc_2_address == fw_op_st_5_rt_address) && (fw_op_st_5_wrt_en_op == 1) && (fw_op_st_5_unit_latency > 4'd6))
+            )
+            ) begin
                 dependency_stall_2 = 1;
-            end
+                $display("hello dep stall 2.1");
+        end
 
-            else if(rt_1_address == rt_2_address) begin // WAW Hazard
-                dependency_stall_2 = 1;
-            end
+        else if((ep_inst1_flag == 1 && ep_inst2_flag == 1) || (op_inst1_flag == 1 && op_inst2_flag == 1)) begin // Structural Hazard 
+            dependency_stall_2 = 1;
+            $display("hello dep stall 2.2");
 
-            else begin 
-                dependency_stall_2 = 0;
-            end
+        end
 
-            if(dependency_stall_1==1) begin
-                opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
-                ra_even_address_temporary = 7'dx;
-                rb_even_address_temporary = 7'dx;
-                rc_even_address_temporary = 7'dx;
-                rt_even_address_temporary = 7'dx;
-                I7_even_temporary = 7'd0;
-                I10_even_temporary = 10'd0;
-                I16_even_temporary = 16'd0;
-                I18_even_temporary = 18'd0; 
+        else if(rt_1_address != 7'dx && rt_2_address != 7'dx && (rt_1_address == rt_2_address)) begin // WAW Hazard
+            dependency_stall_2 = 1;
+            $display("hello dep stall 2.3");
+        end
 
-                opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
-                ra_odd_address_temporary = 7'dx;
-                rb_odd_address_temporary = 7'dx;
-                rt_odd_address_temporary = 7'dx;
-                I7_odd_temporary = 7'd0;
-                I10_odd_temporary = 10'd0;
-                I16_odd_temporary = 16'd0;
-                I18_odd_temporary = 18'd0;
+        else begin 
+            dependency_stall_2 = 0;
+        end
 
-                stall=1;
-            end
+        if(dependency_stall_1 || dependency_stall_2) begin
+            stall = 1;
+        end
 
-            else if(dependency_stall_2==1) begin 
-                if (ep_inst1_flag == 1) begin
-                    opcode_instruction_even_temporary = ep_opcode_1;
-                    ra_even_address_temporary = ra_1_address;
-                    rb_even_address_temporary = rb_1_address;
-                    rc_even_address_temporary = rc_1_address;
-                    rt_even_address_temporary = rt_1_address;
-                    I7_even_temporary = ep_I7_1;
-                    I10_even_temporary = ep_I10_1;
-                    I16_even_temporary = ep_I16_1;
-                    I18_even_temporary = ep_I18_1;
-
-                    opcode_instruction_odd_temporary = NO_OPERATION_LOAD;
-                    ra_odd_address_temporary = 7'dx;
-                    rb_odd_address_temporary = 7'dx;
-                    rt_odd_address_temporary = 7'dx;
-                    I7_odd_temporary = 7'd0;
-                    I10_odd_temporary = 10'd0;
-                    I16_odd_temporary = 16'd0;
-                    I18_odd_temporary = 18'd0;
-                end
-
-                else if (op_inst1_flag == 1) begin
-                    opcode_instruction_odd_temporary = op_opcode_1;
-                    ra_odd_address_temporary = ra_1_address;
-                    rb_odd_address_temporary = rb_1_address;
-                    rt_odd_address_temporary = rt_1_address;
-                    I7_odd_temporary = op_I7_1;
-                    I10_odd_temporary = op_I10_1;
-                    I16_odd_temporary = op_I16_1;
-                    I18_odd_temporary = op_I18_1;
-
-                    opcode_instruction_even_temporary = NO_OPERATION_EXECUTE;
-                    ra_even_address_temporary = 7'dx;
-                    rb_even_address_temporary = 7'dx;
-                    rc_even_address_temporary = 7'dx;
-                    rt_even_address_temporary = 7'dx;
-                    I7_even_temporary = 7'd0;
-                    I10_even_temporary = 10'd0;
-                    I16_even_temporary = 16'd0;
-                    I18_even_temporary = 18'd0;  
-                end
-
-                previous_stall=1;
-                stall=1;
-            end
-
-            else begin
-                if((op_inst1_flag == 1) && (ep_inst2_flag == 1)) begin
-                    opcode_instruction_odd_temporary = op_opcode_1;
-                    ra_odd_address_temporary = ra_1_address;
-                    rb_odd_address_temporary = rb_1_address;
-                    rt_odd_address_temporary = rt_1_address;
-                    I7_odd_temporary = op_I7_1;
-                    I10_odd_temporary = op_I10_1;
-                    I16_odd_temporary = op_I16_1;
-                    I18_odd_temporary = op_I18_1;
-
-                    opcode_instruction_even_temporary = ep_opcode_2;
-                    ra_even_address_temporary = ra_2_address;
-                    rb_even_address_temporary = rb_2_address;
-                    rc_even_address_temporary = rc_2_address;
-                    rt_even_address_temporary = rt_2_address;
-                    I7_even_temporary = ep_I7_2;
-                    I10_even_temporary = ep_I10_2;
-                    I16_even_temporary = ep_I16_2;
-                    I18_even_temporary = ep_I18_2;
-                end
-
-                else if ((ep_inst1_flag == 1) && (op_inst2_flag == 1)) begin  
-                    opcode_instruction_even_temporary = ep_opcode_1;
-                    ra_even_address_temporary = ra_1_address;
-                    rb_even_address_temporary = rb_1_address;
-                    rc_even_address_temporary = rc_1_address;
-                    rt_even_address_temporary = rt_1_address;
-                    I7_even_temporary = ep_I7_1;
-                    I10_even_temporary = ep_I10_1;
-                    I16_even_temporary = ep_I16_1;
-                    I18_even_temporary = ep_I18_1;
-
-                    opcode_instruction_odd_temporary = op_opcode_2;
-                    ra_odd_address_temporary = ra_2_address;
-                    rb_odd_address_temporary = rb_2_address;
-                    rt_odd_address_temporary = rt_2_address;
-                    I7_odd_temporary = op_I7_2;
-                    I10_odd_temporary = op_I10_2;
-                    I16_odd_temporary = op_I16_2;
-                    I18_odd_temporary = op_I18_2;
-                end
-
-                previous_stall=0;
-                stall=0;
-            end
+        else begin 
+            stall = 0;
         end
     end
 
@@ -515,43 +421,137 @@ module decode_stage(
             I16_odd <= 7'dx;
             I18_odd <= 7'dx;
         end
-        else begin 
-            opcode_instruction_even <= opcode_instruction_even_temporary;
-            ra_even_address <= ra_even_address_temporary;
-            rb_even_address <= rb_even_address_temporary;
-            rc_even_address <= rc_even_address_temporary;
-            rt_even_address <= rt_even_address_temporary;
-            I7_even <= I7_even_temporary;
-            I10_even <= I10_even_temporary;
-            I16_even <= I16_even_temporary;
-            I18_even <= I18_even_temporary;
-            
-            opcode_instruction_odd <= opcode_instruction_odd_temporary;
-            ra_odd_address <= ra_odd_address_temporary;
-            rb_odd_address <= rb_odd_address_temporary;
-            rt_odd_address <= rt_odd_address_temporary;
-            I7_odd <= I7_odd_temporary;
-            I10_odd <= I10_odd_temporary;
-            I16_odd <= I16_odd_temporary;
-            I18_odd <= I18_odd_temporary;
+
+        else if(dependency_stall_1==1) begin
+            opcode_instruction_even <= NO_OPERATION_EXECUTE;
+            ra_even_address <= 7'dx;
+            rb_even_address <= 7'dx;
+            rc_even_address <= 7'dx;
+            rt_even_address <= 7'dx;
+            I7_even <= 7'd0;
+            I10_even <= 10'd0;
+            I16_even <= 16'd0;
+            I18_even <= 18'd0; 
+
+            opcode_instruction_odd <= NO_OPERATION_LOAD;
+            ra_odd_address <= 7'dx;
+            rb_odd_address <= 7'dx;
+            rt_odd_address <= 7'dx;
+            I7_odd <= 7'd0;
+            I10_odd <= 10'd0;
+            I16_odd <= 16'd0;
+            I18_odd <= 18'd0;
+        end
+
+        else if(dependency_stall_2==1) begin 
+            if (ep_inst1_flag == 1) begin
+                opcode_instruction_even <= ep_opcode_1;
+                ra_even_address <= ra_1_address;
+                rb_even_address <= rb_1_address;
+                rc_even_address <= rc_1_address;
+                rt_even_address <= rt_1_address;
+                I7_even <= ep_I7_1;
+                I10_even <= ep_I10_1;
+                I16_even <= ep_I16_1;
+                I18_even <= ep_I18_1;
+
+                opcode_instruction_odd <= NO_OPERATION_LOAD;
+                ra_odd_address <= 7'dx;
+                rb_odd_address <= 7'dx;
+                rt_odd_address <= 7'dx;
+                I7_odd <= 7'd0;
+                I10_odd <= 10'd0;
+                I16_odd <= 16'd0;
+                I18_odd <= 18'd0;
+            end
+
+            else if (op_inst1_flag == 1) begin
+                opcode_instruction_odd <= op_opcode_1;
+                ra_odd_address <= ra_1_address;
+                rb_odd_address <= rb_1_address;
+                rt_odd_address <= rt_1_address;
+                I7_odd <= op_I7_1;
+                I10_odd <= op_I10_1;
+                I16_odd <= op_I16_1;
+                I18_odd <= op_I18_1;
+
+                opcode_instruction_even <= NO_OPERATION_EXECUTE;
+                ra_even_address <= 7'dx;
+                rb_even_address <= 7'dx;
+                rc_even_address <= 7'dx;
+                rt_even_address <= 7'dx;
+                I7_even <= 7'd0;
+                I10_even <= 10'd0;
+                I16_even <= 16'd0;
+                I18_even <= 18'd0;  
+            end
+            previous_stall=1;
+        end
+
+        else begin
+            if((ep_inst2_flag == 1)) begin
+                opcode_instruction_odd <= op_opcode_1;
+                ra_odd_address <= ra_1_address;
+                rb_odd_address <= rb_1_address;
+                rt_odd_address <= rt_1_address;
+                I7_odd <= op_I7_1;
+                I10_odd <= op_I10_1;
+                I16_odd <= op_I16_1;
+                I18_odd <= op_I18_1;
+
+                opcode_instruction_even <= ep_opcode_2;
+                ra_even_address <= ra_2_address;
+                rb_even_address <= rb_2_address;
+                rc_even_address <= rc_2_address;
+                rt_even_address <= rt_2_address;
+                I7_even <= ep_I7_2;
+                I10_even <= ep_I10_2;
+                I16_even <= ep_I16_2;
+                I18_even <= ep_I18_2;
+            end
+
+            else if ((op_inst2_flag == 1)) begin  
+                opcode_instruction_even <= ep_opcode_1;
+                ra_even_address <= ra_1_address;
+                rb_even_address <= rb_1_address;
+                rc_even_address <= rc_1_address;
+                rt_even_address <= rt_1_address;
+                I7_even <= ep_I7_1;
+                I10_even <= ep_I10_1;
+                I16_even <= ep_I16_1;
+                I18_even <= ep_I18_1;
+
+                opcode_instruction_odd <= op_opcode_2;
+                ra_odd_address <= ra_2_address;
+                rb_odd_address <= rb_2_address;
+                rt_odd_address <= rt_2_address;
+                I7_odd <= op_I7_2;
+                I10_odd <= op_I10_2;
+                I16_odd <= op_I16_2;
+                I18_odd <= op_I18_2;
+            end
+            previous_stall=0;
         end
     end
-
 
     always_comb begin
         // Add NO OP opcodes checking
         ep_inst1_flag = 0;
+        ep_inst2_flag = 0;
+        op_inst1_flag = 0;
         op_inst2_flag = 0;
+        wrt_en_decode_1 = 0;
+        wrt_en_decode_2 = 0;
 
-        ra_1_address = 7'd0;
-        rb_1_address = 7'd0;
-        rc_1_address = 7'd0;
-        rt_1_address = 7'd0;
+        ra_1_address = 7'dx;
+        rb_1_address = 7'dx;
+        rc_1_address = 7'dx;
+        rt_1_address = 7'dx;
 
-        ra_2_address = 7'd0;
-        rb_2_address = 7'd0;
-        rc_2_address = 7'd0;
-        rt_2_address = 7'd0;
+        ra_2_address = 7'dx;
+        rb_2_address = 7'dx;
+        rc_2_address = 7'dx;
+        rt_2_address = 7'dx;
 
         ep_I7_1 = 7'd0;
         ep_I10_1 = 10'd0;
@@ -580,6 +580,7 @@ module decode_stage(
             rb_1_address = first_inst[11:17];
             ra_1_address = first_inst[18:24];
             rc_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_4)
                 4'b1110:
                     begin
@@ -606,6 +607,7 @@ module decode_stage(
             ep_I18_1 = first_inst[7:24];
             rt_1_address = first_inst[25:31];
             ep_opcode_1 = IMMEDIATE_LOAD_ADDRESS;
+            wrt_en_decode_1 = 1;
         end
 
         else if(first_inst_8 == 8'b00011101 || first_inst_8 == 8'b00011100 || first_inst_8 == 8'b00001101 || first_inst_8 == 8'b00001100 || first_inst_8 == 8'b00010101 || first_inst_8 == 8'b00010100 || first_inst_8 == 8'b00000101 || first_inst_8 == 8'b00000100 || first_inst_8 == 8'b01000101 || first_inst_8 == 8'b01000100 || first_inst_8 == 8'b01111101 || first_inst_8 == 8'b01111100 || first_inst_8 == 8'b01001101 || first_inst_8 == 8'b01001100 || first_inst_8 == 8'b01011101 || first_inst_8 == 8'b01011100 || first_inst_8 == 8'b01110100 || first_inst_8 == 8'b01110101) begin
@@ -614,7 +616,7 @@ module decode_stage(
             ep_I10_1 = first_inst[8:17];
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
-            
+            wrt_en_decode_1 = 1;
             case(first_inst_8)
                 8'b00011101:
                     begin
@@ -699,6 +701,7 @@ module decode_stage(
             rt_1_address = first_inst[25:31];
             
             op_opcode_1 = LOAD_QUADFORM_DFORM;
+            wrt_en_decode_1 = 1;
               
         end
 
@@ -710,6 +713,7 @@ module decode_stage(
             rb_1_address = first_inst[25:31];
                        
             op_opcode_1 = STORE_QUADFORM_DFORM;
+            wrt_en_decode_1 = 0;
         end
 
         else if(first_inst_9 == 9'b010000011 || first_inst_9 == 9'b010000010 || first_inst_9 == 9'b010000001) begin
@@ -717,6 +721,7 @@ module decode_stage(
             op_inst1_flag = 0;
             ep_I16_1 = first_inst[9:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_9)
                 9'b010000011:
                     begin
@@ -738,6 +743,7 @@ module decode_stage(
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_9) 
                 9'b001100001:
                     begin
@@ -759,6 +765,7 @@ module decode_stage(
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
             rb_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 0;
             case(first_inst_9) 
                 9'b001000001:
                     begin
@@ -787,6 +794,7 @@ module decode_stage(
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
+            wrt_en_decode_1 = 0;
             case(first_inst_9)
                 9'b001100100:
                     begin
@@ -805,7 +813,7 @@ module decode_stage(
             rb_1_address = first_inst[11:17];
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
-            
+            wrt_en_decode_1 = 1;
             case(first_inst_11)
                 11'b00011000000:
                     begin
@@ -945,6 +953,7 @@ module decode_stage(
             op_inst1_flag = 1;
             op_I16_1 = first_inst[9:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_11)
                 11'b00111011011:
                     begin
@@ -978,6 +987,7 @@ module decode_stage(
             op_inst1_flag = 0;
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_11)
                 11'b01010100101:
                     begin
@@ -1004,6 +1014,7 @@ module decode_stage(
             op_I7_1 = first_inst[11:17];
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_11)
                 11'b00111111011:
                     begin
@@ -1030,6 +1041,7 @@ module decode_stage(
             ep_I7_1 = first_inst[11:17];
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_11)
                 11'b00001111111:
                     begin
@@ -1055,6 +1067,7 @@ module decode_stage(
             op_inst1_flag = 1;
             ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
+            wrt_en_decode_1 = 1;
             case(first_inst_11)
                 11'b00110110010:
                     begin
@@ -1072,7 +1085,13 @@ module decode_stage(
         end
 
         else if (first_inst_11 == 11'b01000000001) begin
-            ep_inst1_flag = 1;
+            wrt_en_decode_1 = 0;
+            if(previous_stall==1) begin
+                ep_inst1_flag = 0;
+            end
+            else begin
+                ep_inst1_flag = 1;
+            end
             op_inst1_flag = 0;
             case(first_inst_11)
                 11'b01000000001:
@@ -1084,7 +1103,13 @@ module decode_stage(
 
         else if (first_inst_11 == 11'b00000000001) begin
             ep_inst1_flag = 0;
-            op_inst1_flag = 1;
+            wrt_en_decode_1 = 0;
+            if(previous_stall==1) begin
+                op_inst1_flag = 0;
+            end
+            else begin 
+                op_inst1_flag = 1;
+            end
             case(first_inst_11)
                 11'b00000000001:
                     begin
@@ -1100,6 +1125,7 @@ module decode_stage(
             rb_2_address = second_inst[11:17];
             ra_2_address = second_inst[18:24];
             rc_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_4)
                 4'b1110:
                     begin
@@ -1126,6 +1152,7 @@ module decode_stage(
             ep_I18_2 = second_inst[7:24];
             rt_2_address = second_inst[25:31];
             ep_opcode_2 = IMMEDIATE_LOAD_ADDRESS;
+            wrt_en_decode_2 = 1;
     
         end
 
@@ -1135,7 +1162,7 @@ module decode_stage(
             ep_I10_2 = second_inst[8:17];
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
-            
+            wrt_en_decode_2 = 1;
             case(second_inst_8)
                 8'b00011101:
                     begin
@@ -1218,7 +1245,7 @@ module decode_stage(
             op_I10_2 = second_inst[8:17];
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
-
+            wrt_en_decode_2 = 1;
             op_opcode_2 = LOAD_QUADFORM_DFORM;
                         
         end
@@ -1229,7 +1256,7 @@ module decode_stage(
             op_I10_2 = second_inst[8:17];
             ra_2_address = second_inst[18:24];
             rb_2_address = second_inst[25:31];
-            
+            wrt_en_decode_2 = 0;
             op_opcode_2 = STORE_QUADFORM_DFORM;
         end
 
@@ -1238,6 +1265,7 @@ module decode_stage(
             op_inst2_flag = 0;
             ep_I16_2 = second_inst[9:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(first_inst_9)
                 9'b010000011:
                     begin
@@ -1259,6 +1287,7 @@ module decode_stage(
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_9)  
                 9'b001100001:
                     begin
@@ -1280,6 +1309,7 @@ module decode_stage(
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
             rb_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 0;
             case(second_inst_9)  
                 9'b001000001:
                     begin
@@ -1308,6 +1338,7 @@ module decode_stage(
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
+            wrt_en_decode_2 = 0;
             case(second_inst_9)
                 9'b001100100:
                     begin
@@ -1326,7 +1357,7 @@ module decode_stage(
             rb_2_address = second_inst[11:17];
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
-            
+            wrt_en_decode_2 = 1;
             case(second_inst_11)
                 11'b00011000000:
                     begin
@@ -1466,6 +1497,7 @@ module decode_stage(
             op_inst2_flag = 0;
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_11)
                 11'b01010100101:
                     begin
@@ -1492,6 +1524,7 @@ module decode_stage(
             ep_I7_2 = second_inst[11:17];
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_11)
                 11'b00001111111:
                     begin
@@ -1517,6 +1550,7 @@ module decode_stage(
             op_inst2_flag = 1;
             op_I16_2 = second_inst[9:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_11)
                 11'b00111011011:
                     begin
@@ -1551,6 +1585,7 @@ module decode_stage(
             op_I7_2 = second_inst[11:17];
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_11)
                 11'b00111111011:
                     begin
@@ -1576,6 +1611,7 @@ module decode_stage(
             op_inst2_flag = 1;
             ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
+            wrt_en_decode_2 = 1;
             case(second_inst_11)
                 11'b00110110010:
                     begin
@@ -1593,7 +1629,13 @@ module decode_stage(
         end
 
         else if (second_inst_11 == 11'b01000000001) begin
-            ep_inst2_flag = 1;
+            wrt_en_decode_2 = 0;
+            if(previous_stall==1) begin
+                ep_inst2_flag = 0;
+            end
+            else begin 
+                ep_inst2_flag = 1;
+            end
             op_inst2_flag = 0;
             case(second_inst_11)
                 11'b01000000001:
@@ -1604,8 +1646,14 @@ module decode_stage(
         end
 
         else if (second_inst_11 == 11'b00000000001) begin
+            wrt_en_decode_2 = 0;
             ep_inst2_flag = 0;
-            op_inst2_flag = 1;
+            if(previous_stall==1) begin
+                op_inst2_flag = 0;
+            end
+            else begin
+                op_inst2_flag = 1;
+            end
             case(second_inst_11)
                 11'b00000000001:
                     begin
@@ -1615,9 +1663,7 @@ module decode_stage(
         end
 
         else begin
-
             $display(" enter valid instructions ");
-
         end
     end
 
