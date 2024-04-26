@@ -25,8 +25,8 @@ module testbench_cell_SPU();
     logic [0:9] I10_odd;
     logic [0:15] I16_odd;
     logic [0:17] I18_odd;
-    logic [0:6] rt_rf_ep_address;
-    logic [0:6] rt_rf_op_address;
+    logic [0:6] rt_fw_ep_address;
+    logic [0:6] rt_fw_op_address;
 
     toplevel_cellSPU dut_cell_SPU(
         .clock(clock),
@@ -73,9 +73,7 @@ module testbench_cell_SPU();
         .branch_taken(branch_taken),
         .flush(flush),
         .reg_file(reg_file),
-        .ls(ls),
-        .rt_rf_ep_address(rt_rf_ep_address),
-        .rt_rf_op_address(rt_rf_op_address)
+        .ls(ls)
     );
 
     initial clock = 1;

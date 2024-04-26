@@ -5,16 +5,24 @@ lnop
 il 3,30
 lnop
 il 4,40
+lnop
 il 5,50
+lnop
 il 6,60
 lnop
-a 8,4,5
-lqd 9,8,20
-a 10,8,9
+il 7,70
 lnop
-il 11,80
-lnop 
-il 12,90
-lqd 12,1,10
-il 7,-10
+il 8,80
 lnop
+il 9,90
+lnop
+il 10,100
+lnop
+a 11,1,2
+shlqbii 12,3,20
+clz 13,4
+gbb 14,5
+shlhi 15,4,2
+shlhi 16,5,2
+mpya 17,15,2,3
+rotqby 18,2,4

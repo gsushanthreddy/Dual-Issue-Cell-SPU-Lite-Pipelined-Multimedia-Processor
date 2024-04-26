@@ -12,6 +12,7 @@ module toplevel_part1(
     input logic [0:6] rb_ep_address, 
     input logic [0:6] rc_ep_address,
     input logic [0:6] rt_ep_address,
+    input logic wrt_en_ep,
 
     input [0:6] I7_ep,
     input [0:9] I10_ep,
@@ -24,6 +25,7 @@ module toplevel_part1(
     input logic [0:6] ra_op_address, 
     input logic [0:6] rb_op_address, 
     input logic [0:6] rt_op_address,
+    input logic wrt_en_op,
 
     input [0:6] I7_op,
     input [0:9] I10_op,
@@ -64,22 +66,16 @@ module toplevel_part1(
     // Local store
     output logic [0:7] ls [0:32767],
 
-    output logic flush,
-
-    // RT addresses taken from register fetch stage
-    output logic [0:6] rt_rf_ep_address,
-    output logic [0:6] rt_rf_op_address
+    output logic flush
 
    // CHECK WITH PROFESSOR THAT WE HAVE TO PUT THE LOCAL STORE AND REGISTER MEMORIES AS OUTPUT IN THE TOP FILE
 );
 
     // Even pipe
     logic [0:127] rt_value_ep;
-    logic wrt_en_ep;
 
     // Odd pipe
     logic [0:127] rt_value_op;
-    logic wrt_en_op;
 
     // register file ouputs
     logic [0:127] ra_ep_value;
@@ -95,6 +91,9 @@ module toplevel_part1(
     logic [0:127] rc_value_fw_ep;
     logic [0:127] ra_value_fw_op;
     logic [0:127] rb_value_fw_op;
+    logic [0:6] rt_fw_ep_address;
+    logic [0:6] rt_fw_op_address;
+
     //logic [0:127] rc_value_fw_op;
 
     // Local store access logic between odd pipe and the local store
@@ -112,8 +111,6 @@ module toplevel_part1(
         .ra_ep_address(ra_ep_address),
         .rb_ep_address(rb_ep_address),
         .rc_ep_address(rc_ep_address),
-        .rt_ep_address(rt_ep_address),
-        .rt_op_address(rt_op_address),
         .wrt_back_arr_ep(fw_ep_st_7),
         .ra_op_address(ra_op_address),
         .rb_op_address(rb_op_address),
@@ -123,15 +120,14 @@ module toplevel_part1(
         .rc_ep_value(rc_ep_value),
         .ra_op_value(ra_op_value),
         .rb_op_value(rb_op_value),
-        .reg_file(reg_file),
-        .rt_rf_ep_address(rt_rf_ep_address),
-        .rt_rf_op_address(rt_rf_op_address)
+        .reg_file(reg_file)
     );
 
     forwardunit FW (
 
         .clock(clock),
         .reset(reset),
+        .flush(flush),
         .ep_opcode(ep_opcode),
         .ra_address_ep(ra_ep_address),
         .rb_address_ep(rb_ep_address),
@@ -174,7 +170,10 @@ module toplevel_part1(
         .rb_value_fw_ep(rb_value_fw_ep),
         .rc_value_fw_ep(rc_value_fw_ep),
         .ra_value_fw_op(ra_value_fw_op),
-        .rb_value_fw_op(rb_value_fw_op)
+        .rb_value_fw_op(rb_value_fw_op),
+        .rt_fw_ep_address(rt_fw_ep_address),
+        .rt_fw_op_address(rt_fw_op_address)
+        
     );
 
     evenpipe EP (
@@ -185,7 +184,7 @@ module toplevel_part1(
         .ra_input(ra_value_fw_ep), // this input is coming from the forwading unit
         .rb_input(rb_value_fw_ep),
         .rc_input(rc_value_fw_ep),
-        .rt_address_input(rt_rf_ep_address),
+        .rt_address_input(rt_fw_ep_address),
         .I7_input(I7_ep),
         .I10_input(I10_ep),
         .I16_input(I16_ep),
@@ -208,7 +207,7 @@ module toplevel_part1(
         .op_input_op_code(op_opcode), // check whether this connection is legit
         .ra_input(ra_value_fw_op), // This value is direct connection from the forwarding block 
         .rb_input(rb_value_fw_op),
-        .rt_address_input(rt_rf_op_address),
+        .rt_address_input(rt_fw_op_address),
         .I7_input(I7_op),
         .I10_input(I10_op),
         .I16_input(I16_op),
