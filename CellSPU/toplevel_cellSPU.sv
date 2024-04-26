@@ -6,7 +6,7 @@ module toplevel_cellSPU(
 
     input clock,
     input reset,
-
+    input flush,
     // ouputs from fetch stage
     output logic [0:31] first_inst,
     output logic [0:31] second_inst,
@@ -38,10 +38,6 @@ module toplevel_cellSPU(
     output logic [0:15] I16_odd,
     output logic [0:17] I18_odd,
 
-    // Outputs from Register fetch Stage 
-
-    output logic [0:6] rt_rf_ep_address,
-    output logic [0:6] rt_rf_op_address,
     
     // outputs of every propagation state of even pipe
     output logic [0:142] fw_ep_st_1,
@@ -63,7 +59,6 @@ module toplevel_cellSPU(
 
     // Branch related ports
     output logic branch_taken,
-    output logic flush,
 
     // Register file
     output logic [0:127] reg_file [128],
@@ -72,6 +67,10 @@ module toplevel_cellSPU(
     output logic [0:7] ls [0:32767]
 );
 
+logic wrt_en_fw_ep;
+logic wrt_en_fw_op;
+logic wrt_en_decode_ep;
+logic wrt_en_decode_op;
 
 fetch_stage fetch (
 
@@ -93,8 +92,10 @@ decode_stage decode (
     .flush(flush),
     .first_inst_input(first_inst),
     .second_inst_input(second_inst),
-    .rt_ep_address(rt_rf_ep_address),
-    .rt_op_address(rt_rf_op_address),
+    .rt_ep_address(rt_even_address),
+    .rt_op_address(rt_odd_address),
+    .wrt_en_fw_ep(wrt_en_decode_ep),
+    .wrt_en_fw_op(wrt_en_decode_op),
     .fw_ep_st_1(fw_ep_st_1),
     .fw_ep_st_2(fw_ep_st_2),
     .fw_ep_st_3(fw_ep_st_3),
@@ -129,7 +130,9 @@ decode_stage decode (
     .stall(stall),
     .dependency_stall_1(dependency_stall_1),
     .dependency_stall_2(dependency_stall_2),
-    .previous_stall(previous_stall)
+    .previous_stall(previous_stall),
+    .wrt_en_decode_ep(wrt_en_decode_ep),
+    .wrt_en_decode_op(wrt_en_decode_op)
 
 );
 
@@ -141,6 +144,7 @@ toplevel_part1 register_pipes_localstore(
     .rb_ep_address(rb_even_address),
     .rc_ep_address(rc_even_address),
     .rt_ep_address(rt_even_address),
+    .wrt_en_ep(wrt_en_decode_ep),
     .I7_ep(I7_even),
     .I10_ep(I10_even),
     .I16_ep(I16_even),
@@ -149,6 +153,7 @@ toplevel_part1 register_pipes_localstore(
     .ra_op_address(ra_odd_address),
     .rb_op_address(rb_odd_address),
     .rt_op_address(rt_odd_address),
+    .wrt_en_op(wrt_en_decode_op),
     .I7_op(I7_odd),
     .I10_op(I10_odd),
     .I16_op(I16_odd),
@@ -173,9 +178,8 @@ toplevel_part1 register_pipes_localstore(
     .PC_output(pc_input),
     .reg_file(reg_file),
     .ls(ls),
-    .flush(flush),
-    .rt_rf_ep_address(rt_rf_ep_address),
-    .rt_rf_op_address(rt_rf_op_address)
+    .flush(flush)
+
 );
 
 endmodule
