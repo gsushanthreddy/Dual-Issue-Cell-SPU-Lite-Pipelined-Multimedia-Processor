@@ -26,12 +26,10 @@ module fetch_stage(
     end
 
     always_ff @(posedge clock) begin
-        $display("stall signal = %b",stall);
         if(reset==1) begin
             first_inst <= {11'b00000000001,21'b0};
             second_inst <= {11'b01000000001, 21'b0};
             pc <= 0;
-            $display("PC Starts here");
         end
         else if(reset==0) begin 
             if(stall==0) begin
@@ -79,8 +77,5 @@ module fetch_stage(
             pc<=pc;
         end
         pc_output <= pc;
-        $display("first_inst = %b",first_inst);
-        $display("second_inst = %b",second_inst);
-        $display("pc_output = %d",pc_output);
     end
 endmodule

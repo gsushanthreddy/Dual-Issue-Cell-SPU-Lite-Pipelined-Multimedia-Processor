@@ -70,7 +70,7 @@ module oddpipe(
             I10 <= 10'd0;
             I16 <= 16'd0;
             I18 <= 18'd0;
-            //pc_input <= PC_input;// check this
+            pc_input <= 0;// check this
         end
         else if (flush==1) begin
             ra <= 127'd0;
@@ -81,7 +81,7 @@ module oddpipe(
             I10 <= 10'd0;
             I16 <= 16'd0;
             I18 <= 18'd0;
-            //pc_input <= PC_input;// check this
+            pc_input <= PC_input;// check this
         end
         else begin
             ra <= ra_input;
