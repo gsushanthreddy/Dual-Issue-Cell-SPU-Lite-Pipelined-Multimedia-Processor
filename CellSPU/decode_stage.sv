@@ -8,8 +8,12 @@ module decode_stage(
     input [0:31] second_inst_input,
     input [0:6] rt_ep_address,
     input [0:6] rt_op_address,
-    input wrt_en_fw_ep,
-    input wrt_en_fw_op,
+    input logic [0:6] rt_fw_stage_ep_address,
+    input logic [0:6] rt_fw_stage_op_address,
+    input logic wrt_en_fw_ep,
+    input logic wrt_en_fw_op,
+    input logic wrt_fw_stage_ep_in,
+    input logic wrt_fw_stage_op_in,
     input logic [0:142] fw_ep_st_1,
     input logic [0:142] fw_ep_st_2,
     input logic [0:142] fw_ep_st_3,
@@ -24,6 +28,8 @@ module decode_stage(
     input logic [0:142] fw_op_st_5,
     input logic [0:142] fw_op_st_6,
     input logic [0:142] fw_op_st_7,
+
+    input logic [0:31] pc_decode_in;
 
     output opcode opcode_instruction_even,
     output logic [0:6] ra_even_address,
@@ -49,7 +55,9 @@ module decode_stage(
     output logic dependency_stall_2,
     output logic previous_stall,
     output logic wrt_en_decode_ep,
-    output logic wrt_en_decode_op
+    output logic wrt_en_decode_op,
+    
+    output logic [0:31] pc_decode_out
 );
     logic [0:31] first_inst;
     logic [0:31] second_inst;
@@ -265,6 +273,14 @@ module decode_stage(
                 (rb_1_address == rt_op_address) ||
                 (rc_1_address == rt_op_address)
             ) ||
+            (
+                (wrt_fw_stage_ep_in == 1 && (ra_1_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rb_1_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rc_1_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_op_in == 1 && (ra_1_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rb_1_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rc_1_address == rt_fw_stage_op_address))
+            ) ||
             (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                 ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
                 ((ra_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
@@ -325,6 +341,14 @@ module decode_stage(
                 (wrt_en_fw_op == 1 && (rb_2_address == rt_op_address)) ||
                 (wrt_en_fw_op == 1 && (rc_2_address == rt_op_address)) 
             ) ||
+            (
+                (wrt_fw_stage_ep_in == 1 && (ra_2_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rb_2_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rc_2_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_op_in == 1 && (ra_2_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rb_2_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rc_2_address == rt_fw_stage_op_address))
+            ) ||
             (   ((ra_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                 ((ra_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
                 ((ra_2_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
@@ -369,18 +393,17 @@ module decode_stage(
                 $display("hello dep stall 2.1");
         end
 
-    
-        else if(((ep_inst1_flag == 1 && ep_inst2_flag == 1) || (op_inst1_flag == 1 && op_inst2_flag == 1))) begin // Structural Hazard 
-            if(  previous_stall == 1'dx || previous_stall == 0 ) begin
-                dependency_stall_2 = 1;
-                $display("hello dep stall 2.2");
-            end
-        end
-           
-        else if(rt_1_address != 7'dx && rt_2_address != 7'dx && (rt_1_address == rt_2_address)) begin // WAW Hazard
-            if( previous_stall == 1'dx || previous_stall == 0) begin
+        else if((wrt_en_decode_1 == 1 && wrt_en_decode_2 == 1) && (rt_1_address == rt_2_address)) begin // WAW Hazard
+            if( previous_stall == 1'dx || previous_stall == 0 ) begin
                 dependency_stall_2 = 1;
                 $display("hello dep stall 2.3");
+            end
+        end
+    
+        else if(((ep_inst1_flag == 1 && ep_inst2_flag == 1) || (op_inst1_flag == 1 && op_inst2_flag == 1))) begin // Structural Hazard 
+            if( previous_stall == 1'dx || previous_stall == 0 ) begin
+                dependency_stall_2 = 1;
+                $display("hello dep stall 2.2");
             end
         end
 
@@ -398,7 +421,7 @@ module decode_stage(
     end
 
     always_ff @(posedge clock) begin
-        if(flush==1 || reset==1) begin
+        if(reset==1) begin
             opcode_instruction_even <= NO_OPERATION_EXECUTE;
             ra_even_address <= 7'dx;
             rb_even_address <= 7'dx;
@@ -419,6 +442,33 @@ module decode_stage(
             I16_odd <= 7'dx;
             I18_odd <= 7'dx;
             wrt_en_decode_op <= 0;
+            pc_decode_out <= 0;
+
+            previous_stall <= 0;
+        end
+
+        else if(flush==1) begin
+            opcode_instruction_even <= NO_OPERATION_EXECUTE;
+            ra_even_address <= 7'dx;
+            rb_even_address <= 7'dx;
+            rc_even_address <= 7'dx;
+            rt_even_address <= 7'dx;
+            I7_even <= 7'dx;
+            I10_even <= 7'dx;
+            I16_even <= 7'dx;
+            I18_even <= 7'dx;
+            wrt_en_decode_ep <= 0;
+            
+            opcode_instruction_odd <= NO_OPERATION_LOAD;
+            ra_odd_address <= 7'dx;
+            rb_odd_address <= 7'dx;
+            rt_odd_address <= 7'dx;
+            I7_odd <= 7'dx;
+            I10_odd <= 7'dx;
+            I16_odd <= 7'dx;
+            I18_odd <= 7'dx;
+            wrt_en_decode_op <= 0;
+            pc_decode_out <= pc_decode_in; ////check
 
             previous_stall <= 0;
         end
@@ -444,6 +494,8 @@ module decode_stage(
             I16_odd <= 16'd0;
             I18_odd <= 18'd0;
             wrt_en_decode_op <= 0;
+
+            pc_decode_out <= pc_decode_in;
         end
 
         else if(dependency_stall_2==1) begin
@@ -468,6 +520,8 @@ module decode_stage(
                 I16_odd <= 16'd0;
                 I18_odd <= 18'd0;
                 wrt_en_decode_op <= 0;
+
+                pc_decode_out <= pc_decode_in;
             end 
             
             else begin
@@ -519,6 +573,8 @@ module decode_stage(
                 end
             end
             previous_stall<=1;
+
+            pc_decode_out <= pc_decode_in;
         end
 
         else begin
@@ -570,7 +626,10 @@ module decode_stage(
                     wrt_en_decode_ep <= 0;
                 end
                 previous_stall<=0;
+
+                pc_decode_out <= pc_decode_in;
             end
+
             else begin 
                 if((op_inst1_flag == 1) && (ep_inst2_flag == 1)) begin
                     opcode_instruction_odd <= op_opcode_1;
@@ -617,6 +676,8 @@ module decode_stage(
                     I18_odd <= op_I18_2;
                     wrt_en_decode_op <= wrt_en_decode_2;
                 end
+
+                pc_decode_out <= pc_decode_in;
             end
         end
     end
@@ -1038,7 +1099,8 @@ module decode_stage(
         else if(first_inst_11 == 11'b00111011011 || first_inst_11 == 11'b00111011111 || first_inst_11 == 11'b00111001111 || first_inst_11 == 11'b00111011100 || first_inst_11 == 11'b00111001100 || first_inst_11 == 11'b00111011000) begin
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
-            op_I16_1 = first_inst[9:24];
+            rb_1_address = first_inst[11:17];
+            ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
             wrt_en_decode_1 = 1;
             case(first_inst_11)
@@ -1625,7 +1687,8 @@ module decode_stage(
         else if(second_inst_11 == 11'b00111011011 || second_inst_11 == 11'b00111011111 || second_inst_11 == 11'b00111001111 || second_inst_11 == 11'b00111011100 || second_inst_11 == 11'b00111001100 || second_inst_11 == 11'b00111011000) begin
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
-            op_I16_2 = second_inst[9:24];
+            rb_2_address = second_inst[11:17];
+            ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
             wrt_en_decode_2 = 1;
             case(second_inst_11)

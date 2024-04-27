@@ -23,7 +23,7 @@ module forwardunit(
     input [0:142] fw_ep_st_5,
     input [0:142] fw_ep_st_6,
     input [0:142] fw_ep_st_7,
-    input wrt_en_ep,
+    input logic wrt_en_ep,
 
     input opcode op_opcode,
     input [0:6] ra_address_op,
@@ -42,15 +42,30 @@ module forwardunit(
     input [0:142] fw_op_st_5,
     input [0:142] fw_op_st_6,
     input [0:142] fw_op_st_7,
-    input wrt_en_op,
+    input logic wrt_en_op,
 
+    input logic [0:31] pc_forward_unit_in,
+
+    output opcode opcode_ep_fw,
+    output opcode opcode_op_fw,
     output logic [0:127] ra_value_fw_ep,
     output logic [0:127] rb_value_fw_ep,
     output logic [0:127] rc_value_fw_ep,
+    output logic [0:6] I7_fw_ep,
+    output logic [0:9] I10_fw_ep,
+    output logic [0:15] I16_fw_ep,
+    output logic [0:17] I18_fw_ep,
     output logic [0:127] ra_value_fw_op,
     output logic [0:127] rb_value_fw_op,
+    output logic [0:6] I7_fw_op,
+    output logic [0:9] I10_fw_op,
+    output logic [0:15] I16_fw_op,
+    output logic [0:17] I18_fw_op,
     output logic [0:6] rt_fw_ep_address,
-    output logic [0:6] rt_fw_op_address
+    output logic [0:6] rt_fw_op_address,
+    output logic wrt_fw_stage_ep,
+    output logic wrt_fw_stage_op,
+    output logic [0:31] pc_forward_unit_out
 );
     logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid;
     logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value;
@@ -150,14 +165,49 @@ module forwardunit(
     assign fw_op_st_7_unit_latency = fw_op_st_7[139:142];
 
     always_ff @(posedge clock) begin
-        if(reset==1 || flush==1) begin
+        if(reset==1) begin
             ra_value_fw_ep <= 0;
             rb_value_fw_ep <= 0;
             rc_value_fw_ep <= 0;
             ra_value_fw_op <= 0;
             rb_value_fw_op <= 0;
+            I7_fw_ep <= 0;
+            I10_fw_ep <= 0;
+            I16_fw_ep <= 0;
+            I18_fw_ep <= 0;
+            I7_fw_op <= 0;
+            I10_fw_op <= 0;
+            I16_fw_op <= 0;
+            I18_fw_op <= 0;
             rt_fw_ep_address <= 0;
-            rt_fw_op_address <= 0;
+            rt_fw_op_address <= 0; 
+            opcode_ep_fw <= NO_OPERATION_EXECUTE;
+            opcode_op_fw <= NO_OPERATION_LOAD;
+            wrt_fw_stage_ep <= 0;
+            wrt_fw_stage_op <= 0;
+            pc_forward_unit_out <= 0;
+        end
+        else if(flush==1) begin
+            ra_value_fw_ep <= 0;
+            rb_value_fw_ep <= 0;
+            rc_value_fw_ep <= 0;
+            ra_value_fw_op <= 0;
+            rb_value_fw_op <= 0;
+            I7_fw_ep <= 0;
+            I10_fw_ep <= 0;
+            I16_fw_ep <= 0;
+            I18_fw_ep <= 0;
+            I7_fw_op <= 0;
+            I10_fw_op <= 0;
+            I16_fw_op <= 0;
+            I18_fw_op <= 0;
+            rt_fw_ep_address <= 0;
+            rt_fw_op_address <= 0; 
+            opcode_ep_fw <= NO_OPERATION_EXECUTE;
+            opcode_op_fw <= NO_OPERATION_LOAD;
+            wrt_fw_stage_ep <= 0;
+            wrt_fw_stage_op <= 0;
+            pc_forward_unit_out <= pc_forward_unit_in;
 
         end
         else begin 
@@ -166,8 +216,21 @@ module forwardunit(
             rc_value_fw_ep <= rc_value_fw_ep_temp;
             ra_value_fw_op <= ra_value_fw_op_temp;
             rb_value_fw_op <= rb_value_fw_op_temp;
+            I7_fw_ep <= I7_ep;
+            I10_fw_ep <= I10_ep;
+            I16_fw_ep <= I16_ep;
+            I18_fw_ep <= I18_ep;
+            I7_fw_op <= I7_op;
+            I10_fw_op <= I10_op;
+            I16_fw_op <= I16_op;
+            I18_fw_op <= I18_op;
             rt_fw_ep_address <= rt_address_ep;
             rt_fw_op_address <= rt_address_op;
+            opcode_ep_fw <= ep_opcode;
+            opcode_op_fw <= op_opcode;
+            wrt_fw_stage_ep <= wrt_en_ep;
+            wrt_fw_stage_op <= wrt_en_op;
+            pc_forward_unit_out <= pc_forward_unit_in;
         end
     end    
 

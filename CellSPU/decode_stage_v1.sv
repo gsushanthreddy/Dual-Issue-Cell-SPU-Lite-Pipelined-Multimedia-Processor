@@ -8,8 +8,12 @@ module decode_stage(
     input [0:31] second_inst_input,
     input [0:6] rt_ep_address,
     input [0:6] rt_op_address,
-    input wrt_en_fw_ep,
-    input wrt_en_fw_op,
+    input logic [0:6] rt_fw_stage_ep_address,
+    input logic [0:6] rt_fw_stage_op_address,
+    input logic wrt_en_fw_ep,
+    input logic wrt_en_fw_op,
+    input logic wrt_fw_stage_ep_in,
+    input logic wrt_fw_stage_op_in,
     input logic [0:142] fw_ep_st_1,
     input logic [0:142] fw_ep_st_2,
     input logic [0:142] fw_ep_st_3,
@@ -276,6 +280,14 @@ module decode_stage(
                 (rb_1_address == rt_op_address) ||
                 (rc_1_address == rt_op_address)
             ) ||
+            (
+                (wrt_fw_stage_ep_in == 1 && (ra_1_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rb_1_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rc_1_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_op_in == 1 && (ra_1_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rb_1_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rc_1_address == rt_fw_stage_op_address))
+            ) ||
             (   ((ra_1_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                 ((ra_1_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
                 ((ra_1_address == fw_ep_st_3_rt_address) && (fw_ep_st_3_wrt_en_ep == 1) && (fw_ep_st_3_unit_latency > 4'd4)) || 
@@ -335,6 +347,14 @@ module decode_stage(
                 (wrt_en_fw_op == 1 && (ra_2_address == rt_op_address)) ||
                 (wrt_en_fw_op == 1 && (rb_2_address == rt_op_address)) ||
                 (wrt_en_fw_op == 1 && (rc_2_address == rt_op_address)) 
+            ) ||
+             (
+                (wrt_fw_stage_ep_in == 1 && (ra_2_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rb_2_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_ep_in == 1 && (rc_2_address == rt_fw_stage_ep_address)) ||
+                (wrt_fw_stage_op_in == 1 && (ra_2_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rb_2_address == rt_fw_stage_op_address)) ||
+                (wrt_fw_stage_op_in == 1 && (rc_2_address == rt_fw_stage_op_address))
             ) ||
             (   ((ra_2_address == fw_ep_st_1_rt_address) && (fw_ep_st_1_wrt_en_ep == 1)) ||
                 ((ra_2_address == fw_ep_st_2_rt_address) && (fw_ep_st_2_wrt_en_ep == 1) && (fw_ep_st_2_unit_latency > 4'd3)) ||
@@ -968,7 +988,8 @@ module decode_stage(
         else if(first_inst_11 == 11'b00111011011 || first_inst_11 == 11'b00111011111 || first_inst_11 == 11'b00111001111 || first_inst_11 == 11'b00111011100 || first_inst_11 == 11'b00111001100 || first_inst_11 == 11'b00111011000) begin
             ep_inst1_flag = 0;
             op_inst1_flag = 1;
-            op_I16_1 = first_inst[9:24];
+            rb_1_address = first_inst[11:17];
+            ra_1_address = first_inst[18:24];
             rt_1_address = first_inst[25:31];
             wrt_en_decode_1 = 1;
             case(first_inst_11)
@@ -1565,7 +1586,8 @@ module decode_stage(
         else if(second_inst_11 == 11'b00111011011 || second_inst_11 == 11'b00111011111 || second_inst_11 == 11'b00111001111 || second_inst_11 == 11'b00111011100 || second_inst_11 == 11'b00111001100 || second_inst_11 == 11'b00111011000) begin
             ep_inst2_flag = 0;
             op_inst2_flag = 1;
-            op_I16_2 = second_inst[9:24];
+            rb_2_address = second_inst[11:17];
+            ra_2_address = second_inst[18:24];
             rt_2_address = second_inst[25:31];
             wrt_en_decode_2 = 1;
             case(second_inst_11)
