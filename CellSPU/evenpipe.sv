@@ -22,6 +22,7 @@ module evenpipe(
     input [0:9] I10_input, 
     input [0:15] I16_input,
     input [0:17] I18_input,
+    input logic branch_is_first_inst_from_fw,
     output logic [0:142] fw_ep_st_1,
     output logic [0:142] fw_ep_st_2,
     output logic [0:142] fw_ep_st_3,
@@ -112,7 +113,7 @@ module evenpipe(
             fw_ep_st_7 <= 143'd0;
         end
         else begin
-            if(flush==1) begin
+            if(flush==1 && branch_is_first_inst_from_fw==1) begin
                 fw_ep_st_2 <= 143'd0;
                 fw_ep_st_3 <= fw_ep_st_2;
                 fw_ep_st_4 <= fw_ep_st_3;
