@@ -48,7 +48,7 @@ module fetch_stage(
                 pc=pc+8;
                 $display("PC here for branch : %d",pc);
             end
-            pc_output <= pc;
+            pc_output = pc;
         end
         else if(stall==1) begin
             pc = pc;

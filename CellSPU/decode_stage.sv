@@ -133,6 +133,7 @@ module decode_stage(
     logic [0:17] I18_odd_temporary;
     logic wrt_en_decode_1;
     logic wrt_en_decode_2;
+    logic previous_flush;
 
 
     /* wrt enables are not there for 
@@ -444,7 +445,7 @@ module decode_stage(
             I18_odd <= 7'dx;
             wrt_en_decode_op <= 0;
             pc_decode_out <= 0;
-
+            previous_flush <= 0;
             previous_stall <= 0;
             
         end
@@ -471,7 +472,7 @@ module decode_stage(
             I18_odd <= 7'dx;
             wrt_en_decode_op <= 0;
             pc_decode_out <= pc_decode_in; ////check
-
+            previous_flush <= flush;
             previous_stall <= 0;
         end
 
@@ -496,7 +497,7 @@ module decode_stage(
             I16_odd <= 16'd0;
             I18_odd <= 18'd0;
             wrt_en_decode_op <= 0;
-
+            previous_flush <= 0;
             pc_decode_out <= pc_decode_in;
         end
 
@@ -522,7 +523,7 @@ module decode_stage(
                 I16_odd <= 16'd0;
                 I18_odd <= 18'd0;
                 wrt_en_decode_op <= 0;
-
+                previous_flush <= 0;
                 pc_decode_out <= pc_decode_in;
             end 
             
@@ -549,6 +550,7 @@ module decode_stage(
                     I16_odd <= 16'd0;
                     I18_odd <= 18'd0;
                     wrt_en_decode_op <= 0;
+                    previous_flush <= 0;
                 end
 
                 else if (op_inst1_flag == 1) begin
@@ -571,7 +573,8 @@ module decode_stage(
                     I10_even <= 10'd0;
                     I16_even <= 16'd0;
                     I18_even <= 18'd0;
-                    wrt_en_decode_ep <= 0;  
+                    wrt_en_decode_ep <= 0;
+                    previous_flush <= 0;  
                 end
             end
             previous_stall<=1;
@@ -603,6 +606,7 @@ module decode_stage(
                     I16_odd <= 16'd0;
                     I18_odd <= 18'd0;
                     wrt_en_decode_op <= 0;
+                    previous_flush <= 0;
                 end
 
                 else if (op_inst2_flag == 1) begin
@@ -626,6 +630,7 @@ module decode_stage(
                     I16_even <= 16'd0;
                     I18_even <= 18'd0;
                     wrt_en_decode_ep <= 0;
+                    previous_flush <= 0;
                 end
                 previous_stall<=0;
 
@@ -654,6 +659,7 @@ module decode_stage(
                     I16_even <= ep_I16_2;
                     I18_even <= ep_I18_2;
                     wrt_en_decode_ep <= wrt_en_decode_2;
+                    previous_flush <= 0;
                 end
 
                 else if ((ep_inst1_flag == 1) && (op_inst2_flag == 1)) begin  
@@ -677,6 +683,7 @@ module decode_stage(
                     I16_odd <= op_I16_2;
                     I18_odd <= op_I18_2;
                     wrt_en_decode_op <= wrt_en_decode_2;
+                    previous_flush <= 0;
                 end
 
                 pc_decode_out <= pc_decode_in;
@@ -1803,26 +1810,28 @@ module decode_stage(
             endcase
         end
 
-        else begin
-            if(ep_inst2_flag==1) begin
-                op_opcode_1 = NO_OPERATION_LOAD;
-                ep_inst1_flag = 0;
-                op_inst1_flag = 1;
-                ra_1_address = 7'dx;
-                rb_1_address = 7'dx;
-                rc_1_address = 7'dx;
-                rt_1_address = 7'dx;
-                wrt_en_decode_1 = 0;
-            end
-            else if(op_inst2_flag==1) begin
-                op_opcode_2 = NO_OPERATION_EXECUTE;
-                ep_inst1_flag = 1;
-                op_inst1_flag = 0;
-                ra_1_address = 7'dx;
-                rb_1_address = 7'dx;
-                rc_1_address = 7'dx;
-                rt_1_address = 7'dx;
-                wrt_en_decode_1 = 0;
+        if(previous_flush==1) begin 
+            if(first_inst_11 == 11'b00000000000) begin
+                if(ep_inst2_flag==1) begin
+                    op_opcode_1 = NO_OPERATION_LOAD;
+                    ep_inst1_flag = 0;
+                    op_inst1_flag = 1;
+                    ra_1_address = 7'dx;
+                    rb_1_address = 7'dx;
+                    rc_1_address = 7'dx;
+                    rt_1_address = 7'dx;
+                    wrt_en_decode_1 = 0;
+                end
+                else if(op_inst2_flag==1) begin
+                    ep_opcode_1 = NO_OPERATION_EXECUTE;
+                    ep_inst1_flag = 1;
+                    op_inst1_flag = 0;
+                    ra_1_address = 7'dx;
+                    rb_1_address = 7'dx;
+                    rc_1_address = 7'dx;
+                    rt_1_address = 7'dx;
+                    wrt_en_decode_1 = 0;
+                end
             end
         end
     end
