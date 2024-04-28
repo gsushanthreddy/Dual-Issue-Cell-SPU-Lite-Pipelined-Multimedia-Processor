@@ -93,8 +93,23 @@ module toplevel_part1(
     logic [0:127] rb_value_fw_op;
     logic [0:6] rt_fw_ep_address;
     logic [0:6] rt_fw_op_address;
+    logic [0:31] pc_forward_unit_in;
+    logic branch_is_first_inst_from_decode;
+    opcode opcode_ep_fw;
+    opcode opcode_op_fw;
+    logic [0:6] I7_fw_ep;
+    logic [0:9] I10_fw_ep;
+    logic [0:15] I16_fw_ep;
+    logic [0:17] I18_fw_ep;
+    logic [0:6] I7_fw_op;
+    logic [0:9] I10_fw_op;
+    logic [0:15] I16_fw_op;
+    logic [0:17] I18_fw_op;
+    logic wrt_fw_stage_ep;
+    logic wrt_fw_stage_op;
+    logic [0:31] pc_forward_unit_out;
+    logic branch_is_first_inst_from_fw;
 
-    //logic [0:127] rc_value_fw_op;
 
     // Local store access logic between odd pipe and the local store
 
@@ -166,13 +181,29 @@ module toplevel_part1(
         .fw_op_st_6(fw_op_st_6),
         .fw_op_st_7(fw_op_st_7),
         .wrt_en_op(wrt_en_op),
+        .pc_forward_unit_in(pc_forward_unit_in),
+        .branch_is_first_inst_from_decode(branch_is_first_inst_from_decode),
+        .opcode_ep_fw(opcode_ep_fw),
+        .opcode_op_fw(opcode_op_fw),
         .ra_value_fw_ep(ra_value_fw_ep),
         .rb_value_fw_ep(rb_value_fw_ep),
         .rc_value_fw_ep(rc_value_fw_ep),
+        .I7_fw_ep(I7_fw_ep),
+        .I10_fw_ep(I10_fw_ep),
+        .I16_fw_ep(I16_fw_ep),
+        .I18_fw_ep(I18_fw_ep),
+        .I7_fw_op(I7_fw_op),
+        .I10_fw_op(I10_fw_op),
+        .I16_fw_op(I16_fw_op),
+        .I18_fw_op(I18_fw_op),
         .ra_value_fw_op(ra_value_fw_op),
         .rb_value_fw_op(rb_value_fw_op),
         .rt_fw_ep_address(rt_fw_ep_address),
-        .rt_fw_op_address(rt_fw_op_address)
+        .rt_fw_op_address(rt_fw_op_address),
+        .wrt_fw_stage_ep(wrt_fw_stage_ep),
+        .wrt_fw_stage_op(wrt_fw_stage_op),
+        .pc_forward_unit_out(pc_forward_unit_out),
+        .branch_is_first_inst_from_fw(branch_is_first_inst_from_fw)
         
     );
 
@@ -180,23 +211,24 @@ module toplevel_part1(
 
         .clock(clock),
         .reset(reset),
-        .ep_input_op_code(ep_opcode),  // check whether i have assigned correct values
-        .ra_input(ra_value_fw_ep), // this input is coming from the forwading unit
+        .flush(flush),
+        .ep_input_op_code(opcode_ep_fw),
+        .ra_input(ra_value_fw_ep),
         .rb_input(rb_value_fw_ep),
         .rc_input(rc_value_fw_ep),
         .rt_address_input(rt_fw_ep_address),
-        .I7_input(I7_ep),
-        .I10_input(I10_ep),
-        .I16_input(I16_ep),
-        .I18_input(I18_ep),
+        .I7_input(I7_fw_ep),
+        .I10_input(I10_fw_ep),
+        .I16_input(I16_fw_ep),
+        .I18_input(I18_fw_ep),
+        .branch_is_first_inst_from_fw(branch_is_first_inst_from_fw),
         .fw_ep_st_1(fw_ep_st_1),
         .fw_ep_st_2(fw_ep_st_2),
         .fw_ep_st_3(fw_ep_st_3),
         .fw_ep_st_4(fw_ep_st_4),
         .fw_ep_st_5(fw_ep_st_5),
         .fw_ep_st_6(fw_ep_st_6),
-        .fw_ep_st_7(fw_ep_st_7),
-        .flush(flush)
+        .fw_ep_st_7(fw_ep_st_7)
 
     );
 
@@ -204,14 +236,14 @@ module toplevel_part1(
 
         .clock(clock),
         .reset(reset),
-        .op_input_op_code(op_opcode), // check whether this connection is legit
-        .ra_input(ra_value_fw_op), // This value is direct connection from the forwarding block 
+        .op_input_op_code(opcode_op_fw),
+        .ra_input(ra_value_fw_op),
         .rb_input(rb_value_fw_op),
         .rt_address_input(rt_fw_op_address),
-        .I7_input(I7_op),
-        .I10_input(I10_op),
-        .I16_input(I16_op),
-        .I18_input(I18_op),
+        .I7_input(I7_fw_op),
+        .I10_input(I10_fw_op),
+        .I16_input(I16_fw_op),
+        .I18_input(I18_fw_op),
         .LS_address(LS_address),
         .LS_data_input(LS_data_input),
         .LS_data_output(LS_data_output),
