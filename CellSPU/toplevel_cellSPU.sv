@@ -6,7 +6,7 @@ module toplevel_cellSPU(
 
     input clock,
     input reset,
-    input flush,
+    output flush,
     // ouputs from fetch stage
     output logic [0:31] first_inst,
     output logic [0:31] second_inst,
@@ -112,6 +112,8 @@ logic LS_wrt_en;
 
 logic [0:31] pc_decode;
 logic [0:31] pc_forward_unit;
+logic branch_is_first_inst_decode_output;
+logic branch_is_first_inst_fw_output;
 
 fetch_stage fetch (
 
@@ -179,7 +181,8 @@ decode_stage decode (
     .previous_stall(previous_stall),
     .wrt_en_decode_ep(wrt_en_decode_ep),
     .wrt_en_decode_op(wrt_en_decode_op),
-    .pc_decode_out(pc_decode)
+    .pc_decode_out(pc_decode),
+    .branch_is_first_inst(branch_is_first_inst_decode_output)
 
 );
 
@@ -244,6 +247,7 @@ forwardunit forward_unit (
     .fw_op_st_7(fw_op_st_7),
     .wrt_en_op(wrt_en_decode_op),
     .pc_forward_unit_in(pc_decode),
+    .branch_is_first_inst_from_decode(branch_is_first_inst_decode_output),
     .opcode_ep_fw(opcode_ep_fw),
     .opcode_op_fw(opcode_op_fw),
     .ra_value_fw_ep(ra_value_fw_ep),
@@ -263,7 +267,8 @@ forwardunit forward_unit (
     .rt_fw_op_address(rt_fw_op_address),
     .wrt_fw_stage_ep(wrt_fw_stage_ep),
     .wrt_fw_stage_op(wrt_fw_stage_op),
-    .pc_forward_unit_out(pc_forward_unit)
+    .pc_forward_unit_out(pc_forward_unit),
+    .branch_is_first_inst_from_fw(branch_is_first_inst_fw_output)
 );
 
 evenpipe Even_pipe(
@@ -279,6 +284,7 @@ evenpipe Even_pipe(
     .I10_input(I10_fw_ep),
     .I16_input(I16_fw_ep),
     .I18_input(I18_fw_ep),
+    .branch_is_first_inst_from_fw(branch_is_first_inst_fw_output),
     .fw_ep_st_1(fw_ep_st_1),
     .fw_ep_st_2(fw_ep_st_2),
     .fw_ep_st_3(fw_ep_st_3),
@@ -299,7 +305,6 @@ oddpipe Odd_pipe (
     .I10_input(I10_fw_op),
     .I16_input(I16_fw_op),
     .I18_input(I18_fw_op),
-
     .LS_address(LS_address),
     .LS_data_input(LS_data_input),
     .LS_data_output(LS_data_output),

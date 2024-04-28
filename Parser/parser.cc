@@ -363,7 +363,7 @@ int main(){
         else if(instruction[0] == "lnop"){ // 94. No Operation (Load)
             outputfile << "00000000001"<< convertDecimalToBinary(null_string_append, 7)<< convertDecimalToBinary(null_string_append, 7)<< convertDecimalToBinary(null_string_append, 7) <<endl;
         }
-        else {cout<< instruction[0]<<" : Instruction not Found"<<endl;}
+        else {outputfile << "00000000000"<< convertDecimalToBinary(null_string_append, 7)<< convertDecimalToBinary(null_string_append, 7)<< convertDecimalToBinary(null_string_append, 7) <<endl;}
     }
     outputfile.close();
 }

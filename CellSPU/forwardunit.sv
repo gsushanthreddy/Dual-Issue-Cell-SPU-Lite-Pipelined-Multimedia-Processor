@@ -45,6 +45,7 @@ module forwardunit(
     input logic wrt_en_op,
 
     input logic [0:31] pc_forward_unit_in,
+    input logic branch_is_first_inst_from_decode,
 
     output opcode opcode_ep_fw,
     output opcode opcode_op_fw,
@@ -65,7 +66,8 @@ module forwardunit(
     output logic [0:6] rt_fw_op_address,
     output logic wrt_fw_stage_ep,
     output logic wrt_fw_stage_op,
-    output logic [0:31] pc_forward_unit_out
+    output logic [0:31] pc_forward_unit_out,
+    output logic branch_is_first_inst_from_fw
 );
     logic [0:2] fw_ep_st_1_unitid, fw_ep_st_2_unitid, fw_ep_st_3_unitid, fw_ep_st_4_unitid, fw_ep_st_5_unitid, fw_ep_st_6_unitid, fw_ep_st_7_unitid;
     logic [0:127] fw_ep_st_1_rt_value, fw_ep_st_2_rt_value, fw_ep_st_3_rt_value, fw_ep_st_4_rt_value, fw_ep_st_5_rt_value, fw_ep_st_6_rt_value, fw_ep_st_7_rt_value;
@@ -186,6 +188,7 @@ module forwardunit(
             wrt_fw_stage_ep <= 0;
             wrt_fw_stage_op <= 0;
             pc_forward_unit_out <= 0;
+            branch_is_first_inst_from_fw <= 0;
         end
         else if(flush==1) begin
             ra_value_fw_ep <= 0;
@@ -208,6 +211,7 @@ module forwardunit(
             wrt_fw_stage_ep <= 0;
             wrt_fw_stage_op <= 0;
             pc_forward_unit_out <= pc_forward_unit_in;
+            branch_is_first_inst_from_fw <= 0;
 
         end
         else begin 
@@ -231,6 +235,7 @@ module forwardunit(
             wrt_fw_stage_ep <= wrt_en_ep;
             wrt_fw_stage_op <= wrt_en_op;
             pc_forward_unit_out <= pc_forward_unit_in;
+            branch_is_first_inst_from_fw <= branch_is_first_inst_from_decode;
         end
     end    
 

@@ -29,7 +29,7 @@ module decode_stage(
     input logic [0:142] fw_op_st_6,
     input logic [0:142] fw_op_st_7,
 
-    input logic [0:31] pc_decode_in;
+    input logic [0:31] pc_decode_in,
 
     output opcode opcode_instruction_even,
     output logic [0:6] ra_even_address,
@@ -57,7 +57,8 @@ module decode_stage(
     output logic wrt_en_decode_ep,
     output logic wrt_en_decode_op,
     
-    output logic [0:31] pc_decode_out
+    output logic [0:31] pc_decode_out,
+    output logic branch_is_first_inst
 );
     logic [0:31] first_inst;
     logic [0:31] second_inst;
@@ -445,6 +446,7 @@ module decode_stage(
             pc_decode_out <= 0;
 
             previous_stall <= 0;
+            
         end
 
         else if(flush==1) begin
@@ -900,10 +902,12 @@ module decode_stage(
                 9'b001100110:
                     begin
                         op_opcode_1 = BRANCH_RELATIVE_AND_SET_LINK;
+                        branch_is_first_inst = 1;
                     end
                 9'b001100010:
                     begin
                         op_opcode_1 = BRANCH_ABSOLUTE_AND_SET_LINK;
+                        branch_is_first_inst = 1;
                     end
             endcase
         end
@@ -922,18 +926,23 @@ module decode_stage(
                 9'b001000010:
                     begin
                         op_opcode_1 = BRANCH_IF_NOT_ZERO_WORD;
+                        branch_is_first_inst = 1;
                     end
                 9'b001000000:
                     begin
                         op_opcode_1 = BRANCH_IF_ZERO_WORD;
+                        branch_is_first_inst = 1;
                     end
                 9'b001000110:
                     begin
                         op_opcode_1 = BRANCH_IF_NOT_ZERO_HALFWORD;
+                        branch_is_first_inst = 1;
                     end
                 9'b001000100:
                     begin
                         op_opcode_1 = BRANCH_IF_ZERO_HALFWORD;
+                        branch_is_first_inst = 1;
+
                     end
             endcase
         end
@@ -947,10 +956,12 @@ module decode_stage(
                 9'b001100100:
                     begin
                         op_opcode_1 = BRANCH_RELATIVE;
+                        branch_is_first_inst = 1;
                     end
                 9'b001100000:
                     begin
                         op_opcode_1 = BRANCH_ABSOLUTE;
+                        branch_is_first_inst = 1;
                     end
             endcase
         end
@@ -1793,7 +1804,26 @@ module decode_stage(
         end
 
         else begin
-            $display(" enter valid instructions ");
+            if(ep_inst2_flag==1) begin
+                op_opcode_1 = NO_OPERATION_LOAD;
+                ep_inst1_flag = 0;
+                op_inst1_flag = 1;
+                ra_1_address = 7'dx;
+                rb_1_address = 7'dx;
+                rc_1_address = 7'dx;
+                rt_1_address = 7'dx;
+                wrt_en_decode_1 = 0;
+            end
+            else if(op_inst2_flag==1) begin
+                op_opcode_2 = NO_OPERATION_EXECUTE;
+                ep_inst1_flag = 1;
+                op_inst1_flag = 0;
+                ra_1_address = 7'dx;
+                rb_1_address = 7'dx;
+                rc_1_address = 7'dx;
+                rt_1_address = 7'dx;
+                wrt_en_decode_1 = 0;
+            end
         end
     end
 
